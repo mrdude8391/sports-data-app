@@ -15,6 +15,10 @@ app.get("/", (req, res) => {
   res.send("API is running...");
 });
 
+// use auth router
+const authRouter = require("./routes/authRoutes");
+app.use("/auth", authRouter);
+
 const PORT = process.env.PORT;
 // Start Express server
 app.listen(PORT, () => console.log(`Server started on port ${PORT}`));

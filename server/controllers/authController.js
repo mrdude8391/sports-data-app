@@ -1,4 +1,4 @@
-const User = require("./User.js");
+const User = require("../models/User.js");
 // bcrypt encryption library to help hash passwords
 const bcrypt = require("bcryptjs");
 // jwt -> library to help with working with JSON web tokens: signing, verifying, decoding
@@ -13,12 +13,12 @@ const registerUser = async (req, res) => {
   try {
     const { username, email, password } = req.body;
     // if user exists return 400
-    const userExists = User.findOne(email);
-    if (!userExists) {
-      res.status(400).json({ message: "Email already in use" });
+    const userExists = await User.findOne({ email });
+    if (userExists) {
+      return res.status(400).json({ message: "Email already in use" });
     }
     // hash password
-    const hashedPassword = bcrypt.hash(password);
+    const hashedPassword = await bcrypt.hash(password, 10);
     // create user
     const user = await User.create({
       username,
