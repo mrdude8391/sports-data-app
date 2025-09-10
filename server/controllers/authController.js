@@ -39,4 +39,49 @@ const registerUser = async (req, res) => {
   }
 };
 
-module.exports = { registerUser };
+// Login User
+
+const loginUser = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    // check user exist
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res
+        .status(404)
+        .json({ message: "Account not found: email not found" });
+    }
+    // match password
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(400).json({ message: "Invalid credentials" });
+    }
+
+    const token = generateToken(user._id);
+
+    res.json({
+      _id: user._id,
+      username: user.username,
+      email: user.email,
+      token: token,
+    });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+// get profile
+
+const getProfile = async (req, res) => {
+  try {
+    // verify token
+    // get profile data
+    //
+  } catch (err) {}
+};
+
+module.exports = {
+  registerUser,
+  loginUser,
+  getProfile,
+};
