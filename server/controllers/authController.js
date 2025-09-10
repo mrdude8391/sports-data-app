@@ -74,10 +74,12 @@ const loginUser = async (req, res) => {
 
 const getProfile = async (req, res) => {
   try {
-    // verify token
-    // get profile data
-    //
-  } catch (err) {}
+    // receive the req.user from authMiddleware
+    // can just return the req.user
+    res.json(req.user);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
 };
 
 module.exports = {
