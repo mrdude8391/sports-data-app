@@ -1,15 +1,26 @@
 import { useState } from "react";
-import { Button } from "./components/ui/button";
+import About from "./pages/About.tsx";
+import Home from "./pages/Home.tsx";
+import Login from "./pages/Login.tsx";
+
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import MainLayout from "./pages/layouts/MainLayout.tsx";
 
 function App() {
-  const [count, setCount] = useState(0);
-
   return (
     <>
       <div className="flex flex-col h-screen items-center justify-center">
-        <Button onClick={() => setCount((count) => (count += 1))}>
-          Count is {count}
-        </Button>
+        <p>Hello</p>
+
+        <Routes>
+          {/* Layout */}
+          <Route element={<MainLayout />}>
+            {/* Routes */}
+            <Route path="/" element={<Home />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/login" element={<Login />} />
+          </Route>
+        </Routes>
       </div>
     </>
   );
