@@ -4,18 +4,19 @@ import { Link, Outlet } from "react-router-dom";
 const MainLayout = () => {
   return (
     <div className="flex flex-col h-screen items-center justify-between">
-      <header className="flex  gap-1">
-        Header
+      <header className="flex w-full justify-between ">
         <Link to="/">Home</Link>
-        <Link to="/about">about</Link>
-        <Link to="/login">login</Link>
+        <Link to="/about">About</Link>
+        <Link to="/login">Login</Link>
+        <Link to="/profile">Profile</Link>
+        <Link to="/athletes">Athletes</Link>
       </header>
 
       <div>
         <Outlet />
       </div>
 
-      <footer>Footer</footer>
+      <footer className="flex justify-center w-full bg-gray-100">Footer</footer>
     </div>
   );
 };
