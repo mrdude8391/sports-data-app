@@ -6,6 +6,7 @@ import Login from "./pages/Login.tsx";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import MainLayout from "./pages/layouts/MainLayout.tsx";
 import Profile from "./pages/Profile.tsx";
+import Athletes from "./pages/Athletes.tsx";
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
             <Route path="/about" element={<About />} />
             <Route path="/login" element={<Login />} />
             <Route path="/profile" element={<Profile />} />
+            <Route path="/athletes" element={<Athletes />} />
           </Route>
         </Routes>
       </div>
