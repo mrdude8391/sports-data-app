@@ -3,6 +3,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 const Navbar = () => {
+  // Nav bar links are configured in the NAV_LINKS list in the index.ts file
   return (
     <>
       <nav className="sticky w-full bg-stone-200">
