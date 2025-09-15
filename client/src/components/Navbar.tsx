@@ -12,7 +12,7 @@ const Navbar = () => {
               <Link
                 key={link.key}
                 to={link.href}
-                className="flex items-center justify-center"
+                className="flex items-center justify-center p-5"
               >
                 {link.label}
               </Link>
