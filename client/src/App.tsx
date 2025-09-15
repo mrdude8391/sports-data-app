@@ -11,7 +11,7 @@ import Athletes from "./pages/Athletes.tsx";
 function App() {
   return (
     <>
-      <div className="flex flex-col h-screen items-center justify-center">
+      <div className="flex flex-col bg-stone-50 h-screen items-center justify-center">
         <Routes>
           {/* Layout */}
           <Route element={<MainLayout />}>
