@@ -3,14 +3,29 @@ import axios, { AxiosError } from "axios";
 
 const API_URL = import.meta.env.VITE_API_URL
 
-export const login = async (email: String, password: String) => {
+const api = axios.create({
+    baseURL: API_URL
+});
+
+api.interceptors.request.use(
+    (config) => {
+        const token = localStorage.getItem("token")
+        if (token) {
+            config.headers.Authorization = `Bearer ${token}`
+        }
+        return config
+    }, (error) => { return Promise.reject(error)}
+)
+
+export const login = async (email: string, password: string) => {
     try {
-        const res = await axios.post(API_URL + '/auth/login', {email, password} )
+        const res = await api.post("/auth/login", {email, password} )
         const user:User = {
             username: res.data.username,
             email: res.data.email,
             token: res.data.token
         }
+        localStorage.setItem("token", user.token)
         return user
     } catch (error: any) {
         console.log(error.response.data.message)
@@ -19,3 +34,16 @@ export const login = async (email: String, password: String) => {
 
 }
 
+export const profile = async() => {
+    try {
+        const res = await api.get("/auth/profile")
+        const user: User = {
+            username: res.data.username,
+            email: res.data.email,
+            token: res.data.token
+        }
+        return user
+    } catch (error : any) {
+        console.log(error.response.data.message)
+    }
+}
