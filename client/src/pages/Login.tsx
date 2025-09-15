@@ -9,7 +9,7 @@ const Login = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    let user = await sportsDataservice.login(email, password);
+    const user = await sportsDataservice.login(email, password);
     console.log("login page", user);
   };
 
