@@ -1,12 +1,12 @@
 import Footer from "@/components/Footer";
-import Header from "@/components/Header";
+import Navbar from "@/components/Navbar";
 import React from "react";
 import { Link, Outlet } from "react-router-dom";
 
 const MainLayout = () => {
   return (
     <>
-      <Header />
+      <Navbar />
       <div className="flex flex-col w-lg h-screen justify-center items-center">
         <Outlet />
       </div>
