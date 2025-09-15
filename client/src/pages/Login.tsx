@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import React, { useState } from "react";
 import * as sportsDataservice from "../services/sportsDataService";
 import type { User } from "@/types/User";
+import { Link } from "react-router-dom";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -36,7 +37,9 @@ const Login = () => {
           <Button className="flex-1" type="submit">
             Login
           </Button>
-          <Button className="flex-1">Sign Up</Button>
+          <Button className="flex-1">
+            <Link to="/register">Sign Up</Link>
+          </Button>
         </div>
       </div>
     </form>

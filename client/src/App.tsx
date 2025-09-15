@@ -12,8 +12,6 @@ function App() {
   return (
     <>
       <div className="flex flex-col h-screen items-center justify-center">
-        <p>Hello</p>
-
         <Routes>
           {/* Layout */}
           <Route element={<MainLayout />}>
