@@ -34,6 +34,22 @@ export const login = async (email: string, password: string) => {
 
 }
 
+export const register = async (email: string, password: string) => {
+    try {
+        const res = await api.post("/auth/register", {email, password})
+        const user:User = {
+            username: res.data.username,
+            email: res.data.email,
+            token: res.data.token,
+        }
+        localStorage.setItem("token", user.token)
+        return user
+    } catch (error: any) {
+        console.log(error.response.data.message)
+        return error
+    }
+}
+
 export const profile = async() => {
     try {
         const res = await api.get("/auth/profile")
