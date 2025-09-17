@@ -14,6 +14,7 @@ const Login = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const user = await sportsDataservice.login(email, password);
+    console.log(e);
     console.log("login page", user);
   };
 
@@ -54,9 +55,12 @@ const Login = () => {
           >
             Login
           </Button>
-          <Button variant="outline" className="w-full">
-            <Link to="/register">Sign Up</Link>
-          </Button>
+
+          <Link className="w-full" to="/register">
+            <Button variant="outline" className="cursor-pointer w-full">
+              Sign Up
+            </Button>
+          </Link>
         </CardFooter>
       </Card>
     </>
