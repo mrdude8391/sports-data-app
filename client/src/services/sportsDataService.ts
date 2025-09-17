@@ -34,9 +34,9 @@ export const login = async (email: string, password: string) => {
 
 }
 
-export const register = async (email: string, password: string) => {
+export const register = async (username: string, email: string, password: string) => {
     try {
-        const res = await api.post("/auth/register", {email, password})
+        const res = await api.post("/auth/register", {username, email, password})
         const user:User = {
             username: res.data.username,
             email: res.data.email,
@@ -45,8 +45,7 @@ export const register = async (email: string, password: string) => {
         localStorage.setItem("token", user.token)
         return user
     } catch (error: any) {
-        console.log(error.response.data.message)
-        return error
+        throw new Error(error.response?.data?.message || "Registration Failed")
     }
 }
 
