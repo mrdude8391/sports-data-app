@@ -2,20 +2,29 @@ import { Button } from "@/components/ui/button";
 import React, { useState } from "react";
 import * as sportsDataservice from "../services/sportsDataService";
 import type { User } from "@/types/User";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
+import { Alert, AlertTitle } from "@/components/ui/alert";
+import { AlertCircleIcon } from "lucide-react";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+
+  const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    const user = await sportsDataservice.login(email, password);
-    console.log(e);
-    console.log("login page", user);
+    try {
+      e.preventDefault();
+      const user = await sportsDataservice.login(email, password);
+      console.log("login Successful");
+      navigate("/profile");
+    } catch (err: any) {
+      setError(err.message);
+    }
   };
 
   return (
@@ -48,19 +57,28 @@ const Login = () => {
           </form>
         </CardContent>
         <CardFooter className="flex-col gap-2 justify-between">
-          <Button
-            className="w-full cursor-pointer"
-            type="submit"
-            form="loginForm"
-          >
+          <Button className="w-full" type="submit" form="loginForm">
             Login
           </Button>
 
           <Link className="w-full" to="/register">
-            <Button variant="outline" className="cursor-pointer w-full">
+            <Button variant="outline" className="w-full">
               Sign Up
             </Button>
           </Link>
+
+          {error && (
+            <Alert
+              variant="destructive"
+              className="flex justify-between items-center"
+            >
+              <AlertCircleIcon />
+              <AlertTitle className="text-center">{error}</AlertTitle>
+              <Button variant="destructive" onClick={() => setError("")}>
+                X
+              </Button>
+            </Alert>
+          )}
         </CardFooter>
       </Card>
     </>
