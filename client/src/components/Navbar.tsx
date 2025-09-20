@@ -1,9 +1,14 @@
 import { NAV_LINKS } from "@/constants";
+import { useAuth } from "@/context/AuthContext";
 import React from "react";
 import { Link } from "react-router-dom";
+import { Button } from "./ui/button";
 
 const Navbar = () => {
   // Nav bar links are configured in the NAV_LINKS list in the index.ts file
+
+  const { user, isLoggedIn, login, logout } = useAuth();
+
   return (
     <>
       <nav className="sticky w-full bg-stone-200">
@@ -18,6 +23,7 @@ const Navbar = () => {
                 {link.label}
               </Link>
             ))}
+            {isLoggedIn && <Button onClick={logout}> Logout</Button>}
           </ul>
         </div>
       </nav>

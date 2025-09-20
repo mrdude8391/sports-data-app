@@ -9,8 +9,10 @@ const api = axios.create({
 
 api.interceptors.request.use(
     (config) => {
+        
         const token = localStorage.getItem("token")
         if (token) {
+            
             config.headers.Authorization = `Bearer ${token}`
         }
         return config
@@ -52,7 +54,9 @@ export const register = async (username: string, email: string, password: string
 
 export const profile = async() => {
     try {
+        console.log("profile call")
         const res = await api.get("/auth/profile")
+        console.log("profile response")
         const user: User = {
             username: res.data.username,
             email: res.data.email,
@@ -60,6 +64,7 @@ export const profile = async() => {
         }
         return user
     } catch (error : any) {
+        throw new Error(error.response.data.message)
         console.log(error.response.data.message)
     }
 }

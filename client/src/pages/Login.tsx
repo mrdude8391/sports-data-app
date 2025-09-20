@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Alert, AlertTitle } from "@/components/ui/alert";
 import { AlertCircleIcon } from "lucide-react";
+import { useAuth } from "@/context/AuthContext";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -16,14 +17,18 @@ const Login = () => {
 
   const navigate = useNavigate();
 
+  const { user, login, logout } = useAuth();
+
   const handleSubmit = async (e: React.FormEvent) => {
     try {
       e.preventDefault();
       const user = await sportsDataservice.login(email, password);
       console.log("login Successful");
+      login(user);
       navigate("/profile");
     } catch (err: any) {
       setError(err.message);
+      console.log(err.message);
     }
   };
 

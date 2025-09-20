@@ -1,9 +1,8 @@
-import { useState } from "react";
 import About from "./pages/About.tsx";
 import Home from "./pages/Home.tsx";
 import Login from "./pages/Login.tsx";
 
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import MainLayout from "./pages/layouts/MainLayout.tsx";
 import Profile from "./pages/Profile.tsx";
 import Athletes from "./pages/Athletes.tsx";

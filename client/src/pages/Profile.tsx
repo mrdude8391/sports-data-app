@@ -9,9 +9,13 @@ const Profile = () => {
   const [username, setUsername] = useState("");
 
   const getProfile = async () => {
-    const user = await sportsDataService.profile();
-    if (user) {
-      setUsername(user.username);
+    try {
+      const user = await sportsDataService.profile();
+      if (user) {
+        setUsername(user.username);
+      }
+    } catch (error: any) {
+      console.log(error.message);
     }
   };
 
