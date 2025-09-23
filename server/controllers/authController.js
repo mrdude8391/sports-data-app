@@ -80,6 +80,7 @@ const getProfile = async (req, res) => {
     // can just return the req.user
     console.log("Get Profile", req.user.email);
     res.json(req.user);
+    console.log("Profile Response Sent");
   } catch (err) {
     res.status(500).json({ message: err.message });
   }

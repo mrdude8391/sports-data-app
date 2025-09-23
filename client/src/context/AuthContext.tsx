@@ -29,6 +29,7 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
   const navigate = useNavigate();
 
   const logout = () => {
+    console.log("Logout Called");
     localStorage.clear();
     setUser(null);
     setIsLoggedIn(false);
