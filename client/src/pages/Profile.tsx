@@ -1,6 +1,6 @@
 import AthleteCard from "@/components/AthleteCard";
 import { Image } from "lucide-react";
-import sampleImage from "../assets/sampleImage.png";
+import sampleImage from "../assets/circle-user-round.svg";
 import React, { useEffect, useState } from "react";
 import * as sportsDataService from "../services/sportsDataService";
 import type { User } from "@/types/User";
@@ -30,9 +30,7 @@ const Profile = () => {
         <div className="px-3 py-1 border-1 rounded-lg">{username}</div>
       </div>
       <div className="flex flex-col gap-5 py-10 px-15 border-2 rounded-xl">
-        <AthleteCard imageSrc={sampleImage} athlete="Micaa" />
-        <AthleteCard imageSrc={sampleImage} athlete="Gage" />
-        <AthleteCard imageSrc={sampleImage} athlete="Joe" />
+        <AthleteCard imageSrc={sampleImage} athlete="Player" />
       </div>
     </div>
   );
