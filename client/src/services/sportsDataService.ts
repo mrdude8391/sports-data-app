@@ -14,7 +14,23 @@ api.interceptors.request.use(
             config.headers.Authorization = `Bearer ${token}`
         }
         return config
-    }, (error) => { return Promise.reject(error)}
+    }, (error) => { 
+        console.log(error)
+        return Promise.reject(error)}
+)
+
+api.interceptors.response.use((response) => {
+    
+    return response
+},
+(error) => {
+    if (error.response && error.response.status === 401){
+        console.log("error 401 unauthorized token, clearing token")
+        localStorage.removeItem("token")
+    }
+    return Promise.reject(error)
+}
+
 )
 
 export const login = async (email: string, password: string) => {
