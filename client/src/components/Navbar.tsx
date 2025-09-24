@@ -23,7 +23,7 @@ const Navbar = () => {
                 {link.label}
               </Link>
             ))}
-            {isLoggedIn && <Button onClick={logout}> Logout</Button>}
+            {isLoggedIn && user && <Button onClick={logout}> Logout</Button>}
           </ul>
         </div>
       </nav>
