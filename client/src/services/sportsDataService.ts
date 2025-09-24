@@ -9,9 +9,10 @@ const api = axios.create({
 
 api.interceptors.request.use(
     (config) => {
-        const token = localStorage.getItem("token")
-        if (token) {
-            config.headers.Authorization = `Bearer ${token}`
+        const savedUser = localStorage.getItem("user")
+        if (savedUser) {
+            const user:User = JSON.parse(savedUser)
+            config.headers.Authorization = `Bearer ${user.token}`
         }
         return config
     }, (error) => { 
@@ -26,7 +27,7 @@ api.interceptors.response.use((response) => {
 (error) => {
     if (error.response && error.response.status === 401){
         console.log("error 401 unauthorized token, clearing token")
-        localStorage.removeItem("token")
+        localStorage.removeItem("user")
     }
     return Promise.reject(error)
 }
@@ -41,7 +42,7 @@ export const login = async (email: string, password: string) => {
             email: res.data.email,
             token: res.data.token
         }
-        localStorage.setItem("token", user.token)
+        localStorage.setItem("user", JSON.stringify(user))
         return user
     } catch (error: any) {
         console.log(error.response.data.message)

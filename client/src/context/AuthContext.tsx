@@ -37,9 +37,12 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) {
+    const savedUser = localStorage.getItem("user");
+    if (savedUser) {
+      const user = JSON.parse(savedUser);
+      console.log("rehydrate", user);
       setIsLoggedIn(true);
+      setUser(user);
     }
   }, []);
 

@@ -17,7 +17,7 @@ const Login = () => {
 
   const navigate = useNavigate();
 
-  const { user, login, logout } = useAuth();
+  const { login } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     try {
