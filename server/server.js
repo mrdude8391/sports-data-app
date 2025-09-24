@@ -18,6 +18,9 @@ app.get("/", (req, res) => {
 // use auth router
 const authRouter = require("./routes/authRoutes");
 app.use("/auth", authRouter);
+// athlete router
+const athleteRouter = require("./routes/athleteRoutes");
+app.use("/athlete", athleteRouter);
 
 const PORT = process.env.PORT;
 // Start Express server
