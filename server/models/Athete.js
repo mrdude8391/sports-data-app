@@ -18,4 +18,4 @@ const athleteSchema = new mongoose.Schema(
 // Compound index: prevents duplicate athlete names per user
 athleteSchema.index({ userId: 1, name: 1 }, { unique: true });
 
-module.exports = mongoose.model("User", userSchema);
+module.exports = mongoose.model("Athlete", athleteSchema);
