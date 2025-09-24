@@ -7,7 +7,7 @@ import * as sportsDataService from "../services/sportsDataService";
 const Profile = () => {
   // const [username, setUsername] = useState("");
 
-  const { user, login } = useAuth();
+  const { user } = useAuth();
 
   // const getProfile = async () => {
   //   try {
@@ -26,9 +26,9 @@ const Profile = () => {
   //   }
   // };
 
-  useEffect(() => {
-    // getProfile();
-  }, []);
+  // useEffect(() => {
+  //   // getProfile();
+  // }, []);
 
   return (
     <div className="flex flex-col gap-2">
