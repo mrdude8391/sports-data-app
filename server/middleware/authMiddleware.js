@@ -3,7 +3,6 @@ const User = require("../models/User");
 
 // Token verification
 const protect = async (req, res, next) => {
-  console.log("Protect called");
   let token;
   // Verify the correct headers sent
   if (
@@ -13,7 +12,6 @@ const protect = async (req, res, next) => {
     try {
       // split the token from the header string
       token = req.headers.authorization.split(" ")[1];
-      console.log("token", token);
       // decode the ID from the token using JWT
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
       // get the user from the decoded ID, without the password, and attach to the request.user
