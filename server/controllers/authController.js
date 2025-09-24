@@ -12,7 +12,6 @@ const generateToken = (id) => {
 const registerUser = async (req, res) => {
   try {
     const { username, email, password } = req.body;
-    console.log("Register User", username, " ", email);
     // if user exists return 400
     const userExists = await User.findOne({ email });
     if (userExists) {
@@ -44,7 +43,6 @@ const registerUser = async (req, res) => {
 
 const loginUser = async (req, res) => {
   try {
-    console.log("login called", req.body);
     const { email, password } = req.body;
     // check user exist
     const user = await User.findOne({ email });
@@ -78,9 +76,7 @@ const getProfile = async (req, res) => {
   try {
     // receive the req.user from authMiddleware
     // can just return the req.user
-    console.log("Get Profile", req.user.email);
     res.json(req.user);
-    console.log("Profile Response Sent");
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
