@@ -23,4 +23,13 @@ const createAthlete = async (req, res) => {
   }
 };
 
-module.exports = { createAthlete };
+const getAthletes = async (req, res) => {
+  try {
+    const athletes = await Athlete.find({ userId: req.user._id });
+    res.json(athletes);
+  } catch (err) {
+    return res.status(500).json({ message: err.message });
+  }
+};
+
+module.exports = { createAthlete, getAthletes };
