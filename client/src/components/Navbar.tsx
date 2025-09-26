@@ -7,7 +7,7 @@ import { Button } from "./ui/button";
 const Navbar = () => {
   // Nav bar links are configured in the NAV_LINKS list in the index.ts file
 
-  const { user, isLoggedIn, login, logout } = useAuth();
+  const { user, isLoggedIn, logout } = useAuth();
 
   return (
     <>
