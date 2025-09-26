@@ -1,3 +1,4 @@
+import type { Athlete } from '@/types/Athlete';
 import type { User } from './../types/User';
 import axios from "axios";
 
@@ -18,6 +19,7 @@ api.interceptors.request.use(
         const savedUser = localStorage.getItem("user")
         console.log("inteceptor saved user", savedUser)
         if (savedUser) {
+            console.log("user exists")
             const user:User = JSON.parse(savedUser)
             config.headers.Authorization = `Bearer ${user.token}`
         }
@@ -89,12 +91,21 @@ export const profile = async () => {
     }
 }
 
-export const getAthletes = async () => {
+export const getAthletes = async () : Promise<Athlete[]> => {
     try {
         console.log("Get Athletes")
-        const res = await api.get("/athlete/")
-        const athletes = res.data
-        return athletes
+        const {data} = await api.get("/athlete/")
+        return data
+    } catch (error:any) {
+        throw new Error(error.response.data.message)
+    }
+}
+
+export const createAthlete = async (athlete : {name:string, age: number, height: number}) : Promise<Athlete> => {
+    try {
+        console.log("create athlete", athlete)
+        const {data} = await api.post("/athlete/create", athlete)
+        return data
     } catch (error:any) {
         throw new Error(error.response.data.message)
     }
