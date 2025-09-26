@@ -34,4 +34,20 @@ const getAthletes = async (req, res) => {
   }
 };
 
-module.exports = { createAthlete, getAthletes };
+const deleteAthlete = async (req, res) => {
+  try {
+    console.log("deleteAthlete");
+    const id = req.params.id;
+    const athlete = await Athlete.findOne({ _id: id, userId: req.user._id });
+
+    if (!athlete) {
+      return res.status(404).json({ message: "Athlete not found" });
+    }
+    await athlete.deleteOne();
+    res.status(200).json({ message: "Athlete deleted successfully" });
+  } catch (err) {
+    return res.status(500).json({ message: err.message });
+  }
+};
+
+module.exports = { createAthlete, getAthletes, deleteAthlete };
