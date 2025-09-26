@@ -15,9 +15,12 @@ const CreateAthlete = () => {
 
   const { isPending, error, mutate } = useMutation({
     mutationFn: sportsDataService.createAthlete,
-    onSuccess: (newAthlete) => {
+    onSuccess: () => {
       // Invalidate and refetch
       queryClient.invalidateQueries({ queryKey: ["athletes"] });
+      setName("");
+      setAge("");
+      setHeight("");
     },
   });
 
