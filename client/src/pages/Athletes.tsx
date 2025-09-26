@@ -7,6 +7,7 @@ import { useAuth } from "@/context/AuthContext";
 import { Loader } from "lucide-react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import CreateAthlete from "@/components/CreateAthlete";
+import DeleteAthlete from "@/components/DeleteAthlete";
 
 const Athletes = () => {
   // const [athletes, setAthletes] = useState<Athlete[]>([]);
@@ -72,7 +73,10 @@ const Athletes = () => {
       <CreateAthlete></CreateAthlete>
       {athletes &&
         athletes.map((a: Athlete) => (
-          <AthleteCard key={a._id} imageSrc={sampleImage} athlete={a.name} />
+          <div key={a._id} className="flex flex-row">
+            <AthleteCard imageSrc={sampleImage} athlete={a.name} />
+            <DeleteAthlete id={a._id} />
+          </div>
         ))}
     </div>
   );
