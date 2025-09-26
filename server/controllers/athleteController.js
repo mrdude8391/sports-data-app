@@ -5,6 +5,7 @@ const jwt = require("jsonwebtoken");
 
 const createAthlete = async (req, res) => {
   try {
+    console.log("createAthlete");
     const { name, age, height } = req.body;
     const userId = req.user._id;
     const athleteExists = await Athlete.findOne({ userId, name });
@@ -25,6 +26,7 @@ const createAthlete = async (req, res) => {
 
 const getAthletes = async (req, res) => {
   try {
+    console.log("getAthletes");
     const athletes = await Athlete.find({ userId: req.user._id });
     res.json(athletes);
   } catch (err) {
