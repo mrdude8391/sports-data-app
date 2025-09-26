@@ -1,5 +1,5 @@
 import type { User } from "@/types/User";
-import React, {
+import {
   createContext,
   useContext,
   useEffect,
@@ -7,6 +7,7 @@ import React, {
   type ReactNode,
 } from "react";
 import { useNavigate } from "react-router-dom";
+import { setLogoutCallback } from "@/services/sportsDataService";
 
 interface AuthContextType {
   user: User | null;
@@ -15,13 +16,14 @@ interface AuthContextType {
   logout: () => void;
 }
 
-const AuthContext = createContext<AuthContextType | null>(null);
+export const AuthContext = createContext<AuthContextType | null>(null);
 
 const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const login = (user: User) => {
+    localStorage.setItem("user", JSON.stringify(user));
     setUser(user);
     console.log("set user", user);
     setIsLoggedIn(true);
@@ -33,7 +35,7 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
     localStorage.clear();
     setUser(null);
     setIsLoggedIn(false);
-    navigate("/");
+    navigate("/login");
   };
 
   useEffect(() => {
@@ -44,6 +46,8 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
       setIsLoggedIn(true);
       setUser(user);
     }
+
+    setLogoutCallback(logout);
   }, []);
 
   return (
@@ -52,11 +56,10 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
     </AuthContext.Provider>
   );
 };
+export default AuthProvider;
 
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (!context) throw new Error("useAuth must be used within AuthProvider");
   return context;
 };
-
-export default AuthProvider;
