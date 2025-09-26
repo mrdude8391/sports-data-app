@@ -3,6 +3,7 @@ const User = require("../models/User");
 
 // Token verification
 const protect = async (req, res, next) => {
+  console.log("protect");
   let token;
   // Verify the correct headers sent
   if (
@@ -18,12 +19,13 @@ const protect = async (req, res, next) => {
       req.user = await User.findById(decoded.id).select("-password");
       next();
     } catch (error) {
+      console.log("token fail");
       res.status(401).json({ message: "Not authorized, token failed" });
     }
-
-    if (!token) {
-      res.status(401).json({ message: "Not authorized, no token" });
-    }
+  }
+  if (!token) {
+    console.log("no token");
+    res.status(401).json({ message: "Not authorized, no token" });
   }
 };
 
