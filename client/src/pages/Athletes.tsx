@@ -28,7 +28,7 @@ const Athletes = () => {
   return (
     <div className="flex flex-col gap-5">
       <CreateAthlete></CreateAthlete>
-      {athletes &&
+      {athletes && athletes.length > 0 ? (
         athletes.map((a: Athlete) => (
           <div key={a._id} className="flex flex-row">
             <AthleteCard imageSrc={sampleImage} athlete={a.name} />
@@ -37,7 +37,10 @@ const Athletes = () => {
             </Link>
             <DeleteAthlete id={a._id} />
           </div>
-        ))}
+        ))
+      ) : (
+        <p>No Athletes</p>
+      )}
     </div>
   );
 };
