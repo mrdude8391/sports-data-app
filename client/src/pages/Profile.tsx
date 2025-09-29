@@ -3,11 +3,13 @@ import sampleImage from "../assets/circle-user-round.svg";
 import { useEffect, useState } from "react";
 import { useAuth } from "@/context/AuthContext";
 import * as sportsDataService from "../services/sportsDataService";
+import { useNavigate } from "react-router-dom";
 
 const Profile = () => {
   // const [username, setUsername] = useState("");
 
-  const { user } = useAuth();
+  const { user, isLoggedIn } = useAuth();
+  const navigate = useNavigate();
 
   // const getProfile = async () => {
   //   try {
@@ -26,9 +28,10 @@ const Profile = () => {
   //   }
   // };
 
-  // useEffect(() => {
-  //   // getProfile();
-  // }, []);
+  useEffect(() => {
+    if (!isLoggedIn) navigate("/login");
+    // getProfile();
+  }, []);
 
   return (
     <div className="flex flex-col gap-2">
