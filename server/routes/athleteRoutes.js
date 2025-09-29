@@ -8,11 +8,14 @@ const {
   createAthlete,
   getAthletes,
   deleteAthlete,
+  getStats,
 } = require("../controllers/athleteController");
 
 router.post("/create", protect, createAthlete);
 router.get("/", protect, getAthletes);
 router.delete("/:id", protect, deleteAthlete);
+
+router.get("/:id/stats", protect, getStats);
 
 // export the router we have set up here
 module.exports = router;
