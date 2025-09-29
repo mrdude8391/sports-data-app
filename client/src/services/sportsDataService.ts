@@ -1,5 +1,6 @@
 import type { Athlete } from '@/types/Athlete';
 import type { User } from './../types/User';
+import type { Stat } from "@/types/Stat"
 import axios from "axios";
 
 const API_URL = import.meta.env.VITE_API_URL
@@ -115,6 +116,16 @@ export const deleteAthlete = async (id: string) => {
     try {
         console.log("delete athlete", id)
         await api.delete(`/athlete/${id}`)
+    } catch (error:any) {
+        throw new Error(error.response.data.message)
+    }
+}
+
+export const getStats = async (id: string) : Promise<Stat[]> => {
+    try {
+        console.log("Get Stats for: ", id)
+        const {data} = await api.get(`/athlete/${id}/stats`)
+        return data
     } catch (error:any) {
         throw new Error(error.response.data.message)
     }
