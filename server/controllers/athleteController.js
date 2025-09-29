@@ -81,4 +81,10 @@ const getStats = async (req, res) => {
   }
 };
 
-module.exports = { createAthlete, getAthletes, deleteAthlete };
+module.exports = {
+  createAthlete,
+  getAthletes,
+  deleteAthlete,
+  getStats,
+  createStat,
+};
