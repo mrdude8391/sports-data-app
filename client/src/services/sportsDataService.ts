@@ -121,6 +121,17 @@ export const deleteAthlete = async (id: string) => {
     }
 }
 
+export const createStat = async (stat: { athleteId: string, type: string, value: string}) => {
+    try {
+        console.log("create stat")
+        const { data } = await api.post(`/athlete/${stat.athleteId}/stats`, stat) 
+        return data
+    } catch (error: any) {
+        
+        throw new Error(error.response.data.message)
+    }
+}
+
 export const getStats = async (id: string) : Promise<Stat[]> => {
     try {
         console.log("Get Stats for: ", id)
