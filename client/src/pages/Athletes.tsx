@@ -12,51 +12,6 @@ import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 
 const Athletes = () => {
-  // const [athletes, setAthletes] = useState<Athlete[]>([]);
-  // const [loading, setLoading] = useState(true);
-
-  // const { isLoggedIn } = useAuth();
-
-  // const fetchAthletes = async () => {
-  //   try {
-  //     setLoading(true);
-  //     const athletes = await sportsDataService.getAthletes();
-  //     // setAthletes(res);
-  //     return athletes
-  //   } catch (error) {
-  //     console.log(error)
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   fetchAthletes();
-  //   console.log("fetch athletes", athletes);
-  // }, []);
-
-  //  return (
-  //   <div className="flex flex-col gap-5">
-  //     {isLoggedIn ? (
-  //       loading ? (
-  //         <Loader className="animate-spin" />
-  //       ) : (
-  //         athletes.map((athlete) => (
-  //           <AthleteCard
-  //             key={athlete._id}
-  //             imageSrc={sampleImage}
-  //             athlete={athlete.name}
-  //           />
-  //         ))
-  //       )
-  //     ) : (
-  //       <AthleteCard imageSrc={sampleImage} athlete="No user logged in" />
-  //     )}
-
-  //     <div className="min-w-lg min-h-10 border-2"></div>
-  //   </div>
-  // );
-
   const {
     data: athletes,
     isLoading,
