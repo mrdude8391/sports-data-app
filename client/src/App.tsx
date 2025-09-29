@@ -7,6 +7,7 @@ import MainLayout from "./pages/layouts/MainLayout.tsx";
 import Profile from "./pages/Profile.tsx";
 import Athletes from "./pages/Athletes.tsx";
 import Register from "./pages/Register.tsx";
+import AthleteStats from "./pages/AthleteStats.tsx";
 
 function App() {
   return (
@@ -22,6 +23,10 @@ function App() {
             <Route path="/profile" element={<Profile />} />
             <Route path="/athletes" element={<Athletes />} />
             <Route path="/register" element={<Register />} />
+            <Route
+              path="/athletes/:athleteId/stats"
+              element={<AthleteStats />}
+            />
           </Route>
         </Routes>
       </div>
