@@ -45,6 +45,7 @@ const CreateAthlete = () => {
           id="name"
           value={name}
           placeholder="Name"
+          required
           onChange={(e) => {
             setName(e.target.value);
           }}
@@ -55,6 +56,7 @@ const CreateAthlete = () => {
           id="age"
           value={age}
           placeholder="Age"
+          required
           onChange={(e) => {
             setAge(e.target.value);
           }}
@@ -65,6 +67,7 @@ const CreateAthlete = () => {
           id="height"
           value={height}
           placeholder="Height"
+          required
           onChange={(e) => {
             setHeight(e.target.value);
           }}
