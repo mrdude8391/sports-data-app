@@ -1,6 +1,6 @@
 import type { Athlete } from '@/types/Athlete';
 import type { User } from './../types/User';
-import type { Stat } from "@/types/Stat"
+import type { Stat, StatForm } from "@/types/Stat"
 import axios from "axios";
 
 const API_URL = import.meta.env.VITE_API_URL
@@ -121,10 +121,10 @@ export const deleteAthlete = async (id: string) => {
     }
 }
 
-export const createStat = async (stat: { athleteId: string, type: string, value: string}) => {
+export const createStat = async (newStat : {athleteId: string, data: StatForm}) => {
     try {
-        console.log("create stat")
-        const { data } = await api.post(`/athlete/${stat.athleteId}/stats`, stat) 
+        console.log("create stat", newStat.data)
+        const { data } = await api.post(`/athlete/${newStat.athleteId}/stats`, newStat.data) 
         return data
     } catch (error: any) {
         
