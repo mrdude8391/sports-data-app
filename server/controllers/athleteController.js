@@ -54,15 +54,13 @@ const deleteAthlete = async (req, res) => {
 const createStat = async (req, res) => {
   try {
     console.log("add stat");
-    const { type, value, recordedAt } = req.body;
+    const data = req.body;
     const athleteId = req.params.id;
     const userId = req.user._id;
     const stat = await Stat.create({
       userId: userId,
       athleteId: athleteId,
-      type: type,
-      value: value,
-      recordedAt: recordedAt,
+      ...data,
     });
     res.status(201).json(stat);
   } catch (err) {
