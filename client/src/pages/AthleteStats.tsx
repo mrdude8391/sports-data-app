@@ -1,14 +1,21 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import * as sportsDataService from "@/services/sportsDataService";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Loader } from "lucide-react";
 import type { Stat } from "@/types/Stat";
 import AthleteStatsList from "@/components/AthleteStatsList";
 import CreateAthleteStat from "@/components/CreateAthleteStat";
+import type { Athlete } from "@/types/Athlete";
 
 const AthleteStats = () => {
   const { athleteId } = useParams<{ athleteId: string }>();
+
+  const queryClient = useQueryClient();
+
+  // Try to read from cache
+  const athletes = queryClient.getQueryData<Athlete[]>(["athletes"]);
+  const cachedAthlete = athletes?.find((a) => a._id === athleteId);
 
   const {
     data: stats,
@@ -25,8 +32,10 @@ const AthleteStats = () => {
 
   return (
     <div>
-      AthleteStats
-      <div>{athleteId}</div>
+      <div>
+        <p>{cachedAthlete?.name}</p>
+        <p>Id {athleteId}</p>
+      </div>
       <CreateAthleteStat />
       <AthleteStatsList stats={stats!} />
     </div>
