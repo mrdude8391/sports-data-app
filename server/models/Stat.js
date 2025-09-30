@@ -14,8 +14,38 @@ const statSchema = new mongoose.Schema(
       required: true,
       index: true,
     },
-    type: { type: String, required: true },
-    value: { type: Number, required: true },
+    attack: {
+      kills: { type: Number, default: 0 },
+      errors: { type: Number, default: 0 },
+      total: { type: Number, default: 0 },
+      percentage: { type: Number, default: 0 },
+    },
+    setting: {
+      assists: { type: Number, default: 0 },
+      errors: { type: Number, default: 0 },
+    },
+    serving: {
+      rating: { type: Number, default: 0 },
+      aces: { type: Number, default: 0 },
+      errors: { type: Number, default: 0 },
+      attempts: { type: Number, default: 0 },
+    },
+    passing: {
+      rating: { type: Number, default: 0 },
+      errors: { type: Number, default: 0 },
+      attempts: { type: Number, default: 0 },
+    },
+    defense: {
+      digs: { type: Number, default: 0 },
+    },
+    blocking: {
+      total: { type: Number, default: 0 },
+      kills: { type: Number, default: 0 },
+      solos: { type: Number, default: 0 },
+      goodTouches: { type: Number, default: 0 },
+      attempts: { type: Number, default: 0 },
+      errors: { type: Number, default: 0 },
+    },
     recordedAt: { type: Date, default: Date.now },
   },
   { timestamps: true }
