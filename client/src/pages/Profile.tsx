@@ -6,31 +6,11 @@ import * as sportsDataService from "../services/sportsDataService";
 import { useNavigate } from "react-router-dom";
 
 const Profile = () => {
-  // const [username, setUsername] = useState("");
-
   const { user, isLoggedIn } = useAuth();
   const navigate = useNavigate();
 
-  // const getProfile = async () => {
-  //   try {
-  //     console.log("get profile");
-  //     if (user) {
-  //       setUsername(user.username);
-  //     } else {
-  //       const tempUser = await sportsDataService.profile();
-  //       if (tempUser) {
-  //         login(tempUser);
-  //         setUsername(tempUser.username);
-  //       }
-  //     }
-  //   } catch (error: any) {
-  //     console.log(error.message);
-  //   }
-  // };
-
   useEffect(() => {
     if (!isLoggedIn) navigate("/login");
-    // getProfile();
   }, []);
 
   return (
