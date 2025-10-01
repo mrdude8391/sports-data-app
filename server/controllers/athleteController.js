@@ -79,10 +79,27 @@ const getStats = async (req, res) => {
   }
 };
 
+const deleteStat = async (req, res) => {
+  try {
+    console.log("deleteStat");
+    const statId = req.params.id;
+    const stat = await Stat.findOne({ _id: statId, userId: req.user._id });
+
+    if (!stat) {
+      return res.status(404).json({ message: "Stat not found" });
+    }
+    await stat.deleteOne();
+    res.status(200).json({ message: "Stat deleted successfully" });
+  } catch (err) {
+    return res.status(500).json({ message: err.message });
+  }
+};
+
 module.exports = {
   createAthlete,
   getAthletes,
   deleteAthlete,
   getStats,
   createStat,
+  deleteStat,
 };
