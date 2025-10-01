@@ -65,7 +65,7 @@ const CreateAthleteStat = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (athleteId && form != initialForm) {
+    if (athleteId && form != initialForm && date) {
       console.log(form, date);
       mutate({ athleteId, data: form, recordDate: date });
     }
