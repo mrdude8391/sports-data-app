@@ -19,6 +19,14 @@ import {
 } from "@/components/ui/dialog";
 import { Alert, AlertTitle } from "./ui/alert";
 import { AlertCircleIcon } from "lucide-react";
+import * as React from "react";
+import { ChevronDownIcon } from "lucide-react";
+import { Calendar } from "@/components/ui/calendar";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 
 const initialForm: StatForm = Object.fromEntries(
   Object.entries(STAT_FIELDS).map(([category, fields]) => [
@@ -31,6 +39,8 @@ const CreateAthleteStat = () => {
   const { athleteId } = useParams<{ athleteId: string }>();
 
   const [form, setForm] = useState<StatForm>(initialForm);
+  const [open, setOpen] = React.useState(false);
+  const [date, setDate] = React.useState<Date | undefined>(new Date());
 
   const queryClient = useQueryClient();
 
@@ -56,8 +66,8 @@ const CreateAthleteStat = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (athleteId && form != initialForm) {
-      console.log(form);
-      mutate({ athleteId, data: form });
+      console.log(form, date);
+      mutate({ athleteId, data: form, recordDate: date });
     }
   };
 
@@ -77,6 +87,37 @@ const CreateAthleteStat = () => {
               </DialogDescription>
             </DialogHeader>
             <div className="overflow-y-auto space-y-4 p-4">
+              <div className="flex flex-col gap-3">
+                <Label htmlFor="date" className="px-1">
+                  Date
+                </Label>
+                <Popover open={open} onOpenChange={setOpen}>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant="outline"
+                      id="date"
+                      className="w-48 justify-between font-normal"
+                    >
+                      {date ? date.toLocaleDateString() : "Select date"}
+                      <ChevronDownIcon />
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent
+                    className="w-auto overflow-hidden p-0"
+                    align="start"
+                  >
+                    <Calendar
+                      mode="single"
+                      selected={date}
+                      captionLayout="dropdown"
+                      onSelect={(date) => {
+                        setDate(date);
+                        setOpen(false);
+                      }}
+                    />
+                  </PopoverContent>
+                </Popover>
+              </div>
               {Object.entries(STAT_FIELDS).map(([category, fields]) => (
                 <fieldset key={category} className="border p-4 rounded-md ">
                   <legend className="font-bold capitalize">{category}</legend>
