@@ -1,6 +1,9 @@
 import { STAT_FIELDS } from "@/constants";
 import type { Stat } from "@/types/Stat";
-import React from "react";
+import { Button } from "./ui/button";
+
+import * as sportsDataService from "@/services/sportsDataService";
+import DeleteAthleteStat from "./DeleteAthleteStat";
 
 interface AthleteStatsListProps {
   stats: Stat[];
@@ -8,6 +11,7 @@ interface AthleteStatsListProps {
 
 const AthleteStatsList = (props: AthleteStatsListProps) => {
   const { stats } = props;
+
   return (
     <div>
       {stats && stats.length > 0 ? (
@@ -31,6 +35,9 @@ const AthleteStatsList = (props: AthleteStatsListProps) => {
                   </div>
                 </div>
               ))}
+              <div>
+                <DeleteAthleteStat statId={stat._id} />
+              </div>
             </li>
           ))}
         </ul>

@@ -141,3 +141,12 @@ export const getStats = async (id: string) : Promise<Stat[]> => {
         throw new Error(error.response.data.message)
     }
 }
+
+export const deleteStat = async (statId : string) => {
+    try {
+        console.log("delete stat", statId)
+        await api.delete(`/athlete/${statId}/stats`)
+    } catch (error:any) {
+        throw new Error(error.response.data.message)
+    }
+}
