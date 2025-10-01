@@ -72,7 +72,9 @@ const getStats = async (req, res) => {
   try {
     console.log("get all stats");
     const athleteId = req.params.id;
-    const stats = await Stat.find({ athleteId: athleteId });
+    const stats = await Stat.find({ athleteId: athleteId }).sort({
+      recordedAt: -1,
+    });
     res.status(201).json(stats);
   } catch (err) {
     return res.status(500).json({ message: err.message });
