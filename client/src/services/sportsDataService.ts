@@ -124,7 +124,7 @@ export const deleteAthlete = async (id: string) => {
 export const createStat = async (req : {athleteId: string, data: StatForm, recordDate: Date}) => {
     try {
         
-        const newStat =  {...req.data, recordedAt : req.recordDate }
+        const newStat = {...req.data, recordedAt : req.recordDate }
         console.log("create stat", newStat)
         const { data } = await api.post(`/athlete/${req.athleteId}/stats`, newStat) 
         return data
