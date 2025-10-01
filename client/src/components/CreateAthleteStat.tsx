@@ -31,7 +31,6 @@ const CreateAthleteStat = () => {
   const { athleteId } = useParams<{ athleteId: string }>();
 
   const [form, setForm] = useState<StatForm>(initialForm);
-  const [dialogOpen, setDialogOpen] = useState(false);
 
   const queryClient = useQueryClient();
 
@@ -41,7 +40,6 @@ const CreateAthleteStat = () => {
       // Invalidate and refetch
       queryClient.invalidateQueries({ queryKey: ["stats"] });
       setForm(initialForm);
-      setDialogOpen(false);
     },
   });
 
