@@ -1,11 +1,9 @@
 import AthleteCard from "@/components/AthleteCard";
-import { useEffect, useState } from "react";
 import type { Athlete } from "@/types/Athlete";
 import * as sportsDataService from "../services/sportsDataService";
 import sampleImage from "../assets/circle-user-round.svg";
-import { useAuth } from "@/context/AuthContext";
 import { Loader } from "lucide-react";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import CreateAthlete from "@/components/CreateAthlete";
 import DeleteAthlete from "@/components/DeleteAthlete";
 import { Button } from "@/components/ui/button";
