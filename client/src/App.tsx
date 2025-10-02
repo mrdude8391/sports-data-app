@@ -12,24 +12,19 @@ import AthleteStats from "./pages/AthleteStats.tsx";
 function App() {
   return (
     <>
-      <div className="flex flex-col bg-stone-50 min-h-screen items-center justify-center">
-        <Routes>
-          {/* Layout */}
-          <Route element={<MainLayout />}>
-            {/* Routes */}
-            <Route path="/" element={<Home />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/profile" element={<Profile />} />
-            <Route path="/athletes" element={<Athletes />} />
-            <Route path="/register" element={<Register />} />
-            <Route
-              path="/athletes/:athleteId/stats"
-              element={<AthleteStats />}
-            />
-          </Route>
-        </Routes>
-      </div>
+      <Routes>
+        {/* Layout */}
+        <Route element={<MainLayout />}>
+          {/* Routes */}
+          <Route path="/" element={<Home />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/athletes" element={<Athletes />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/athletes/:athleteId/stats" element={<AthleteStats />} />
+        </Route>
+      </Routes>
     </>
   );
 }
