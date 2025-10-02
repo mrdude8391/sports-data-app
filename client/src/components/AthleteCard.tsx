@@ -9,7 +9,7 @@ interface AthleteCardProps {
 const AthleteCard = (props: AthleteCardProps) => {
   const { imageSrc, athlete } = props;
   return (
-    <div className="flex gap-5 items-center border-1 rounded-lg px-5 py-2">
+    <div className="flex w-full gap-5 items-center border-1 rounded-lg px-5 py-2">
       <img
         src={imageSrc}
         height={48}

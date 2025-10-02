@@ -28,7 +28,7 @@ const Athletes = () => {
       <CreateAthlete></CreateAthlete>
       {athletes && athletes.length > 0 ? (
         athletes.map((a: Athlete) => (
-          <div key={a._id} className="flex flex-row">
+          <div key={a._id} className="flex flex-row gap-4 items-center">
             <AthleteCard imageSrc={sampleImage} athlete={a.name} />
             <Link to={`/athletes/${a._id}/stats`}>
               <Button>View Stats</Button>
