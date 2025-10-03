@@ -22,19 +22,22 @@ const AthleteStatsList = (props: AthleteStatsListProps) => {
                 Game {index + 1} (
                 {new Date(stat.recordedAt).toLocaleDateString()})
               </h3>
-              {Object.entries(STAT_FIELDS).map(([category, fields]) => (
-                <div key={category} className="mb-2">
-                  <h4 className="font-semibold capitalize">{category}</h4>
-                  <div className="grid grid-cols-2 gap-2">
-                    {fields.map(({ key, label }) => (
-                      <div key={key} className="flex justify-between">
-                        <span>{label}</span>
-                        <span>{(stat as any)[category][key]}</span>
-                      </div>
-                    ))}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-5 gap-x-10">
+                {Object.entries(STAT_FIELDS).map(([category, fields]) => (
+                  <div key={category} className="mb-2">
+                    <h4 className="font-semibold capitalize">{category}</h4>
+                    <div className="grid grid-cols-2 gap-2">
+                      {fields.map(({ key, label }) => (
+                        <div key={key} className="flex justify-between">
+                          <span>{label}</span>
+                          <span>{(stat as any)[category][key]}</span>
+                        </div>
+                      ))}
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
+
               <div>
                 <DeleteAthleteStat statId={stat._id} />
               </div>
