@@ -20,7 +20,7 @@ const Profile = () => {
         <div className="px-3 py-1 border-1 rounded-lg">{user?.username}</div>
       </div>
       <div className="flex flex-col gap-5 py-10 px-15 border-2 rounded-xl">
-        <AthleteCard imageSrc={sampleImage} athlete="Player" />
+        <p>Profile Stuff</p>
       </div>
     </div>
   );
