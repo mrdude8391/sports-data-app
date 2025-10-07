@@ -65,7 +65,8 @@ const CreateAthleteStat = () => {
         const kills = key === "kills" ? value : updatedCategory.kills;
         const total = key === "total" ? value : updatedCategory.total;
 
-        updatedCategory.percentage = total > 0 ? (kills / total) * 100 : 0;
+        updatedCategory.percentage =
+          total > 0 ? Math.round((kills / total) * 100) : 0;
       }
 
       return {
