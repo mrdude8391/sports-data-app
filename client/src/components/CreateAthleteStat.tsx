@@ -54,13 +54,25 @@ const CreateAthleteStat = () => {
   });
 
   const handleChange = (category: string, key: string, value: number) => {
-    setForm((prev) => ({
-      ...prev,
-      [category]: {
+    setForm((prev) => {
+      const updatedCategory = {
         ...prev[category],
         [key]: value,
-      },
-    }));
+      };
+
+      // Auto-calculate hitting percentage
+      if (category === "attack" && (key === "kills" || key === "total")) {
+        const kills = key === "kills" ? value : updatedCategory.kills;
+        const total = key === "total" ? value : updatedCategory.total;
+
+        updatedCategory.percentage = total > 0 ? (kills / total) * 100 : 0;
+      }
+
+      return {
+        ...prev,
+        [category]: updatedCategory,
+      };
+    });
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
