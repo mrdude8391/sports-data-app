@@ -7,6 +7,7 @@ import type { Stat } from "@/types/Stat";
 import AthleteStatsList from "@/components/AthleteStatsList";
 import CreateAthleteStat from "@/components/CreateAthleteStat";
 import type { Athlete } from "@/types/Athlete";
+import AthleteStatChart from "@/components/AthleteStatChart";
 
 const AthleteStats = () => {
   const { athleteId } = useParams<{ athleteId: string }>();
@@ -37,7 +38,7 @@ const AthleteStats = () => {
         <p>Id {athleteId}</p>
       </div>
       <CreateAthleteStat />
-
+      <AthleteStatChart stats={stats!} />
       <AthleteStatsList stats={stats!} />
     </div>
   );

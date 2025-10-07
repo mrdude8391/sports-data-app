@@ -1,6 +1,11 @@
-import React from "react";
+import type { Stat } from "@/types/Stat";
 
-const AthleteStatChart = () => {
+interface AthleteStatChartProps {
+  stats: Stat[];
+}
+
+const AthleteStatChart = (props: AthleteStatChartProps) => {
+  const { stats } = props;
   return <div>AthleteStatChart</div>;
 };
 
