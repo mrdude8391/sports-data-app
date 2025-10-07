@@ -1,4 +1,4 @@
-export type Stat = {
+export type   Stat = {
     _id?:string,
     userId: string,
     athleteId: string,
