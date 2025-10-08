@@ -10,35 +10,35 @@ export const NAV_LINKS = [
 export const STAT_FIELDS = {
     attack: [
     { key: "kills", label: "Kills" },
-    { key: "errors", label: "Errors" },
+    { key: "errors", label: "Attack Errors" },
     { key: "total", label: "Total Attacks" },
     { key: "percentage", label: "Hitting %" },
   ],
   setting: [
     { key: "assists", label: "Assists" },
-    { key: "errors", label: "Errors" },
+    { key: "errors", label: "Setting Errors" },
   ],
   serving: [
-    { key: "rating", label: "Rating" },
+    { key: "rating", label: "Serve Rating" },
     { key: "aces", label: "Aces" },
-    { key: "errors", label: "Errors" },
-    { key: "attempts", label: "Attempts" },
+    { key: "errors", label: "Serve Errors" },
+    { key: "attempts", label: "Serve Attempts" },
   ],
   passing: [
-    { key: "rating", label: "Rating" },
-    { key: "errors", label: "Errors" },
-    { key: "attempts", label: "Attempts" },
+    { key: "rating", label: "Passing Rating" },
+    { key: "errors", label: "Passing Errors" },
+    { key: "attempts", label: "Passing Attempts" },
   ],
   defense : [
     { key: 'digs', label: "Digs"}
   ],
   blocking : [
     { key: "total", label: "Total Blocks" },
-    { key: "kills", label: "Kills" },
+    { key: "kills", label: "Block Kills" },
     { key: "solos", label: "Solo Blocks" },
-    { key: "goodTouches", label: "Good Touches" },
-    { key: "attempts", label: "Attempts" },
-    { key: "errors", label: "Errors" },
+    { key: "goodTouches", label: "Good Block Touches" },
+    { key: "attempts", label: "Block Attempts" },
+    { key: "errors", label: "Block Errors" },
   ]
     
 }

@@ -38,7 +38,7 @@ const AthleteStats = () => {
         <p>Id {athleteId}</p>
       </div>
       <CreateAthleteStat />
-      <AthleteStatChart />
+      <AthleteStatChart stats={stats!} />
       <AthleteStatsList stats={stats!} />
     </div>
   );

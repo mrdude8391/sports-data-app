@@ -35,6 +35,8 @@ export type   Stat = {
       errors: number,
     },
     recordedAt: Date,
+    createdAt: Date,
+    updatedAt: Date
 }
 
 export type StatForm = {
