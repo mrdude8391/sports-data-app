@@ -28,6 +28,8 @@ const AthleteStats = () => {
     enabled: !!athleteId,
   });
 
+  if (stats) console.log(stats);
+
   if (isLoading) return <Loader className="animate-spin" />;
   if (error) return <p>{error.message}</p>;
 

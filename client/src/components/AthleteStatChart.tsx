@@ -19,20 +19,22 @@ interface AthleteStatChartProps {
 const AthleteStatChart = (props: AthleteStatChartProps) => {
   const { stats } = props;
 
-  //   const [data, setData] = useState([]);
+  const [data, setData] = useState("");
 
   //   const convertStats = (stats: Stat[]) => {
   //     const data = stats.map((stat) => {});
   //     return data;
   //   };
 
-  useEffect(() => {
-    console.log(stats);
-  }, []);
+  const handleValueChange = (value: any) => {
+    setData(value);
+    // Perform any other actions with the selected value here
+  };
 
   return (
     <div className="flex flex-col">
-      <Select>
+      <p>{data}</p>
+      <Select onValueChange={handleValueChange} value={data}>
         <SelectTrigger className="w-[180px]">
           <SelectValue placeholder="Select a bitch" />
         </SelectTrigger>
@@ -41,7 +43,7 @@ const AthleteStatChart = (props: AthleteStatChartProps) => {
             <SelectGroup key={category}>
               <SelectLabel>{category}</SelectLabel>
               {field.map(({ key, label }) => (
-                <SelectItem key={key} value={label}>
+                <SelectItem key={key} value={category + "." + key}>
                   {label}
                 </SelectItem>
               ))}
@@ -59,7 +61,7 @@ const AthleteStatChart = (props: AthleteStatChartProps) => {
           labelFormatter={(date) => new Date(date).toLocaleDateString("en-UB")}
         />
         <Legend />
-        <Line type="monotone" dataKey="attack.kills" />
+        <Line type="monotone" dataKey={data} />
       </LineChart>
     </div>
   );
