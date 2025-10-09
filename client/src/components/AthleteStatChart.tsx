@@ -26,6 +26,11 @@ const AthleteStatChart = (props: AthleteStatChartProps) => {
   //     return data;
   //   };
 
+  const capitalize = (str: string) => {
+    if (str == undefined || str.length === 0) return "";
+    return str.charAt(0).toUpperCase() + str.slice(1);
+  };
+
   const handleValueChange = (value: any) => {
     setData(value);
     // Perform any other actions with the selected value here
@@ -33,15 +38,14 @@ const AthleteStatChart = (props: AthleteStatChartProps) => {
 
   return (
     <div className="flex flex-col">
-      <p>{data}</p>
-      <Select onValueChange={handleValueChange} value={data}>
+      <Select onValueChange={handleValueChange}>
         <SelectTrigger className="w-[180px]">
           <SelectValue placeholder="Select a stat" />
         </SelectTrigger>
         <SelectContent>
           {STAT_INDEX.map(({ category, fields }) => (
             <SelectGroup key={category}>
-              <SelectLabel>{category}</SelectLabel>
+              <SelectLabel>{capitalize(category)}</SelectLabel>
               {fields.map(({ key, label }) => (
                 <SelectItem
                   key={key}
@@ -62,8 +66,17 @@ const AthleteStatChart = (props: AthleteStatChartProps) => {
         <YAxis />
         <Tooltip
           labelFormatter={(date) => new Date(date).toLocaleDateString("en-UB")}
+          formatter={(value, name: string) => {
+            const [category, field] = name.split(".");
+            return [value, capitalize(field)];
+          }}
         />
-        <Legend />
+        <Legend
+          formatter={(value) => {
+            const [category, field] = value.split(".");
+            return `${capitalize(category)} - ${capitalize(field)}`;
+          }}
+        />
         <Line type="monotone" dataKey={data} />
       </LineChart>
     </div>
