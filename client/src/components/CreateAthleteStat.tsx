@@ -62,27 +62,57 @@ const CreateAthleteStat = () => {
 
       // Auto-calculate hitting percentage
       if (
-        category === "Attack" &&
+        category === "attack" &&
         (key === "kills" || key === "total" || key === "errors")
       ) {
         const kills = key === "kills" ? value : updatedCategory.kills;
         const total = key === "total" ? value : updatedCategory.total;
         const errors = key === "errors" ? value : updatedCategory.errors;
-
         const percentage = total > 0 ? ((kills - errors) / total) * 100 : 0;
-
         updatedCategory.percentage = Math.round(percentage * 10) / 10;
       }
 
-      // Auto-calculate hitting percentage
-      if (category === "Serving" && (key === "attempts" || key === "errors")) {
+      // Auto-calculate serving percentage
+      if (
+        category === "serving" &&
+        (key === "attempts" || key === "errors" || key === "ratingTotal")
+      ) {
         const attempts = key === "attempts" ? value : updatedCategory.attempts;
         const errors = key === "errors" ? value : updatedCategory.errors;
-
+        const ratingTotal =
+          key === "ratingTotal" ? value : updatedCategory.ratingTotal;
         const percentage =
           attempts > 0 ? ((attempts - errors) / attempts) * 100 : 0;
+        const rating = attempts > 0 ? ratingTotal / attempts : 0;
 
+        updatedCategory.rating = Math.round(rating * 10) / 10;
         updatedCategory.percentage = Math.round(percentage * 10) / 10;
+      }
+
+      // Auto-calculate receiving rating
+      if (
+        category === "receiving" &&
+        (key === "ratingTotal" || key === "attempts")
+      ) {
+        const attempts = key === "attempts" ? value : updatedCategory.attempts;
+        const ratingTotal =
+          key === "ratingTotal" ? value : updatedCategory.ratingTotal;
+        const rating = attempts > 0 ? ratingTotal / attempts : 0;
+
+        updatedCategory.rating = Math.round(rating * 10) / 10;
+      }
+
+      // Auto-calculate defense rating
+      if (
+        category === "defense" &&
+        (key === "ratingTotal" || key === "attempts")
+      ) {
+        const attempts = key === "attempts" ? value : updatedCategory.attempts;
+        const ratingTotal =
+          key === "ratingTotal" ? value : updatedCategory.ratingTotal;
+        const rating = attempts > 0 ? ratingTotal / attempts : 0;
+
+        updatedCategory.rating = Math.round(rating * 10) / 10;
       }
 
       return {
