@@ -26,6 +26,7 @@ const statSchema = new mongoose.Schema(
     },
     serving: {
       rating: { type: Number, default: 0 },
+      ratingTotal: { type: Number, default: 0 },
       aces: { type: Number, default: 0 },
       errors: { type: Number, default: 0 },
       attempts: { type: Number, default: 0 },
@@ -33,12 +34,14 @@ const statSchema = new mongoose.Schema(
     },
     receiving: {
       rating: { type: Number, default: 0 },
+      ratingTotal: { type: Number, default: 0 },
       errors: { type: Number, default: 0 },
       attempts: { type: Number, default: 0 },
     },
     defense: {
       digs: { type: Number, default: 0 },
       rating: { type: Number, default: 0 },
+      ratingTotal: { type: Number, default: 0 },
       errors: { type: Number, default: 0 },
       attempts: { type: Number, default: 0 },
     },
