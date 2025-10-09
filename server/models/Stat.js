@@ -29,6 +29,7 @@ const statSchema = new mongoose.Schema(
       aces: { type: Number, default: 0 },
       errors: { type: Number, default: 0 },
       attempts: { type: Number, default: 0 },
+      percentage: { type: Number, default: 0 },
     },
     passing: {
       rating: { type: Number, default: 0 },

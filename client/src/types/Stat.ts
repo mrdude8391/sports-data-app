@@ -17,6 +17,7 @@ export type   Stat = {
       aces: number,
       errors: number,
       attempts: number,
+      percentage: number, 
     },
     passing: {
       rating: number,

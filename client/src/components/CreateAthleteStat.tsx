@@ -61,12 +61,28 @@ const CreateAthleteStat = () => {
       };
 
       // Auto-calculate hitting percentage
-      if (category === "attack" && (key === "kills" || key === "total")) {
+      if (
+        category === "attack" &&
+        (key === "kills" || key === "total" || key === "errors")
+      ) {
         const kills = key === "kills" ? value : updatedCategory.kills;
         const total = key === "total" ? value : updatedCategory.total;
+        const errors = key === "errors" ? value : updatedCategory.errors;
 
-        updatedCategory.percentage =
-          total > 0 ? Math.round((kills / total) * 100) : 0;
+        const percentage = total > 0 ? ((kills - errors) / total) * 100 : 0;
+
+        updatedCategory.percentage = Math.round(percentage * 10) / 10;
+      }
+
+      // Auto-calculate hitting percentage
+      if (category === "serving" && (key === "attempts" || key === "errors")) {
+        const attempts = key === "attempts" ? value : updatedCategory.attempts;
+        const errors = key === "errors" ? value : updatedCategory.errors;
+
+        const percentage =
+          attempts > 0 ? ((attempts - errors) / attempts) * 100 : 0;
+
+        updatedCategory.percentage = Math.round(percentage * 10) / 10;
       }
 
       return {

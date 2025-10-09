@@ -23,6 +23,7 @@ export const STAT_FIELDS = {
     { key: "aces", label: "Aces" },
     { key: "errors", label: "Serve Errors" },
     { key: "attempts", label: "Serve Attempts" },
+    { key: "percentage", label: "Serving Percentage" },
   ],
   passing: [
     { key: "rating", label: "Passing Rating" },
