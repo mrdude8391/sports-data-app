@@ -12,6 +12,10 @@ interface AthleteStatsListProps {
 const AthleteStatsList = (props: AthleteStatsListProps) => {
   const { stats } = props;
 
+  const capitalize = (str: string) => {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+  };
+
   return (
     <div>
       {/* {stats && stats.length > 0 ? (
@@ -59,14 +63,14 @@ const AthleteStatsList = (props: AthleteStatsListProps) => {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-5 gap-x-10">
                 {STAT_INDEX.map(({ category, fields }) => (
                   <div key={category} className="mb-2">
-                    <h4 className="font-semibold capitalize">{category}</h4>
+                    <h4 className="font-semibold capitalize">
+                      {capitalize(category)}
+                    </h4>
                     <div className="grid grid-cols-2 gap-2">
                       {fields.map(({ key, label }) => (
                         <div key={key} className="flex justify-between">
                           <span>{label}</span>
-                          <span>
-                            {(stat as any)[category.toLowerCase()][key]}
-                          </span>
+                          <span>{(stat as any)[category][key]}</span>
                         </div>
                       ))}
                     </div>
