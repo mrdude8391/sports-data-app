@@ -140,7 +140,16 @@ const CreateAthleteStat = () => {
                       selected={date}
                       captionLayout="dropdown"
                       onSelect={(date) => {
-                        setDate(date);
+                        const now = new Date();
+                        const merged = new Date(date!);
+                        merged.setHours(
+                          now.getHours(),
+                          now.getMinutes(),
+                          now.getSeconds(),
+                          now.getMilliseconds()
+                        );
+
+                        setDate(merged);
                         setOpen(false);
                       }}
                     />
