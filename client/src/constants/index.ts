@@ -45,7 +45,7 @@ export const STAT_FIELDS = {
 }
 
 export const STAT_INDEX = [
-    { category: "Attack", 
+    { category: "attack", 
       fields: [
         { key: "kills", label: "Kills" },
         { key: "errors", label: "Attack Errors" },
@@ -53,23 +53,23 @@ export const STAT_INDEX = [
         { key: "percentage", label: "Hitting %" },
       ]
     },
-    { category: "Setting", 
+    { category: "setting", 
       fields: [
         { key: "assists", label: "Assists" },
         { key: "errors", label: "Setting Errors" },
       ]
     },
-    { category: "Serving", 
+    { category: "serving", 
       fields: [
         { key: "rating", label: "Serve Rating" },
         { key: "ratingTotal", label: "Serve Rating Total" },
         { key: "aces", label: "Aces" },
         { key: "errors", label: "Serve Errors" },
         { key: "attempts", label: "Serve Attempts" },
-        { key: "percentage", label: "Serving Percentage" },
+        { key: "percentage", label: "Serving %" },
       ]
     },
-    { category: "Receiving", 
+    { category: "receiving", 
       fields: [
         { key: "rating", label: "Receive Rating" },
         { key: "ratingTotal", label: "Receive Rating Total" },
@@ -77,7 +77,7 @@ export const STAT_INDEX = [
         { key: "attempts", label: "Receive Attempts" },
       ]
     },        
-    { category: "Defense", 
+    { category: "defense", 
       fields: [
         { key: "digs", label: "Digs" },
         { key: "rating", label: "Passing Rating" },
@@ -86,7 +86,7 @@ export const STAT_INDEX = [
         { key: "attempts", label: "Passing Attempts" },
       ]
     },  
-    { category: "Blocking", 
+    { category: "blocking", 
       fields: [
         { key: "total", label: "Total Blocks" },
         { key: "kills", label: "Block Kills" },
