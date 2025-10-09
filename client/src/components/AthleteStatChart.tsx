@@ -10,7 +10,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useEffect, useState } from "react";
-import { STAT_FIELDS } from "@/constants";
+import { STAT_FIELDS, STAT_INDEX } from "@/constants";
 
 interface AthleteStatChartProps {
   stats: Stat[];
@@ -36,14 +36,17 @@ const AthleteStatChart = (props: AthleteStatChartProps) => {
       <p>{data}</p>
       <Select onValueChange={handleValueChange} value={data}>
         <SelectTrigger className="w-[180px]">
-          <SelectValue placeholder="Select a bitch" />
+          <SelectValue placeholder="Select a stat" />
         </SelectTrigger>
         <SelectContent>
-          {Object.entries(STAT_FIELDS).map(([category, field]) => (
+          {STAT_INDEX.map(({ category, fields }) => (
             <SelectGroup key={category}>
               <SelectLabel>{category}</SelectLabel>
-              {field.map(({ key, label }) => (
-                <SelectItem key={key} value={category + "." + key}>
+              {fields.map(({ key, label }) => (
+                <SelectItem
+                  key={key}
+                  value={category.toLowerCase() + "." + key}
+                >
                   {label}
                 </SelectItem>
               ))}
@@ -53,7 +56,7 @@ const AthleteStatChart = (props: AthleteStatChartProps) => {
       </Select>
       <LineChart width={600} height={300} data={stats}>
         <XAxis
-          dataKey="createdAt"
+          dataKey="recordedAt"
           tickFormatter={(date) => new Date(date).toLocaleDateString("en-UB")}
         />
         <YAxis />
