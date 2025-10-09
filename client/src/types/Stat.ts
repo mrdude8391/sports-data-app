@@ -19,13 +19,16 @@ export type   Stat = {
       attempts: number,
       percentage: number, 
     },
-    passing: {
+    receiving: {
       rating: number,
       errors: number,
       attempts: number,
     },
     defense: {
       digs: number,
+      rating: number,
+      errors: number,
+      attempts: number,
     },
     blocking: {
       total: number,

@@ -5,7 +5,7 @@ import { useState } from "react";
 import { useParams } from "react-router-dom";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import * as sportsDataService from "@/services/sportsDataService";
-import { STAT_FIELDS } from "@/constants";
+import { STAT_INDEX } from "@/constants";
 import type { StatForm } from "@/types/Stat";
 import {
   Dialog,
@@ -29,7 +29,7 @@ import {
 } from "@/components/ui/popover";
 
 const initialForm: StatForm = Object.fromEntries(
-  Object.entries(STAT_FIELDS).map(([category, fields]) => [
+  STAT_INDEX.map(({ category, fields }) => [
     category,
     Object.fromEntries(fields.map((f) => [f.key, 0])),
   ])
@@ -62,7 +62,7 @@ const CreateAthleteStat = () => {
 
       // Auto-calculate hitting percentage
       if (
-        category === "attack" &&
+        category === "Attack" &&
         (key === "kills" || key === "total" || key === "errors")
       ) {
         const kills = key === "kills" ? value : updatedCategory.kills;
@@ -75,7 +75,7 @@ const CreateAthleteStat = () => {
       }
 
       // Auto-calculate hitting percentage
-      if (category === "serving" && (key === "attempts" || key === "errors")) {
+      if (category === "Serving" && (key === "attempts" || key === "errors")) {
         const attempts = key === "attempts" ? value : updatedCategory.attempts;
         const errors = key === "errors" ? value : updatedCategory.errors;
 
@@ -156,7 +156,7 @@ const CreateAthleteStat = () => {
                   </PopoverContent>
                 </Popover>
               </div>
-              {Object.entries(STAT_FIELDS).map(([category, fields]) => (
+              {STAT_INDEX.map(({ category, fields }) => (
                 <fieldset key={category} className="border p-4 rounded-md ">
                   <legend className="font-bold capitalize">{category}</legend>
 

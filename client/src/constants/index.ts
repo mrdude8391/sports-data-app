@@ -62,22 +62,28 @@ export const STAT_INDEX = [
     { category: "Serving", 
       fields: [
         { key: "rating", label: "Serve Rating" },
+        { key: "ratingTotal", label: "Serve Rating Total" },
         { key: "aces", label: "Aces" },
         { key: "errors", label: "Serve Errors" },
         { key: "attempts", label: "Serve Attempts" },
         { key: "percentage", label: "Serving Percentage" },
       ]
     },
-      { category: "Passing", 
+    { category: "Receiving", 
       fields: [
-        { key: "rating", label: "Passing Rating" },
-        { key: "errors", label: "Passing Errors" },
-        { key: "attempts", label: "Passing Attempts" },
+        { key: "rating", label: "Receive Rating" },
+        { key: "ratingTotal", label: "Receive Rating Total" },
+        { key: "errors", label: "Receive Errors" },
+        { key: "attempts", label: "Receive Attempts" },
       ]
     },        
     { category: "Defense", 
       fields: [
         { key: "digs", label: "Digs" },
+        { key: "rating", label: "Passing Rating" },
+        { key: "ratingTotal", label: "Passing Rating Total" },
+        { key: "errors", label: "Passing Errors" },
+        { key: "attempts", label: "Passing Attempts" },
       ]
     },  
     { category: "Blocking", 
@@ -87,7 +93,7 @@ export const STAT_INDEX = [
         { key: "solos", label: "Solo Blocks" },
         { key: "goodTouches", label: "Good Block Touches" },
         { key: "attempts", label: "Block Attempts" },
-        { key: "errors", label: "Block Errors" },
+        { key: "errors", label: "Block Errors (+ tools)" },
       ]
     },  
 ]

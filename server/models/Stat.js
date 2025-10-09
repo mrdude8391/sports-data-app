@@ -31,13 +31,16 @@ const statSchema = new mongoose.Schema(
       attempts: { type: Number, default: 0 },
       percentage: { type: Number, default: 0 },
     },
-    passing: {
+    receiving: {
       rating: { type: Number, default: 0 },
       errors: { type: Number, default: 0 },
       attempts: { type: Number, default: 0 },
     },
     defense: {
       digs: { type: Number, default: 0 },
+      rating: { type: Number, default: 0 },
+      errors: { type: Number, default: 0 },
+      attempts: { type: Number, default: 0 },
     },
     blocking: {
       total: { type: Number, default: 0 },
