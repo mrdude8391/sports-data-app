@@ -12,7 +12,7 @@ export const STAT_FIELDS = {
     { key: "kills", label: "Kills" },
     { key: "errors", label: "Attack Errors" },
     { key: "total", label: "Total Attacks" },
-    { key: "percentage", label: "Hitting %" },
+    { key: "percentage", label: "Hitting %"},
   ],
   setting: [
     { key: "assists", label: "Assists" },
@@ -50,13 +50,13 @@ export const STAT_INDEX = [
         { key: "kills", label: "Kills" },
         { key: "errors", label: "Attack Errors" },
         { key: "total", label: "Total Attacks" },
-        { key: "percentage", label: "Hitting %" },
+        { key: "percentage", label: "Hitting %"},
       ]
     },
     { category: "setting", 
       fields: [
-        { key: "assists", label: "Assists" },
-        { key: "errors", label: "Setting Errors" },
+        { key: "assists", label: "Assists"},
+        { key: "errors", label: "Setting Errors"},
       ]
     },
     { category: "serving", 

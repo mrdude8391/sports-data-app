@@ -138,7 +138,12 @@ export const getStats = async (id: string) : Promise<Stat[]> => {
     try {
         console.log("Get Stats for: ", id)
         const {data} = await api.get(`/athlete/${id}/stats`)
-        return data
+        return data.map((stat: any) => ({
+    ...stat,
+    recordedAt: new Date(stat.recordedAt),
+    createdAt: new Date(stat.createdAt),
+    updatedAt: new Date(stat.updatedAt),
+  }));
     } catch (error:any) {
         throw new Error(error.response.data.message)
     }

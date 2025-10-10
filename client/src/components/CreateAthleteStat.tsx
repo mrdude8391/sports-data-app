@@ -68,8 +68,8 @@ const CreateAthleteStat = () => {
         const kills = key === "kills" ? value : updatedCategory.kills;
         const total = key === "total" ? value : updatedCategory.total;
         const errors = key === "errors" ? value : updatedCategory.errors;
-        const percentage = total > 0 ? ((kills - errors) / total) * 100 : 0;
-        updatedCategory.percentage = Math.round(percentage * 10) / 10;
+        const percentage = total > 0 ? (kills - errors) / total : 0;
+        updatedCategory.percentage = Math.round(percentage * 1000) / 1000;
       }
 
       // Auto-calculate serving percentage
@@ -81,12 +81,11 @@ const CreateAthleteStat = () => {
         const errors = key === "errors" ? value : updatedCategory.errors;
         const ratingTotal =
           key === "ratingTotal" ? value : updatedCategory.ratingTotal;
-        const percentage =
-          attempts > 0 ? ((attempts - errors) / attempts) * 100 : 0;
+        const percentage = attempts > 0 ? (attempts - errors) / attempts : 0;
         const rating = attempts > 0 ? ratingTotal / attempts : 0;
 
         updatedCategory.rating = Math.round(rating * 10) / 10;
-        updatedCategory.percentage = Math.round(percentage * 10) / 10;
+        updatedCategory.percentage = Math.round(percentage * 1000) / 1000;
       }
 
       // Auto-calculate receiving rating
