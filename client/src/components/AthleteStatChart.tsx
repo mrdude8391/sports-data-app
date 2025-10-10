@@ -60,6 +60,7 @@ const AthleteStatChart = (props: AthleteStatChartProps) => {
       </Select>
       <LineChart width={600} height={300} data={stats}>
         <XAxis
+          reversed
           dataKey="recordedAt"
           tickFormatter={(date) => new Date(date).toLocaleDateString("en-UB")}
         />
