@@ -13,7 +13,7 @@ const Navbar = () => {
 
   return (
     <>
-      <nav className="sticky w-full top-0 left-0 z-30 bg-stone-200 ">
+      <nav className="sticky w-full top-0 left-0 z-30 bg-white shadow-sm ">
         <div className="flex items-center justify-between max-container padding-container z-30 py-3">
           <Link to="/" onClick={closeMenu}>
             <div className="flexCenter gap-5">
