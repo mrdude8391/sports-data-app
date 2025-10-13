@@ -40,10 +40,8 @@ const AthleteStatsList = (props: AthleteStatsListProps) => {
 
   const handleValueChange = (value: string) => {
     const selection: any = STAT_INDEX.find((s) => s.category === value)?.fields;
-    console.log(selection);
     setData(selection);
     setSelect(value);
-    console.log(data);
     // Perform any other actions with the selected value here
   };
 
@@ -84,7 +82,6 @@ const AthleteStatsList = (props: AthleteStatsListProps) => {
       ) : (
         <p>No Stats</p>
       )} */}
-      <p>{select}</p>
       <Select onValueChange={handleValueChange}>
         <SelectTrigger className="w-[180px]">
           <SelectValue placeholder="Select a category" />
@@ -111,7 +108,7 @@ const AthleteStatsList = (props: AthleteStatsListProps) => {
         </TableHeader>
         <TableBody>
           {stats?.map((stat) => (
-            <TableRow>
+            <TableRow key={stat._id}>
               <TableCell>
                 {stat.recordedAt.toLocaleDateString("en-UB")}
               </TableCell>
