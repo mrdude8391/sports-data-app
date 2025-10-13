@@ -18,9 +18,7 @@ export const setLogoutCallback = (cb: () => void) => {
 api.interceptors.request.use(
     (config) => {
         const savedUser = localStorage.getItem("user")
-        console.log("inteceptor saved user", savedUser)
         if (savedUser) {
-            console.log("user exists")
             const user:User = JSON.parse(savedUser)
             config.headers.Authorization = `Bearer ${user.token}`
         }
