@@ -26,7 +26,7 @@ const DeleteAthleteStat = (props: DeleteAthleteStatProps) => {
 
   return (
     <>
-      <Button onClick={handleDelete} variant="destructive">
+      <Button size="sm" onClick={handleDelete} variant="destructive">
         Delete Stat
       </Button>
     </>
