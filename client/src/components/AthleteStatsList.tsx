@@ -30,6 +30,7 @@ import {
 import * as sportsDataService from "@/services/sportsDataService";
 import DeleteAthleteStat from "./DeleteAthleteStat";
 import { useState } from "react";
+import EditAthleteStat from "./EditAthleteStat";
 
 interface AthleteStatsListProps {
   stats: Stat[];
@@ -40,10 +41,6 @@ const AthleteStatsList = (props: AthleteStatsListProps) => {
 
   const [data, setData] = useState([]);
   const [select, setSelect] = useState("");
-
-  const capitalize = (str: string) => {
-    return str.charAt(0).toUpperCase() + str.slice(1);
-  };
 
   const handleValueChange = (value: string) => {
     const selection: any = STAT_INDEX.find((s) => s.category === value)?.fields;
@@ -64,8 +61,12 @@ const AthleteStatsList = (props: AthleteStatsListProps) => {
         <SelectContent>
           {STAT_INDEX.map(({ category, fields }) => (
             <SelectGroup key={category}>
-              <SelectItem key={category} value={category}>
-                {capitalize(category)}
+              <SelectItem
+                key={category}
+                value={category}
+                className="capitalize"
+              >
+                {category}
               </SelectItem>
             </SelectGroup>
           ))}
@@ -114,12 +115,7 @@ const AthleteStatsList = (props: AthleteStatsListProps) => {
                     Game {index + 1} —{" "}
                     {new Date(stat.recordedAt).toLocaleDateString()}
                   </span>
-                  <div className="flex gap-2">
-                    <Button variant="outline" size="sm">
-                      Edit
-                    </Button>
-                    <DeleteAthleteStat statId={stat._id} />
-                  </div>
+                  <div className="flex gap-2 "></div>
                 </div>
               </AccordionTrigger>
 
@@ -140,6 +136,10 @@ const AthleteStatsList = (props: AthleteStatsListProps) => {
                       </div>
                     </div>
                   ))}
+                </div>
+                <div className="flex justify-end pt-3 gap-3">
+                  <EditAthleteStat stat={stat} />
+                  <DeleteAthleteStat statId={stat._id} />
                 </div>
               </AccordionContent>
             </AccordionItem>
