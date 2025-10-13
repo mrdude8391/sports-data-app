@@ -121,6 +121,10 @@
   Button {
     @apply cursor-pointer;
   }
+
+  h3 {
+    @apply text-2xl font-semibold;
+  }
 }
 
 @layer utilities {
