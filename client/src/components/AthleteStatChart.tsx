@@ -1,5 +1,13 @@
 import type { Stat } from "@/types/Stat";
-import { LineChart, Line, XAxis, YAxis, Tooltip, Legend } from "recharts";
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+} from "recharts";
 import {
   Select,
   SelectContent,
@@ -58,28 +66,36 @@ const AthleteStatChart = (props: AthleteStatChartProps) => {
           ))}
         </SelectContent>
       </Select>
-      <LineChart width={600} height={300} data={stats}>
-        <XAxis
-          reversed
-          dataKey="recordedAt"
-          tickFormatter={(date) => new Date(date).toLocaleDateString("en-UB")}
-        />
-        <YAxis />
-        <Tooltip
-          labelFormatter={(date) => new Date(date).toLocaleDateString("en-UB")}
-          formatter={(value, name: string) => {
-            const [category, field] = name.split(".");
-            return [value, capitalize(field)];
-          }}
-        />
-        <Legend
-          formatter={(value) => {
-            const [category, field] = value.split(".");
-            return `${capitalize(category)} - ${capitalize(field)}`;
-          }}
-        />
-        <Line type="monotone" dataKey={data} />
-      </LineChart>
+      <div className="flex-1">
+        <ResponsiveContainer width={"100%"} height={250}>
+          <LineChart width={600} height={300} data={stats}>
+            <XAxis
+              reversed
+              dataKey="recordedAt"
+              tickFormatter={(date) =>
+                new Date(date).toLocaleDateString("en-UB")
+              }
+            />
+            <YAxis />
+            <Tooltip
+              labelFormatter={(date) =>
+                new Date(date).toLocaleDateString("en-UB")
+              }
+              formatter={(value, name: string) => {
+                const [category, field] = name.split(".");
+                return [value, capitalize(field)];
+              }}
+            />
+            <Legend
+              formatter={(value) => {
+                const [category, field] = value.split(".");
+                return `${capitalize(category)} - ${capitalize(field)}`;
+              }}
+            />
+            <Line type="monotone" dataKey={data} />
+          </LineChart>
+        </ResponsiveContainer>
+      </div>
     </div>
   );
 };
