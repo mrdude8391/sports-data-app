@@ -20,6 +20,13 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+
 import * as sportsDataService from "@/services/sportsDataService";
 import DeleteAthleteStat from "./DeleteAthleteStat";
 import { useState } from "react";
@@ -46,45 +53,13 @@ const AthleteStatsList = (props: AthleteStatsListProps) => {
   };
 
   return (
-    <div>
-      {/* {stats && stats.length > 0 ? (
-        <ul>
-          {stats?.map((stat, index) => (
-            <li key={stat._id}>
-              <h3 className="font-bold mb-2">
-                Game {index + 1} (
-                {new Date(stat.recordedAt).toLocaleDateString()})
-              </h3>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-5 gap-x-10">
-                {STAT_INDEX.map(({ category, fields }) => (
-                  <div key={category} className="mb-2">
-                    <h4 className="font-semibold capitalize">
-                      {capitalize(category)}
-                    </h4>
-                    <div className="grid grid-cols-2 gap-2">
-                      {fields.map(({ key, label }) => (
-                        <div key={key} className="flex justify-between">
-                          <span>{label}</span>
-                          <span>{(stat as any)[category][key]}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              <div>
-                <DeleteAthleteStat statId={stat._id} />
-              </div>
-            </li>
-          ))}
-        </ul>
-      ) : (
-        <p>No Stats</p>
-      )} */}
+    <div className="flex flex-col gap-6">
       <Select onValueChange={handleValueChange}>
-        <SelectTrigger className="w-[180px]">
-          <SelectValue placeholder="Select a category" />
+        <SelectTrigger className="w-full text-2xl font-semibold py-6">
+          <SelectValue
+            className=""
+            placeholder="Select a category to display chart"
+          />
         </SelectTrigger>
         <SelectContent>
           {STAT_INDEX.map(({ category, fields }) => (
@@ -97,63 +72,82 @@ const AthleteStatsList = (props: AthleteStatsListProps) => {
         </SelectContent>
       </Select>
       <Table className="min-w-full divide-y divide-gray-200 text-sm">
-        <TableCaption>List of stats</TableCaption>
-        <TableHeader>
-          <TableRow>
-            <TableHead>Date</TableHead>
-            {data.map(({ key, label }) => (
-              <TableHead>{label}</TableHead>
-            ))}
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {stats?.map((stat) => (
-            <TableRow key={stat._id}>
-              <TableCell>
-                {stat.recordedAt.toLocaleDateString("en-UB")}
-              </TableCell>
+        {select == "" ? (
+          <TableCaption>Select a category to display chart</TableCaption>
+        ) : (
+          <TableCaption>List of stats</TableCaption>
+        )}
+
+        {select !== "" && (
+          <TableHeader>
+            <TableRow>
+              <TableHead>Date</TableHead>
               {data.map(({ key, label }) => (
-                <TableCell>{(stat as any)[select][key]}</TableCell>
+                <TableHead>{label}</TableHead>
               ))}
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-      {stats && stats.length > 0 ? (
-        <ul>
-          {stats?.map((stat, index) => (
-            <li key={stat._id}>
-              <h3 className="font-bold mb-2">
-                Game {index + 1} (
-                {new Date(stat.recordedAt).toLocaleDateString()})
-              </h3>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-5 gap-x-10">
-                {STAT_INDEX.map(({ category, fields }) => (
-                  <div key={category} className="mb-2">
-                    <h4 className="font-semibold capitalize">
-                      {capitalize(category)}
-                    </h4>
-                    <div className="grid grid-cols-2 gap-2">
-                      {fields.map(({ key, label }) => (
-                        <div key={key} className="flex justify-between">
-                          <span>{label}</span>
-                          <span>{(stat as any)[category][key]}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
+          </TableHeader>
+        )}
+        {select !== "" && (
+          <TableBody>
+            {stats?.map((stat) => (
+              <TableRow key={stat._id}>
+                <TableCell>
+                  {stat.recordedAt.toLocaleDateString("en-UB")}
+                </TableCell>
+                {data.map(({ key, label }) => (
+                  <TableCell>{(stat as any)[select][key]}</TableCell>
                 ))}
-              </div>
+              </TableRow>
+            ))}
+          </TableBody>
+        )}
+      </Table>
 
-              <div>
-                <DeleteAthleteStat statId={stat._id} />
-              </div>
-            </li>
+      {stats.length > 0 ? (
+        <Accordion type="single" collapsible className="w-full">
+          {stats.map((stat, index) => (
+            <AccordionItem key={stat._id} value={`game-${index}`}>
+              <AccordionTrigger>
+                <div className="flex justify-between w-full">
+                  <span>
+                    Game {index + 1} —{" "}
+                    {new Date(stat.recordedAt).toLocaleDateString()}
+                  </span>
+                  <div className="flex gap-2">
+                    <Button variant="outline" size="sm">
+                      Edit
+                    </Button>
+                    <DeleteAthleteStat statId={stat._id} />
+                  </div>
+                </div>
+              </AccordionTrigger>
+
+              <AccordionContent>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-4 gap-x-8 mt-2">
+                  {STAT_INDEX.map(({ category, fields }) => (
+                    <div key={category}>
+                      <h4 className="font-semibold capitalize mb-1">
+                        {category}
+                      </h4>
+                      <div className="grid grid-cols-2 gap-1 text-sm">
+                        {fields.map(({ key, label }) => (
+                          <div key={key} className="flex justify-between">
+                            <span>{label}</span>
+                            <span>{(stat as any)[category][key]}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </AccordionContent>
+            </AccordionItem>
           ))}
-        </ul>
+        </Accordion>
       ) : (
         <p>No Stats</p>
-      )}{" "}
+      )}
     </div>
   );
 };
