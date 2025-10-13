@@ -57,7 +57,7 @@ const AthleteStatRadar = (props: AthleteStatRadarProps) => {
 
   return (
     <div>
-      <ResponsiveContainer width={700} height="80%">
+      <ResponsiveContainer width={"100%"} height={250}>
         <RadarChart outerRadius={90} width={730} height={250} data={data}>
           <PolarGrid />
           <PolarAngleAxis dataKey="subject" />
