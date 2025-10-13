@@ -25,11 +25,11 @@ const DeleteAthleteStat = (props: DeleteAthleteStatProps) => {
   if (error) return <p>{error.message}</p>;
 
   return (
-    <>
+    <div>
       <Button size="sm" onClick={handleDelete} variant="destructive">
         Delete Stat
       </Button>
-    </>
+    </div>
   );
 };
 
