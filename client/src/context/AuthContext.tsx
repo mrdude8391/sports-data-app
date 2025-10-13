@@ -42,7 +42,6 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
     const savedUser = localStorage.getItem("user");
     if (savedUser) {
       const user = JSON.parse(savedUser);
-      console.log("rehydrate", user);
       setIsLoggedIn(true);
       setUser(user);
     }
