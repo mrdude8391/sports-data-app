@@ -52,6 +52,7 @@ export type StatForm = {
   };
 };
 
+
 export type StatPayload = {
     attack: {
       kills: number,
@@ -94,6 +95,8 @@ export type StatPayload = {
     },
     recordedAt: Date,
 }
+
+
 
 export type StatResponse= {
     _id:string,
