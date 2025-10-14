@@ -6,8 +6,8 @@ import { useParams } from "react-router-dom";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import * as sportsDataService from "@/services/sportsDataService";
 import { STAT_INDEX } from "@/constants";
-import type { StatForm, StatPayload } from "@/types/Stat";
-import { InitialStatForm, InitialStatPayload } from "@/types/Stat";
+import type { StatPayload } from "@/types/Stat";
+import { InitialStatPayload } from "@/types/Stat";
 import {
   Dialog,
   DialogClose,
@@ -39,7 +39,7 @@ import {
 const CreateAthleteStat = () => {
   const { athleteId } = useParams<{ athleteId: string }>();
 
-  const [form, setForm] = useState<StatForm>(InitialStatForm);
+  const [form, setForm] = useState<StatPayload>(InitialStatPayload);
   const [open, setOpen] = React.useState(false);
   const [date, setDate] = React.useState<Date | undefined>(new Date());
 
@@ -50,7 +50,7 @@ const CreateAthleteStat = () => {
     onSuccess: () => {
       // Invalidate and refetch
       queryClient.invalidateQueries({ queryKey: ["stats"] });
-      setForm(InitialStatForm);
+      setForm(InitialStatPayload);
     },
   });
 
@@ -124,10 +124,10 @@ const CreateAthleteStat = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (athleteId && form != InitialStatForm && date) {
+    if (athleteId && form != InitialStatPayload && date) {
       console.log(form, date);
 
-      mutate({ athleteId, data: form, recordDate: date });
+      mutate({ athleteId, payload: form });
     }
   };
 
