@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import {
   Card,
-  CardAction,
   CardContent,
   CardDescription,
   CardFooter,
@@ -12,10 +11,11 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Alert, AlertTitle } from "@/components/ui/alert";
-import { Link, Navigate, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import * as sportsDataService from "../services/sportsDataService";
-import type { User } from "@/types/User";
+import type { UserPayload } from "@/types/User";
 import { AlertCircleIcon } from "lucide-react";
+import { useAuth } from "@/context/AuthContext";
 
 const Register = () => {
   const [email, setEmail] = useState("");
@@ -26,13 +26,17 @@ const Register = () => {
 
   const navigate = useNavigate();
 
+  const { login } = useAuth();
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const user = await sportsDataService.register(username, email, password);
+      const userPayload: UserPayload = { username, email, password };
+      const user = await sportsDataService.register(userPayload);
       if (user) {
         setError("");
         setShowAlert(true);
+        login(user);
         navigate("/profile");
       }
       console.log(user);

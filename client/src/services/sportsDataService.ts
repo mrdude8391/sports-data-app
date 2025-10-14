@@ -1,5 +1,6 @@
+import { STAT_INDEX } from './../constants/index';
 import type { Athlete } from '@/types/Athlete';
-import type { User } from './../types/User';
+import type { UserPayload, UserResponse } from './../types/User';
 import type { Stat, StatForm } from "@/types/Stat"
 import axios from "axios";
 
@@ -19,7 +20,7 @@ api.interceptors.request.use(
     (config) => {
         const savedUser = localStorage.getItem("user")
         if (savedUser) {
-            const user:User = JSON.parse(savedUser)
+            const user:UserResponse = JSON.parse(savedUser)
             config.headers.Authorization = `Bearer ${user.token}`
         }
         return config
@@ -44,10 +45,11 @@ api.interceptors.response.use((response) => {
 export const login = async (email: string, password: string) => {
     try {
         const res = await api.post("/auth/login", {email, password} )
-        const user:User = {
+        const user:UserResponse = {
+            _id: res.data._id,
             username: res.data.username,
             email: res.data.email,
-            token: res.data.token
+            token: res.data.token,
         }
         return user
     } catch (error: any) {
@@ -58,14 +60,16 @@ export const login = async (email: string, password: string) => {
 
 }
 
-export const register = async (username: string, email: string, password: string) => {
+export const register = async ({username, email, password} : UserPayload) => {
     try {
         const res = await api.post("/auth/register", {username, email, password})
-        const user:User = {
+        const user:UserResponse = {
+            _id: res.data._id,
             username: res.data.username,
             email: res.data.email,
             token: res.data.token,
         }
+        console.log(user)
         localStorage.setItem("token", user.token)
         return user
     } catch (error: any) {
@@ -78,10 +82,11 @@ export const profile = async () => {
         console.log("profile call")
         const res = await api.get("/auth/profile")
         console.log("profile response")
-        const user: User = {
+        const user:UserResponse = {
+            _id: res.data._id,
             username: res.data.username,
             email: res.data.email,
-            token: res.data.token
+            token: res.data.token,
         }
         return user
     } catch (error : any) {
