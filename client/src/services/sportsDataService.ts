@@ -1,7 +1,7 @@
 import { STAT_INDEX } from './../constants/index';
 import type { Athlete } from '@/types/Athlete';
 import type { UserPayload, UserResponse } from './../types/User';
-import type { Stat, StatForm } from "@/types/Stat"
+import type { Stat, StatForm, StatPayload } from "@/types/Stat"
 import axios from "axios";
 
 const API_URL = import.meta.env.VITE_API_URL

@@ -6,7 +6,8 @@ import { useParams } from "react-router-dom";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import * as sportsDataService from "@/services/sportsDataService";
 import { STAT_INDEX } from "@/constants";
-import type { StatForm } from "@/types/Stat";
+import type { StatForm, StatPayload } from "@/types/Stat";
+import { InitialStatForm, InitialStatPayload } from "@/types/Stat";
 import {
   Dialog,
   DialogClose,
@@ -28,17 +29,17 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 
-const initialForm: StatForm = Object.fromEntries(
-  STAT_INDEX.map(({ category, fields }) => [
-    category,
-    Object.fromEntries(fields.map((f) => [f.key, 0])),
-  ])
-);
+// const initialForm: StatForm = Object.fromEntries(
+//   STAT_INDEX.map(({ category, fields }) => [
+//     category,
+//     Object.fromEntries(fields.map((f) => [f.key, 0])),
+//   ])
+// );
 
 const CreateAthleteStat = () => {
   const { athleteId } = useParams<{ athleteId: string }>();
 
-  const [form, setForm] = useState<StatForm>(initialForm);
+  const [form, setForm] = useState<StatForm>(InitialStatForm);
   const [open, setOpen] = React.useState(false);
   const [date, setDate] = React.useState<Date | undefined>(new Date());
 
@@ -49,7 +50,7 @@ const CreateAthleteStat = () => {
     onSuccess: () => {
       // Invalidate and refetch
       queryClient.invalidateQueries({ queryKey: ["stats"] });
-      setForm(initialForm);
+      setForm(InitialStatForm);
     },
   });
 
@@ -123,8 +124,9 @@ const CreateAthleteStat = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (athleteId && form != initialForm && date) {
+    if (athleteId && form != InitialStatForm && date) {
       console.log(form, date);
+
       mutate({ athleteId, data: form, recordDate: date });
     }
   };
