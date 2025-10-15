@@ -124,10 +124,23 @@ export const deleteAthlete = async (id: string) => {
     }
 }
 
-export const createStat = async (req : {athleteId: string, payload: StatPayload}) => {
+export const createStat = async ({athleteId, form, date} : {athleteId: string, form: StatForm, date: Date}) => {
     try {
-        console.log("create stat", req.payload)
-        const { data } = await api.post(`/athlete/${req.athleteId}/stats`, req.payload) 
+        console.log("create stat", form)
+        const payload = { ...form, recordedAt: date}
+        const { data } = await api.post(`/athlete/${athleteId}/stats`, payload) 
+        return data
+    } catch (error: any) {
+        
+        throw new Error(error.response.data.message)
+    }
+}
+
+export const editStat = async (req : {statId: string, form: StatForm, date: Date}) => {
+    try {
+        console.log("edit stat", req.form)
+        const payload = { ...req.form, recordedAt: req.date}
+        const { data } = await api.patch(`/athlete/${req.statId}/stats`, payload) 
         return data
     } catch (error: any) {
         
