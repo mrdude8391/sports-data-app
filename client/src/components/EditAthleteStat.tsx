@@ -50,7 +50,7 @@ const EditAthleteStat = (props: EditAthleteStatProps) => {
   const queryClient = useQueryClient();
 
   const { isPending, error, mutate } = useMutation({
-    mutationFn: sportsDataService.createStat,
+    mutationFn: sportsDataService.editStat,
     onSuccess: () => {
       // Invalidate and refetch
       queryClient.invalidateQueries({ queryKey: ["stats"] });
@@ -69,7 +69,8 @@ const EditAthleteStat = (props: EditAthleteStatProps) => {
         ])
       );
 
-      console.log(prevStats);
+      console.log({ ...prevStats, recordedAt: stat.recordedAt });
+      setDate(stat.recordedAt);
       setForm(prevStats);
     }
   }, []);
@@ -144,9 +145,9 @@ const EditAthleteStat = (props: EditAthleteStatProps) => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (athleteId && form != initialForm && date) {
+    if (stat._id && form != initialForm && date) {
       console.log(form, date);
-      mutate({ athleteId, data: form, recordDate: date });
+      mutate({ statId: stat._id, form: form, date: date });
     }
   };
 
@@ -154,7 +155,7 @@ const EditAthleteStat = (props: EditAthleteStatProps) => {
   return (
     <div>
       <Dialog>
-        <form id="statForm" className="space-y-6" onSubmit={handleSubmit}>
+        <form id="editStatForm" className="space-y-6" onSubmit={handleSubmit}>
           <DialogTrigger asChild>
             <Button variant="outline" size="sm">
               Edit
@@ -246,7 +247,7 @@ const EditAthleteStat = (props: EditAthleteStatProps) => {
               <DialogClose asChild>
                 <Button variant="outline">Cancel</Button>
               </DialogClose>
-              <Button type="submit" form="statForm">
+              <Button type="submit" form="editStatForm">
                 Save New Stats
               </Button>
             </DialogFooter>
