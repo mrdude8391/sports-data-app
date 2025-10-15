@@ -1,7 +1,4 @@
-const User = require("../models/User.js");
 const Athlete = require("../models/Athete.js");
-// jwt -> library to help with working with JSON web tokens: signing, verifying, decoding
-const jwt = require("jsonwebtoken");
 const Stat = require("../models/Stat.js");
 
 const createAthlete = async (req, res) => {
@@ -85,13 +82,31 @@ const deleteStat = async (req, res) => {
   try {
     console.log("deleteStat");
     const statId = req.params.id;
-    const stat = await Stat.findOne({ _id: statId, userId: req.user._id });
+    const userId = req.user._id;
+    const stat = await Stat.findOne({ _id: statId, userId: userId });
 
     if (!stat) {
       return res.status(404).json({ message: "Stat not found" });
     }
     await stat.deleteOne();
     res.status(200).json({ message: "Stat deleted successfully" });
+  } catch (err) {
+    return res.status(500).json({ message: err.message });
+  }
+};
+
+const editStat = async (req, res) => {
+  try {
+    console.log("editStat");
+    const statId = req.params.id;
+    const userId = req.user._id;
+    const stat = await Stat.findOne({ _id: statId, userId: userId });
+    if (!stat) {
+      return res.status(404).json({ message: "Stat not found" });
+    }
+    const data = req.body;
+    const updated = await stat.updateOne(data);
+    res.status(200).json({ updated });
   } catch (err) {
     return res.status(500).json({ message: err.message });
   }
@@ -104,4 +119,5 @@ module.exports = {
   getStats,
   createStat,
   deleteStat,
+  editStat,
 };
