@@ -1,3 +1,45 @@
+type BaseStatData = {
+  attack: {
+      kills: number,
+      errors: number,
+      total: number,
+      percentage: number,
+    },
+    setting: {
+      assists: number,
+      errors: number,
+    },
+    serving: {
+      rating: number,
+      ratingTotal: number,
+      aces: number,
+      errors: number,
+      attempts: number,
+      percentage: number, 
+    },
+    receiving: {
+      rating: number,
+      ratingTotal: number,
+      errors: number,
+      attempts: number,
+    },
+    defense: {
+      digs: number,
+      rating: number,
+      ratingTotal: number,
+      errors: number,
+      attempts: number,
+    },
+    blocking: {
+      total: number,
+      kills: number,
+      solos: number,
+      goodTouches: number,
+      attempts: number,
+      errors: number,
+    },
+}
+
 export type Stat= {
     _id?:string,
     userId: string,
@@ -46,109 +88,27 @@ export type Stat= {
     updatedAt: Date
 }
 
-export type StatForm = {
-  [category: string]: {
-    [field: string]: number;
-  };
+export type StatForm = BaseStatData & {
+  recordedAt : Date
 };
 
-
-
-
-export type StatPayload = {
-    attack: {
-      kills: number,
-      errors: number,
-      total: number,
-      percentage: number,
-    },
-    setting: {
-      assists: number,
-      errors: number,
-    },
-    serving: {
-      rating: number,
-      ratingTotal: number,
-      aces: number,
-      errors: number,
-      attempts: number,
-      percentage: number, 
-    },
-    receiving: {
-      rating: number,
-      ratingTotal: number,
-      errors: number,
-      attempts: number,
-    },
-    defense: {
-      digs: number,
-      rating: number,
-      ratingTotal: number,
-      errors: number,
-      attempts: number,
-    },
-    blocking: {
-      total: number,
-      kills: number,
-      solos: number,
-      goodTouches: number,
-      attempts: number,
-      errors: number,
-    },
+export type StatPayload = BaseStatData & {
     recordedAt: Date,
 }
 
-
-
-export type StatResponse= {
+export type StatResponse= BaseStatData & {
     _id:string,
     userId: string,
     athleteId: string,
-    attack: {
-      kills: number,
-      errors: number,
-      total: number,
-      percentage: number,
-    },
-    setting: {
-      assists: number,
-      errors: number,
-    },
-    serving: {
-      rating: number,
-      ratingTotal: number,
-      aces: number,
-      errors: number,
-      attempts: number,
-      percentage: number, 
-    },
-    receiving: {
-      rating: number,
-      ratingTotal: number,
-      errors: number,
-      attempts: number,
-    },
-    defense: {
-      digs: number,
-      rating: number,
-      ratingTotal: number,
-      errors: number,
-      attempts: number,
-    },
-    blocking: {
-      total: number,
-      kills: number,
-      solos: number,
-      goodTouches: number,
-      attempts: number,
-      errors: number,
-    },
     recordedAt: Date,
     createdAt: Date,
     updatedAt: Date
 }
 
-export const InitialStatForm: StatForm = {
+export type StatCategory = keyof BaseStatData;
+export type StatFieldKey<C extends StatCategory> = keyof BaseStatData[C]
+
+export const initialStatForm: StatForm = {
   attack: {
       kills: 0,
       errors: 0,
@@ -188,7 +148,7 @@ export const InitialStatForm: StatForm = {
       attempts: 0,
       errors: 0,
     },
-  
+  recordedAt: new Date()
 };
 
 // export const InitialStatPayload: StatPayload = {
