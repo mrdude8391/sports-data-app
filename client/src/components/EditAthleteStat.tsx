@@ -6,7 +6,13 @@ import { useParams } from "react-router-dom";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import * as sportsDataService from "@/services/sportsDataService";
 import { STAT_INDEX } from "@/constants";
-import type { Stat, StatForm } from "@/types/Stat";
+import {
+  initialStatForm,
+  type Stat,
+  type StatCategory,
+  type StatFieldKey,
+  type StatForm,
+} from "@/types/Stat";
 import {
   Dialog,
   DialogClose,
@@ -28,13 +34,6 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 
-const initialForm: StatForm = Object.fromEntries(
-  STAT_INDEX.map(({ category, fields }) => [
-    category,
-    Object.fromEntries(fields.map((f) => [f.key, 0])),
-  ])
-);
-
 interface EditAthleteStatProps {
   stat: Stat;
 }
@@ -43,9 +42,8 @@ const EditAthleteStat = (props: EditAthleteStatProps) => {
   const { stat } = props;
   const { athleteId } = useParams<{ athleteId: string }>();
 
-  const [form, setForm] = useState<StatForm>(initialForm);
+  const [form, setForm] = useState<StatForm>(initialStatForm);
   const [open, setOpen] = React.useState(false);
-  const [date, setDate] = React.useState<Date | undefined>(new Date());
 
   const queryClient = useQueryClient();
 
@@ -70,12 +68,15 @@ const EditAthleteStat = (props: EditAthleteStatProps) => {
       );
 
       console.log({ ...prevStats, recordedAt: stat.recordedAt });
-      setDate(stat.recordedAt);
-      setForm(prevStats);
+      setForm(stat);
     }
   }, []);
 
-  const handleChange = (category: string, key: string, value: number) => {
+  const handleChange = <C extends StatCategory>(
+    category: C,
+    key: StatFieldKey<C>,
+    value: number
+  ) => {
     setForm((prev) => {
       const updatedCategory = {
         ...prev[category],
@@ -145,9 +146,9 @@ const EditAthleteStat = (props: EditAthleteStatProps) => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (stat._id && form != initialForm && date) {
-      console.log(form, date);
-      mutate({ statId: stat._id, form: form, date: date });
+    if (stat._id && form != initialStatForm) {
+      console.log(form);
+      mutate({ statId: stat._id, form: form, date: form.recordedAt });
     }
   };
 
@@ -180,7 +181,9 @@ const EditAthleteStat = (props: EditAthleteStatProps) => {
                       id="date"
                       className="w-48 justify-between font-normal"
                     >
-                      {date ? date.toLocaleDateString() : "Select date"}
+                      {form.recordedAt
+                        ? form.recordedAt.toLocaleDateString()
+                        : "Select date"}
                       <ChevronDownIcon />
                     </Button>
                   </PopoverTrigger>
@@ -190,7 +193,7 @@ const EditAthleteStat = (props: EditAthleteStatProps) => {
                   >
                     <Calendar
                       mode="single"
-                      selected={date}
+                      selected={form.recordedAt}
                       captionLayout="dropdown"
                       onSelect={(date) => {
                         const now = new Date();
@@ -202,7 +205,7 @@ const EditAthleteStat = (props: EditAthleteStatProps) => {
                           now.getMilliseconds()
                         );
 
-                        setDate(merged);
+                        setForm((prev) => ({ ...prev, recordedAt: merged }));
                         setOpen(false);
                       }}
                     />
@@ -219,9 +222,17 @@ const EditAthleteStat = (props: EditAthleteStatProps) => {
                         <span className="text-sm text-gray-700">{label}</span>
                         <Input
                           type="number"
-                          value={form[category][key]}
+                          value={
+                            form[category as StatCategory][
+                              key as StatFieldKey<StatCategory>
+                            ]
+                          }
                           onChange={(e) =>
-                            handleChange(category, key, Number(e.target.value))
+                            handleChange(
+                              category as StatCategory,
+                              key as any,
+                              Number(e.target.value)
+                            )
                           }
                           className="border rounded p-2"
                         />

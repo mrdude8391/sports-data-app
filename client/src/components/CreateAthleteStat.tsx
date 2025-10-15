@@ -6,8 +6,8 @@ import { useParams } from "react-router-dom";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import * as sportsDataService from "@/services/sportsDataService";
 import { STAT_INDEX } from "@/constants";
-import type { StatForm } from "@/types/Stat";
-import { InitialStatForm } from "@/types/Stat";
+import type { StatCategory, StatFieldKey, StatForm } from "@/types/Stat";
+import { initialStatForm } from "@/types/Stat";
 import {
   Dialog,
   DialogClose,
@@ -39,9 +39,8 @@ import {
 const CreateAthleteStat = () => {
   const { athleteId } = useParams<{ athleteId: string }>();
 
-  const [form, setForm] = useState<StatForm>(InitialStatForm);
+  const [form, setForm] = useState<StatForm>(initialStatForm);
   const [open, setOpen] = React.useState(false);
-  const [date, setDate] = React.useState<Date | undefined>(new Date());
 
   const queryClient = useQueryClient();
 
@@ -50,27 +49,33 @@ const CreateAthleteStat = () => {
     onSuccess: () => {
       // Invalidate and refetch
       queryClient.invalidateQueries({ queryKey: ["stats"] });
-      setForm(InitialStatForm);
+      setForm(initialStatForm);
     },
   });
 
-  const handleChange = (category: string, key: string, value: number) => {
+  const handleChange = <C extends StatCategory, K extends StatFieldKey<C>>(
+    category: C,
+    key: K,
+    value: number
+  ) => {
     setForm((prev) => {
-      let updatedCategory = {
+      const updatedCategory = {
         ...prev[category],
         [key]: value,
-      };
+      } as StatForm[C];
 
       // Auto-calculate hitting percentage
       if (
-        category === "attack" &&
-        (key === "kills" || key === "total" || key === "errors")
+        (category === "attack" && key == "kills") ||
+        key == "total" ||
+        key == "errors"
       ) {
-        const kills = key === "kills" ? value : updatedCategory.kills;
-        const total = key === "total" ? value : updatedCategory.total;
-        const errors = key === "errors" ? value : updatedCategory.errors;
+        const attack = updatedCategory as StatForm["attack"];
+        const kills = key === "kills" ? value : attack.kills;
+        const total = key === "total" ? value : attack.total;
+        const errors = key === "errors" ? value : attack.errors;
         const percentage = total > 0 ? (kills - errors) / total : 0;
-        updatedCategory.percentage = Math.round(percentage * 1000) / 1000;
+        attack.percentage = Math.round(percentage * 1000) / 1000;
       }
 
       // Auto-calculate serving percentage
@@ -78,15 +83,15 @@ const CreateAthleteStat = () => {
         category === "serving" &&
         (key === "attempts" || key === "errors" || key === "ratingTotal")
       ) {
-        const attempts = key === "attempts" ? value : updatedCategory.attempts;
-        const errors = key === "errors" ? value : updatedCategory.errors;
-        const ratingTotal =
-          key === "ratingTotal" ? value : updatedCategory.ratingTotal;
+        const serving = updatedCategory as StatForm["serving"];
+        const attempts = key === "attempts" ? value : serving.attempts;
+        const errors = key === "errors" ? value : serving.errors;
+        const ratingTotal = key === "ratingTotal" ? value : serving.ratingTotal;
         const percentage = attempts > 0 ? (attempts - errors) / attempts : 0;
         const rating = attempts > 0 ? ratingTotal / attempts : 0;
 
-        updatedCategory.rating = Math.round(rating * 10) / 10;
-        updatedCategory.percentage = Math.round(percentage * 1000) / 1000;
+        serving.rating = Math.round(rating * 10) / 10;
+        serving.percentage = Math.round(percentage * 1000) / 1000;
       }
 
       // Auto-calculate receiving rating
@@ -94,12 +99,13 @@ const CreateAthleteStat = () => {
         category === "receiving" &&
         (key === "ratingTotal" || key === "attempts")
       ) {
-        const attempts = key === "attempts" ? value : updatedCategory.attempts;
+        const receiving = updatedCategory as StatForm["receiving"];
+        const attempts = key === "attempts" ? value : receiving.attempts;
         const ratingTotal =
-          key === "ratingTotal" ? value : updatedCategory.ratingTotal;
+          key === "ratingTotal" ? value : receiving.ratingTotal;
         const rating = attempts > 0 ? ratingTotal / attempts : 0;
 
-        updatedCategory.rating = Math.round(rating * 10) / 10;
+        receiving.rating = Math.round(rating * 10) / 10;
       }
 
       // Auto-calculate defense rating
@@ -107,12 +113,12 @@ const CreateAthleteStat = () => {
         category === "defense" &&
         (key === "ratingTotal" || key === "attempts")
       ) {
-        const attempts = key === "attempts" ? value : updatedCategory.attempts;
-        const ratingTotal =
-          key === "ratingTotal" ? value : updatedCategory.ratingTotal;
+        const defense = updatedCategory as StatForm["defense"];
+        const attempts = key === "attempts" ? value : defense.attempts;
+        const ratingTotal = key === "ratingTotal" ? value : defense.ratingTotal;
         const rating = attempts > 0 ? ratingTotal / attempts : 0;
 
-        updatedCategory.rating = Math.round(rating * 10) / 10;
+        defense.rating = Math.round(rating * 10) / 10;
       }
 
       return {
@@ -124,8 +130,8 @@ const CreateAthleteStat = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (athleteId && form != InitialStatForm && date) {
-      mutate({ athleteId, form: form, date });
+    if (athleteId && form != initialStatForm) {
+      mutate({ athleteId, form: form, date: form.recordedAt });
     }
   };
 
@@ -156,7 +162,9 @@ const CreateAthleteStat = () => {
                       id="date"
                       className="w-48 justify-between font-normal"
                     >
-                      {date ? date.toLocaleDateString() : "Select date"}
+                      {form.recordedAt
+                        ? form.recordedAt.toLocaleDateString()
+                        : "Select date"}
                       <ChevronDownIcon />
                     </Button>
                   </PopoverTrigger>
@@ -166,7 +174,7 @@ const CreateAthleteStat = () => {
                   >
                     <Calendar
                       mode="single"
-                      selected={date}
+                      selected={form.recordedAt}
                       captionLayout="dropdown"
                       onSelect={(date) => {
                         const now = new Date();
@@ -177,8 +185,7 @@ const CreateAthleteStat = () => {
                           now.getSeconds(),
                           now.getMilliseconds()
                         );
-
-                        setDate(merged);
+                        setForm((prev) => ({ ...prev, recordedAt: merged }));
                         setOpen(false);
                       }}
                     />
@@ -195,9 +202,17 @@ const CreateAthleteStat = () => {
                         <span className="text-sm text-gray-700">{label}</span>
                         <Input
                           type="number"
-                          value={form[category][key]}
+                          value={
+                            form[category as StatCategory][
+                              key as StatFieldKey<StatCategory>
+                            ]
+                          }
                           onChange={(e) =>
-                            handleChange(category, key, Number(e.target.value))
+                            handleChange(
+                              category as StatCategory,
+                              key as any,
+                              Number(e.target.value)
+                            )
                           }
                           className="border rounded p-2"
                         />
