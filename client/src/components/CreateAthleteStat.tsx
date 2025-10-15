@@ -6,8 +6,8 @@ import { useParams } from "react-router-dom";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import * as sportsDataService from "@/services/sportsDataService";
 import { STAT_INDEX } from "@/constants";
-import type { StatForm, StatPayload } from "@/types/Stat";
-import { InitialStatForm, InitialStatPayload } from "@/types/Stat";
+import type { StatForm } from "@/types/Stat";
+import { InitialStatForm } from "@/types/Stat";
 import {
   Dialog,
   DialogClose,

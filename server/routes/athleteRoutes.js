@@ -11,6 +11,7 @@ const {
   getStats,
   createStat,
   deleteStat,
+  editStat,
 } = require("../controllers/athleteController");
 
 router.post("/create", protect, createAthlete);
@@ -20,6 +21,7 @@ router.delete("/:id", protect, deleteAthlete);
 router.get("/:id/stats", protect, getStats);
 router.post("/:id/stats", protect, createStat);
 router.delete("/:id/stats", protect, deleteStat);
+router.patch("/:id/stats", protect, editStat);
 
 // export the router we have set up here
 module.exports = router;
