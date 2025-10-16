@@ -125,6 +125,10 @@
   h3 {
     @apply text-2xl font-semibold;
   }
+
+  h1 {
+    @apply text-3xl font-bold;
+  }
 }
 
 @layer utilities {
