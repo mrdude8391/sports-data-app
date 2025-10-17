@@ -1,4 +1,4 @@
-import type { User } from "@/types/User";
+import type { UserResponse } from "@/types/User";
 import {
   createContext,
   useContext,
@@ -10,19 +10,19 @@ import { useNavigate } from "react-router-dom";
 import { setLogoutCallback } from "@/services/sportsDataService";
 
 interface AuthContextType {
-  user: User | null;
+  user: UserResponse | null;
   isLoggedIn: boolean;
-  login: (user: User) => void;
+  login: (user: UserResponse) => void;
   logout: () => void;
 }
 
 export const AuthContext = createContext<AuthContextType | null>(null);
 
 const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<UserResponse | null>(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  const login = (user: User) => {
+  const login = (user: UserResponse) => {
     localStorage.setItem("user", JSON.stringify(user));
     setUser(user);
     console.log("set user", user);
