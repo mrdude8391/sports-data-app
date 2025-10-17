@@ -14,15 +14,13 @@ const Navbar = () => {
   return (
     <>
       <nav className="sticky w-full top-0 left-0 z-30 bg-white shadow-sm ">
-        <div className="flex items-center justify-between max-container padding-container z-30 py-3">
+        <div className="flex items-center justify-between max-container padding-container z-30 py-1">
           <Link to="/" onClick={closeMenu}>
-            <div className="flexCenter gap-5">
-              <p className=" transition-all hover:font-bold py-5">
-                Athlete App
-              </p>
-            </div>
+            <p className=" transition-all hover:font-bold py-3 px-3">
+              Athlete App
+            </p>
           </Link>
-          <ul className="hidden h-full gap-12 lg:flex">
+          <ul className="hidden lg:flex h-full gap-12 ">
             {NAV_LINKS.map((link) => (
               <Link
                 key={link.key}
