@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import * as sportsDataService from "@/services/sportsDataService";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { ChevronDownIcon, Loader } from "lucide-react";
-import type { Stat } from "@/types/Stat";
+import type { AthleteStatResponse, Stat } from "@/types/Stat";
 import AthleteStatsList from "@/components/AthleteStatsList";
 import CreateAthleteStat from "@/components/CreateAthleteStat";
 import type { Athlete } from "@/types/Athlete";
@@ -27,91 +27,114 @@ const AthleteStats = () => {
 
   const queryClient = useQueryClient();
 
-  // Try to read from cache
-  const athletes = queryClient.getQueryData<Athlete[]>(["athletes"]);
-  const cachedAthlete = athletes?.find((a) => a._id === athleteId);
-
   const {
-    data: stats,
+    data: res,
     isLoading,
     error,
-  } = useQuery<Stat[]>({
+  } = useQuery<AthleteStatResponse>({
     queryKey: ["stats"],
     queryFn: () => sportsDataService.getStats(athleteId!),
     enabled: !!athleteId,
   });
 
-  const filteredStats = stats?.filter((stat) => {
-    if (date && date.from && date.to) {
-      const recordedAt = new Date(stat.recordedAt);
-      return recordedAt >= date?.from && recordedAt <= date?.to;
-    }
-  });
+  const filteredStats = res
+    ? res.stats.filter((stat) => {
+        if (date && date.from && date.to) {
+          const recordedAt = new Date(stat.recordedAt);
+          return recordedAt >= date?.from && recordedAt <= date?.to;
+        }
+      })
+    : undefined;
+
+  useEffect(() => {
+    console.log("query athlete cache", res?.athlete);
+  }, []);
 
   if (isLoading) return <Loader className="animate-spin" />;
   if (error) return <p>{error.message}</p>;
 
   return (
-    <div className="flex flex-col gap-6 w-full max-w-6xl py-3">
-      <div>
-        <h1>{cachedAthlete?.name}</h1>
-        <p>Id {athleteId}</p>
-      </div>
-      <div>
-        <p>
-          Selected Date{" "}
-          {date && date.from && date.to
-            ? `${date.from.toLocaleDateString()}  ${date.to.toLocaleDateString()}`
-            : ""}
-        </p>
-        <Popover open={open} onOpenChange={setOpen}>
-          <PopoverTrigger asChild>
-            <Button
-              variant="outline"
-              id="date"
-              className="w-48 justify-between font-normal"
-            >
+    <>
+      {res && res.stats.length > 0 ? (
+        <div className="flex flex-col gap-6 w-full max-w-6xl py-3">
+          <div>
+            <h1>{res.athlete.name}</h1>
+            <p>Id {athleteId}</p>
+            <p>Age {res.athlete.age}</p>
+            <p>Height {res.athlete.height}</p>
+          </div>
+          <div>
+            <p>
+              Selected Date{" "}
               {date && date.from && date.to
                 ? `${date.from.toLocaleDateString()}  ${date.to.toLocaleDateString()}`
-                : "Select date"}
-              <ChevronDownIcon />
-            </Button>
-          </PopoverTrigger>
-          <PopoverContent className="w-auto overflow-hidden p-0" align="start">
-            <Calendar
-              mode="range"
-              selected={date}
-              captionLayout="dropdown"
-              onSelect={(date) => {
-                setDate(date);
-              }}
-            />
-          </PopoverContent>
-        </Popover>
-      </div>
+                : ""}
+            </p>
+            <Popover open={open} onOpenChange={setOpen}>
+              <PopoverTrigger asChild>
+                <Button
+                  variant="outline"
+                  id="date"
+                  className="w-48 justify-between font-normal"
+                >
+                  {date && date.from && date.to
+                    ? `${date.from.toLocaleDateString()}  ${date.to.toLocaleDateString()}`
+                    : "Select date"}
+                  <ChevronDownIcon />
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent
+                className="w-auto overflow-hidden p-0"
+                align="start"
+              >
+                <Calendar
+                  mode="range"
+                  selected={date}
+                  captionLayout="dropdown"
+                  onSelect={(date) => {
+                    setDate(date);
+                  }}
+                />
+              </PopoverContent>
+            </Popover>
+          </div>
 
-      <CreateAthleteStat />
-      <AthleteStatRadial
-        stats={
-          filteredStats && filteredStats.length > 0 ? filteredStats : stats!
-        }
-      />
-      <AthleteStatChart
-        stats={
-          filteredStats && filteredStats.length > 0 ? filteredStats : stats!
-        }
-      />
-      <AthleteStatTable
-        stats={
-          filteredStats && filteredStats.length > 0 ? filteredStats : stats!
-        }
-      />
-      <AthleteStatsList
-        stats={
-          filteredStats && filteredStats.length > 0 ? filteredStats : stats!
-        }
-      />
-    </div>
+          <CreateAthleteStat />
+          <AthleteStatRadial
+            stats={
+              filteredStats && filteredStats.length > 0
+                ? filteredStats
+                : res?.stats!
+            }
+          />
+          <AthleteStatChart
+            stats={
+              filteredStats && filteredStats.length > 0
+                ? filteredStats
+                : res?.stats!
+            }
+          />
+          <AthleteStatTable
+            stats={
+              filteredStats && filteredStats.length > 0
+                ? filteredStats
+                : res?.stats!
+            }
+          />
+          <AthleteStatsList
+            stats={
+              filteredStats && filteredStats.length > 0
+                ? filteredStats
+                : res?.stats!
+            }
+          />
+        </div>
+      ) : (
+        <div>
+          <p>No Stats</p>
+        </div>
+      )}
+    </>
   );
 };
 
