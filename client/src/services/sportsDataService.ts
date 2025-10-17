@@ -1,7 +1,7 @@
 import { STAT_INDEX } from './../constants/index';
 import type { Athlete } from '@/types/Athlete';
 import type { UserPayload, UserResponse } from './../types/User';
-import type { Stat, StatForm, StatPayload } from "@/types/Stat"
+import type { AthleteStatResponse, Stat, StatForm, StatPayload, StatResponse,  } from "@/types/Stat"
 import axios from "axios";
 
 const API_URL = import.meta.env.VITE_API_URL
@@ -148,17 +148,22 @@ export const editStat = async (req : {statId: string, form: StatForm, date: Date
     }
 }
 
-export const getStats = async (id: string) : Promise<Stat[]> => {
+export const getStats = async (id: string) : Promise<AthleteStatResponse> => {
     try {
         console.log("Get Stats for: ", id)
-        const {data} = await api.get(`/athlete/${id}/stats`)
-        return data.map((stat: any) => ({
-    ...stat,
-    recordedAt: new Date(stat.recordedAt),
-    createdAt: new Date(stat.createdAt),
-    updatedAt: new Date(stat.updatedAt),
-  }));
+        const {data} = await api.get<AthleteStatResponse>(`/athlete/${id}/stats`)
+        const stats : StatResponse[] = data.stats.map((stat: any) => ({
+            ...stat,
+            recordedAt: new Date(stat.recordedAt),
+            createdAt: new Date(stat.createdAt),
+            updatedAt: new Date(stat.updatedAt),
+        }))
+        const athlete = data.athlete
+        return {athlete, stats};
     } catch (error:any) {
+        if(error.status === 500) {
+            throw new Error("There was an error retreiving the data")
+        }
         throw new Error(error.response.data.message)
     }
 }

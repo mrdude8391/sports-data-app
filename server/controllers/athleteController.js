@@ -1,5 +1,6 @@
 const Athlete = require("../models/Athete.js");
 const Stat = require("../models/Stat.js");
+const mongoose = require("mongoose");
 
 const createAthlete = async (req, res) => {
   try {
@@ -67,13 +68,21 @@ const createStat = async (req, res) => {
 
 const getStats = async (req, res) => {
   try {
-    console.log("get all stats");
     const athleteId = req.params.id;
+    console.log("get stats: find athlete");
+    const athlete = await Athlete.findById(athleteId);
+    if (!athlete) {
+      console.log("not found");
+      return res.status(404).json({ message: "Athlete not found" });
+    }
+    console.log("get all stats");
     const stats = await Stat.find({ athleteId: athleteId }).sort({
       recordedAt: -1,
     });
-    res.status(201).json(stats);
+
+    res.status(201).json({ athlete, stats });
   } catch (err) {
+    console.log(err.message);
     return res.status(500).json({ message: err.message });
   }
 };

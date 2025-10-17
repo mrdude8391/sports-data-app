@@ -10,3 +10,4 @@ export type UserResponse = {
     email: string,
     token: string
 }
+

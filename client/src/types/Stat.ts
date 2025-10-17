@@ -1,3 +1,5 @@
+import type { Athlete } from "./Athlete";
+
 type BaseStatData = {
   attack: {
       kills: number,
@@ -103,6 +105,11 @@ export type StatResponse= BaseStatData & {
     recordedAt: Date,
     createdAt: Date,
     updatedAt: Date
+}
+
+export type AthleteStatResponse= {
+  athlete : Athlete,
+  stats: StatResponse[]
 }
 
 export type StatCategory = keyof BaseStatData;
