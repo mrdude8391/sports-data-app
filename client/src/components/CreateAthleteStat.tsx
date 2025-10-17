@@ -141,7 +141,9 @@ const CreateAthleteStat = () => {
       <Dialog>
         <form id="statForm" className="space-y-6" onSubmit={handleSubmit}>
           <DialogTrigger asChild>
-            <Button variant="outline">Add New Game Stats</Button>
+            <Button variant="default" size="lg">
+              Add New Game Stats
+            </Button>
           </DialogTrigger>
           <DialogContent className="max-h-11/12 flex flex-col overflow-hidden">
             <DialogHeader className="sticky">
