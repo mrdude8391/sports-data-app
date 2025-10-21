@@ -5,13 +5,10 @@ const About = () => {
   const [count, setCount] = useState(0);
   return (
     <div>
-      <Button onClick={() => setCount((count) => (count += 1))}>
-        Count is {count}
-      </Button>
-
-      <Button>
-        <a href="/login"> login</a>
-      </Button>
+      <h1>
+        An app to record stats for your volleyball players and visualize your
+        progress
+      </h1>
     </div>
   );
 };
