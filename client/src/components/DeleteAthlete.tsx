@@ -1,17 +1,15 @@
-import React from "react";
 import { Button } from "./ui/button";
 import * as sportsDataService from "../services/sportsDataService";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 interface deleteAthleteProps {
-  id?: string;
+  id: string;
 }
 
 const DeleteAthlete = (props: deleteAthleteProps) => {
   const { id } = props;
 
   const queryClient = useQueryClient();
-
   const { isPending, error, mutate } = useMutation({
     mutationFn: sportsDataService.deleteAthlete,
     onSuccess: () => {
@@ -22,7 +20,6 @@ const DeleteAthlete = (props: deleteAthleteProps) => {
   if (isPending) return <p>...Deleting</p>;
   if (error) return <p>{error.message}</p>;
   const handleClick = () => {
-    console.log(id);
     if (id) mutate(id);
   };
 
