@@ -127,7 +127,7 @@ export const deleteAthlete = async (id: string) => {
 export const createStat = async ({athleteId, form, date} : {athleteId: string, form: StatForm, date: Date}) => {
     try {
         console.log("create stat", form)
-        const payload = { ...form, recordedAt: date}
+        const payload: StatPayload = { ...form, recordedAt: date}
         const { data } = await api.post(`/athlete/${athleteId}/stats`, payload) 
         return data
     } catch (error: any) {
