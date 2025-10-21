@@ -35,13 +35,8 @@ const Athletes = () => {
         athletes.map((a: Athlete) => (
           <div key={a._id} className="flex w-full flex-row gap-4 items-center">
             <div className="w-full ">
-              <AthleteCard imageSrc={sampleImage} athlete={a} />{" "}
+              <AthleteCard imageSrc={sampleImage} athlete={a} isEdit={isEdit} />{" "}
             </div>
-            {isEdit && (
-              <div>
-                <DeleteAthlete id={a._id} />
-              </div>
-            )}
           </div>
         ))
       ) : (
