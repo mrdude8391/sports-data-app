@@ -14,29 +14,20 @@ interface AthleteCardProps {
 const AthleteCard = (props: AthleteCardProps) => {
   const { imageSrc, athlete, isEdit } = props;
   return (
-    <div className="flex flex-col gap-2 w-full items-center border-1 rounded-lg px-4 py-3">
-      <div className="w-full ">
-        <Link
-          to={`/athletes/${athlete._id}/stats`}
-          className="flex items-center justify-between rounded-lg px-3 py-2 hover:bg-stone-200"
-        >
-          <div className="flex items-center ">
-            <img
-              src={imageSrc}
-              height={48}
-              width={48}
-              className="border-1 rounded-full flex-shrink-0"
-            />
-            <div className="px-3 py-1 rounded-lg ">{athlete.name}</div>
-          </div>
-
-          {isEdit && (
-            <div>
-              <DeleteAthlete id={athlete._id} />
-            </div>
-          )}
-        </Link>
-      </div>
+    <div className="w-full flex items-center justify-between gap-3 border-1 rounded-lg px-3 py-3">
+      <Link
+        to={`/athletes/${athlete._id}/stats`}
+        className="flex items-center w-full justify-start rounded-lg px-3 py-3 gap-3 hover:bg-stone-200"
+      >
+        <img
+          src={imageSrc}
+          height={48}
+          width={48}
+          className="border-1 rounded-full flex-shrink-0"
+        />
+        <p>{athlete.name}</p>
+      </Link>
+      {isEdit && <DeleteAthlete id={athlete._id} />}
     </div>
   );
 };
