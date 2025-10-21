@@ -35,9 +35,12 @@ const getAthletes = async (req, res) => {
 
 const deleteAthlete = async (req, res) => {
   try {
-    console.log("deleteAthlete");
-    const id = req.params.id;
-    const athlete = await Athlete.findOne({ _id: id, userId: req.user._id });
+    const athleteId = req.params.id;
+    console.log("Delete Athlete Called", athleteId);
+    const athlete = await Athlete.findOne({
+      _id: athleteId,
+      userId: req.user._id,
+    });
 
     if (!athlete) {
       return res.status(404).json({ message: "Athlete not found" });
