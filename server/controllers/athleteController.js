@@ -1,5 +1,5 @@
-const Athlete = require("../models/Athete.js");
-const Stat = require("../models/Stat.js");
+const Athlete = require("../schemas/Athete.js");
+const Stat = require("../schemas/Stat.js");
 const mongoose = require("mongoose");
 
 const createAthlete = async (req, res) => {

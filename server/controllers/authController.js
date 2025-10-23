@@ -1,4 +1,4 @@
-const User = require("../models/User.js");
+const User = require("../schemas/User.js");
 // bcrypt encryption library to help hash passwords
 const bcrypt = require("bcryptjs");
 // jwt -> library to help with working with JSON web tokens: signing, verifying, decoding
