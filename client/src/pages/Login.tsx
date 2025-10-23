@@ -16,9 +16,7 @@ const Login = () => {
     password: "",
   });
   const [error, setError] = useState("");
-
   const navigate = useNavigate();
-
   const { login } = useAuth();
 
   const handleChange = (e: any) => {
