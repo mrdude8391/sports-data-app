@@ -1,7 +1,6 @@
 import { Button } from "@/components/ui/button";
 import React, { useState } from "react";
 import * as sportsDataservice from "../services/sportsDataService";
-import type { User } from "@/types/User";
 import { Link, useNavigate } from "react-router-dom";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
