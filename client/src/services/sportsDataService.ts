@@ -1,8 +1,7 @@
-import { STAT_INDEX } from './../constants/index';
 import type { Athlete } from '@/types/Athlete';
-import type { UserPayload, UserResponse } from './../types/User';
 import type { AthleteStatResponse, Stat, StatForm, StatPayload, StatResponse,  } from "@/types/Stat"
 import axios from "axios";
+import type { LoginPayload, AuthResponse, RegisterPayload } from '@/types/Auth';
 
 const API_URL = import.meta.env.VITE_API_URL
 
@@ -20,7 +19,7 @@ api.interceptors.request.use(
     (config) => {
         const savedUser = localStorage.getItem("user")
         if (savedUser) {
-            const user:UserResponse = JSON.parse(savedUser)
+            const user:AuthResponse = JSON.parse(savedUser)
             config.headers.Authorization = `Bearer ${user.token}`
         }
         return config
@@ -42,15 +41,10 @@ api.interceptors.response.use((response) => {
 
 )
 
-export const login = async (email: string, password: string) => {
+export const login = async (loginInfo: LoginPayload) => {
     try {
-        const res = await api.post("/auth/login", {email, password} )
-        const user:UserResponse = {
-            _id: res.data._id,
-            username: res.data.username,
-            email: res.data.email,
-            token: res.data.token,
-        }
+        const res = await api.post<AuthResponse>("/auth/login", loginInfo )
+        const user : AuthResponse = res.data
         return user
     } catch (error: any) {
         console.log(error.response.data.message)
@@ -60,16 +54,10 @@ export const login = async (email: string, password: string) => {
 
 }
 
-export const register = async ({username, email, password} : UserPayload) => {
+export const register = async (registerInfo : RegisterPayload) => {
     try {
-        const res = await api.post("/auth/register", {username, email, password})
-        const user:UserResponse = {
-            _id: res.data._id,
-            username: res.data.username,
-            email: res.data.email,
-            token: res.data.token,
-        }
-        console.log(user)
+        const res = await api.post("/auth/register", registerInfo)
+        const user:AuthResponse = res.data
         localStorage.setItem("token", user.token)
         return user
     } catch (error: any) {
@@ -82,12 +70,7 @@ export const profile = async () => {
         console.log("profile call")
         const res = await api.get("/auth/profile")
         console.log("profile response")
-        const user:UserResponse = {
-            _id: res.data._id,
-            username: res.data.username,
-            email: res.data.email,
-            token: res.data.token,
-        }
+        const user : AuthResponse = res.data
         return user
     } catch (error : any) {
         throw new Error(error.response.data.message)
@@ -98,7 +81,7 @@ export const profile = async () => {
 export const getAthletes = async () : Promise<Athlete[]> => {
     try {
         console.log("Get Athletes")
-        const {data} = await api.get("/athlete/")
+        const {data} = await api.get<Athlete[]>("/athlete/")
         return data
     } catch (error:any) {
         throw new Error(error.response.data.message)
@@ -107,8 +90,8 @@ export const getAthletes = async () : Promise<Athlete[]> => {
 
 export const createAthlete = async (athlete : {name:string, age: number, height: number}) : Promise<Athlete> => {
     try {
-        console.log("create athlete", athlete)
-        const {data} = await api.post("/athlete/create", athlete)
+        console.log("Create athlete", athlete)
+        const {data} = await api.post<Athlete>("/athlete/create", athlete)
         return data
     } catch (error:any) {
         throw new Error(error.response.data.message)
