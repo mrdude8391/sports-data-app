@@ -4,7 +4,7 @@ import { Button } from "./ui/button";
 import { useState } from "react";
 import * as sportsDataService from "@/services/sportsDataService";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import type { Athlete } from "@/types/Athlete";
+import type { AthletePayload } from "@/types/Athlete";
 import {
   Dialog,
   DialogClose,
@@ -36,11 +36,12 @@ const CreateAthlete = () => {
     },
   });
 
-  if (isPending) return <div>pending</div>;
+  // after creating the athlete the pending div is shown instead for a split second which closes the dialog.
+  if (isPending) return <div>...pending</div>;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const athlete: Athlete = {
+    const athlete: AthletePayload = {
       name: name,
       age: Number(age),
       height: Number(height),
@@ -50,19 +51,19 @@ const CreateAthlete = () => {
   return (
     <div>
       <Dialog>
-        <form id="athleteForm" onSubmit={handleSubmit}>
-          <DialogTrigger asChild>
-            <Button variant="outline">Add New Athlete</Button>
-          </DialogTrigger>
-          <DialogContent className="sm:max-w-[425px]">
-            <DialogHeader>
-              <DialogTitle>Create Athlete</DialogTitle>
-              <DialogDescription>
-                Create and add a new athlete here. Click save when you&apos;re
-                done.
-              </DialogDescription>
-            </DialogHeader>
-            <div className="grid gap-4">
+        <DialogTrigger asChild>
+          <Button variant="default">Add New Athlete</Button>
+        </DialogTrigger>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>Create Athlete</DialogTitle>
+            <DialogDescription>
+              Create and add a new athlete here. Click save when you&apos;re
+              done.
+            </DialogDescription>
+          </DialogHeader>
+          <form id="athleteForm" onSubmit={handleSubmit}>
+            <div className="grid gap-3">
               <div className="grid gap-3">
                 <Label htmlFor="name">Name</Label>
                 <Input
@@ -103,25 +104,25 @@ const CreateAthlete = () => {
                 ></Input>
               </div>
             </div>
-            {error && (
-              <Alert
-                variant="destructive"
-                className="flex justify-between items-center"
-              >
-                <AlertCircleIcon />
-                <AlertTitle className="text-center">{error.message}</AlertTitle>
-              </Alert>
-            )}
-            <DialogFooter>
-              <DialogClose asChild>
-                <Button variant="outline">Cancel</Button>
-              </DialogClose>
-              <Button type="submit" form="athleteForm">
-                Save New Athlete
-              </Button>
-            </DialogFooter>
-          </DialogContent>
-        </form>
+          </form>
+          {error && (
+            <Alert
+              variant="destructive"
+              className="flex justify-between items-center"
+            >
+              <AlertCircleIcon />
+              <AlertTitle className="text-center ">{error.message}</AlertTitle>
+            </Alert>
+          )}
+          <DialogFooter>
+            <DialogClose asChild>
+              <Button variant="outline">Cancel</Button>
+            </DialogClose>
+            <Button type="submit" form="athleteForm">
+              Save New Athlete
+            </Button>
+          </DialogFooter>
+        </DialogContent>
       </Dialog>
     </div>
   );
