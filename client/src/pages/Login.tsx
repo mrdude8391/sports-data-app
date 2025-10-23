@@ -8,20 +8,28 @@ import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Alert, AlertTitle } from "@/components/ui/alert";
 import { AlertCircleIcon } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
+import type { LoginPayload } from "@/types/Auth";
 
 const Login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [form, setForm] = useState<LoginPayload>({
+    email: "",
+    password: "",
+  });
   const [error, setError] = useState("");
 
   const navigate = useNavigate();
 
   const { login } = useAuth();
 
+  const handleChange = (e: any) => {
+    const { name, value } = e.target;
+    setForm((prev) => ({ ...prev, [name]: value }));
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     try {
       e.preventDefault();
-      const user = await sportsDataservice.login(email, password);
+      const user = await sportsDataservice.login(form);
       console.log("login Successful");
       login(user);
       navigate("/profile");
@@ -42,19 +50,22 @@ const Login = () => {
                 <Input
                   type="email"
                   placeholder="Email"
+                  name="email"
                   id="email"
                   required
-                  onChange={(e) => setEmail(e.target.value)}
+                  onChange={handleChange}
                 ></Input>
               </div>
 
               <div className="grid gap-3">
                 <Label htmlFor="password">Password</Label>
                 <Input
+                  type="password"
                   placeholder="Password"
+                  name="password"
                   id="password"
                   required
-                  onChange={(e) => setPassword(e.target.value)}
+                  onChange={handleChange}
                 ></Input>
               </div>
             </div>
