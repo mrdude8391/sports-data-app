@@ -59,17 +59,17 @@ const AthleteStats = () => {
         <div className="flex flex-col gap-6 w-full max-w-6xl py-3">
           <div>
             <h1>{res.athlete.name}</h1>
-            <p>Id {athleteId}</p>
             <p>Age {res.athlete.age}</p>
             <p>Height {res.athlete.height}</p>
           </div>
           <div>
-            <p>
+            <h3>Select Date Range</h3>
+            {/* <p>
               Selected Date{" "}
               {date && date.from && date.to
                 ? `${date.from.toLocaleDateString()}  ${date.to.toLocaleDateString()}`
                 : ""}
-            </p>
+            </p> */}
             <Popover open={open} onOpenChange={setOpen}>
               <PopoverTrigger asChild>
                 <Button
