@@ -22,7 +22,7 @@ const AthleteCard = (props: AthleteCardProps) => {
           src={imageSrc}
           height={48}
           width={48}
-          className="border-1 rounded-full flex-shrink-0"
+          className="border-1 rounded-full bg-white flex-shrink-0"
         />
         <p>{athlete.name}</p>
       </Link>
