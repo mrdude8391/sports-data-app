@@ -25,7 +25,7 @@ const DeleteAthlete = (props: deleteAthleteProps) => {
 
   return (
     <>
-      <Button variant="destructive" onClick={handleClick}>
+      <Button className="m-3" variant="destructive" onClick={handleClick}>
         Delete
       </Button>
     </>
