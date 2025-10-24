@@ -4,16 +4,19 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "./ui/button";
 import { BurgerMenu } from "./BurgerMenu";
+import { SunMoon } from "lucide-react";
+import { useTheme } from "@/context/ThemeProvider";
 
 const Navbar = () => {
   // Nav bar links are configured in the NAV_LINKS list in the index.ts file
   const [isOpen, setIsOpen] = useState(false);
   const closeMenu = () => setIsOpen(false);
   const { user, isLoggedIn, logout } = useAuth();
+  const { flipTheme } = useTheme();
 
   return (
     <>
-      <nav className="sticky w-full top-0 left-0 z-30 bg-white shadow-sm ">
+      <nav className="sticky w-full top-0 left-0 z-30 shadow-sm ">
         <div className="flex items-center justify-between max-container padding-container z-30 py-1">
           <Link to="/" onClick={closeMenu}>
             <p className=" transition-all hover:font-bold py-3 px-3">
@@ -31,6 +34,9 @@ const Navbar = () => {
               </Link>
             ))}
             {isLoggedIn && user && <Button onClick={logout}> Logout</Button>}
+            <Button onClick={flipTheme}>
+              <SunMoon />
+            </Button>
           </ul>
           <BurgerMenu isOpen={isOpen} setIsOpen={setIsOpen} />
         </div>
