@@ -5,7 +5,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
 const generateToken = (id) => {
-  return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: 3600 });
+  return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: 3600 * 8 });
 };
 
 // Register User
