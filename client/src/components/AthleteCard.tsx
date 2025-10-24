@@ -8,13 +8,12 @@ import type { Athlete } from "@/types/Athlete";
 interface AthleteCardProps {
   imageSrc: string;
   athlete: Athlete;
-  isEdit: boolean;
 }
 
 const AthleteCard = (props: AthleteCardProps) => {
-  const { imageSrc, athlete, isEdit } = props;
+  const { imageSrc, athlete } = props;
   return (
-    <div className="w-full flex items-center justify-between gap-3 border-1 rounded-lg">
+    <div className="w-full flex items-center justify-between gap-3 rounded-lg ">
       <Link
         to={`/athletes/${athlete._id}/stats`}
         className="flex items-center w-full justify-start rounded-lg px-3 py-3 gap-3 hover:bg-stone-200"
@@ -27,7 +26,6 @@ const AthleteCard = (props: AthleteCardProps) => {
         />
         <p>{athlete.name}</p>
       </Link>
-      {isEdit && <DeleteAthlete id={athlete._id} />}
     </div>
   );
 };
