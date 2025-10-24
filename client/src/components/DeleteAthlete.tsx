@@ -1,6 +1,7 @@
 import { Button } from "./ui/button";
 import * as sportsDataService from "../services/sportsDataService";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { Trash2 } from "lucide-react";
 
 interface deleteAthleteProps {
   id: string;
@@ -25,8 +26,8 @@ const DeleteAthlete = (props: deleteAthleteProps) => {
 
   return (
     <>
-      <Button className="m-3" variant="destructive" onClick={handleClick}>
-        Delete
+      <Button className="ml-3" variant="destructive" onClick={handleClick}>
+        <Trash2 />
       </Button>
     </>
   );
