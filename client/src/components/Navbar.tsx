@@ -34,10 +34,11 @@ const Navbar = () => {
               </Link>
             ))}
             {isLoggedIn && user && <Button onClick={logout}> Logout</Button>}
-            <Button onClick={flipTheme}>
-              <SunMoon />
+            <Button size="icon" variant="ghost" onClick={flipTheme}>
+              <SunMoon className="size-5" />
             </Button>
           </ul>
+
           <BurgerMenu isOpen={isOpen} setIsOpen={setIsOpen} />
         </div>
       </nav>
