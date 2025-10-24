@@ -14,7 +14,7 @@ interface AthleteCardProps {
 const AthleteCard = (props: AthleteCardProps) => {
   const { imageSrc, athlete, isEdit } = props;
   return (
-    <div className="w-full flex items-center justify-between gap-3 border-1 rounded-lg px-3 py-3">
+    <div className="w-full flex items-center justify-between gap-3 border-1 rounded-lg">
       <Link
         to={`/athletes/${athlete._id}/stats`}
         className="flex items-center w-full justify-start rounded-lg px-3 py-3 gap-3 hover:bg-stone-200"
