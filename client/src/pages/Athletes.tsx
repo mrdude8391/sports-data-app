@@ -7,6 +7,7 @@ import { useQuery } from "@tanstack/react-query";
 import CreateAthlete from "@/components/CreateAthlete";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import DeleteAthlete from "@/components/DeleteAthlete";
 
 const Athletes = () => {
   const [isEdit, setIsEdit] = useState(false);
@@ -31,20 +32,14 @@ const Athletes = () => {
         </Button>
       </div>
 
-      <div className="flex flex-col gap-3">
+      <div className="flex flex-col gap-1">
         {athletes && athletes.length > 0 ? (
           athletes.map((a: Athlete) => (
-            <div
-              key={a._id}
-              className="flex w-full flex-row gap-4 items-center"
-            >
+            <div key={a._id} className="flex w-full flex-row items-center ">
               <div className="w-full ">
-                <AthleteCard
-                  imageSrc={sampleImage}
-                  athlete={a}
-                  isEdit={isEdit}
-                />{" "}
+                <AthleteCard imageSrc={sampleImage} athlete={a} />{" "}
               </div>
+              {isEdit && <DeleteAthlete id={a._id} />}
             </div>
           ))
         ) : (
