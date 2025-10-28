@@ -23,6 +23,7 @@ const Navbar = () => {
               Volleyball Tracker
             </p>
           </Link>
+
           <ul className="hidden lg:flex h-full gap-12 ">
             {NAV_LINKS.map((link) => (
               <Link
@@ -33,7 +34,13 @@ const Navbar = () => {
                 {link.label}
               </Link>
             ))}
-            {isLoggedIn && user && <Button onClick={logout}> Logout</Button>}
+            {isLoggedIn && user ? (
+              <Button onClick={logout}>Logout</Button>
+            ) : (
+              <Link key="Login" to="/login">
+                <Button>Login</Button>
+              </Link>
+            )}
             <Button size="icon" variant="ghost" onClick={flipTheme}>
               <SunMoon className="size-5" />
             </Button>
