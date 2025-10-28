@@ -57,12 +57,15 @@ const AthleteStats = () => {
     <>
       {res && res.stats.length > 0 ? (
         <div className="flex flex-col gap-6 w-full max-w-6xl py-3">
-          <div>
+          <div className="card-container w-full">
             <h1>{res.athlete.name}</h1>
             <p>Age {res.athlete.age}</p>
             <p>Height {res.athlete.height}</p>
           </div>
-          <div>
+
+          <CreateAthleteStat />
+
+          <div className="card-container w-full flex flex-col gap-4">
             <h3>Select Date Range</h3>
             {/* <p>
               Selected Date{" "}
@@ -99,7 +102,6 @@ const AthleteStats = () => {
             </Popover>
           </div>
 
-          <CreateAthleteStat />
           <AthleteStatRadial
             stats={
               filteredStats && filteredStats.length > 0

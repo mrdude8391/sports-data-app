@@ -140,7 +140,7 @@ const AthleteStatRadar = (props: AthleteStatRadarProps) => {
   const chartData = transformData(stats);
 
   return (
-    <div>
+    <div className="card-container w-full">
       <ResponsiveContainer width={"100%"} height={350}>
         <RadarChart outerRadius={150} width={730} height={300} data={chartData}>
           <PolarGrid />

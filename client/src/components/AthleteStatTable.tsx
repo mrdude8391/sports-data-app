@@ -40,7 +40,7 @@ const AthleteStatTable = (props: AthleteStatTableProps) => {
     // Perform any other actions with the selected value here
   };
   return (
-    <div className="flex flex-col gap-6">
+    <div className="card-container flex flex-col gap-6">
       <Select onValueChange={handleValueChange}>
         <SelectTrigger className="w-full text-2xl font-semibold py-6">
           <SelectValue

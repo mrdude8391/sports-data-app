@@ -45,7 +45,7 @@ const AthleteStatChart = (props: AthleteStatChartProps) => {
   };
 
   return (
-    <div className="flex flex-col gap-5">
+    <div className="card-container w-full flex flex-col gap-5">
       <Select onValueChange={handleValueChange}>
         <SelectTrigger className="w-[180px]">
           <SelectValue placeholder="Select a stat" />
