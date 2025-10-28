@@ -18,12 +18,12 @@ const AthleteCard = (props: AthleteCardProps) => {
         to={`/athletes/${athlete._id}/stats`}
         className="flex items-center w-full justify-start rounded-lg px-3 py-3 gap-3 hover:bg-accent dark:hover:bg-accent/50"
       >
-        <img
+        {/* <img
           src={imageSrc}
           height={48}
           width={48}
           className="border-1 rounded-full bg-white flex-shrink-0"
-        />
+        /> */}
         <p>{athlete.name}</p>
       </Link>
     </div>
