@@ -24,7 +24,7 @@ const Athletes = () => {
   if (error) return <p>... No Athletes Found</p>;
 
   return (
-    <div className="sm:w-lg flex flex-col gap-6">
+    <div className="card-container flex flex-col gap-6">
       <div className="flex justify-between">
         <CreateAthlete />
         <Button variant="outline" onClick={() => setIsEdit(!isEdit)}>
