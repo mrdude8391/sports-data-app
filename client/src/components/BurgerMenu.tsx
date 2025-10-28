@@ -57,16 +57,18 @@ export const BurgerMenu = ({ isOpen, setIsOpen }: BurgerMenuProps) => {
                   {link.label}
                 </Link>
               ))}
+              {isLoggedIn && user ? (
+                <Button variant="secondary" onClick={logout}>
+                  Logout
+                </Button>
+              ) : (
+                <Button variant="secondary">
+                  <Link key="Login" to="/login">
+                    Login
+                  </Link>
+                </Button>
+              )}
             </ul>
-            {isLoggedIn && user ? (
-              <Button onClick={logout}> Logout</Button>
-            ) : (
-              <Button>
-                <Link key="Login" to="/login">
-                  Login
-                </Link>
-              </Button>
-            )}
           </nav>
         )}
       </div>
