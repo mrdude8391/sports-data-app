@@ -140,3 +140,9 @@
     @apply px-6 lg:px-20;
   }
 }
+
+@layer components {
+  .card-container {
+    @apply w-full sm:w-lg bg-card px-4 py-3 rounded-md;
+  }
+}
