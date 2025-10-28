@@ -143,6 +143,6 @@
 
 @layer components {
   .card-container {
-    @apply bg-card px-4 py-3 rounded-md;
+    @apply border shadow-xs dark:bg-card px-4 py-3 rounded-md;
   }
 }
