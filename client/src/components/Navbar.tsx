@@ -20,7 +20,7 @@ const Navbar = () => {
         <div className="flex items-center justify-between max-container padding-container z-30 py-1">
           <Link to="/" onClick={closeMenu}>
             <p className=" transition-all hover:font-bold py-3 px-3">
-              Athlete App
+              Volleyball Tracker
             </p>
           </Link>
           <ul className="hidden lg:flex h-full gap-12 ">
