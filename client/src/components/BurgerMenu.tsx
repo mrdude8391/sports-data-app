@@ -1,12 +1,9 @@
 import { NAV_LINKS } from "@/constants";
-import React from "react";
-import { useState } from "react";
-import X_IMAGE from "@/assets/x.svg";
-import MENU_IMAGE from "@/assets/menu.svg";
 import { Link } from "react-router-dom";
 import { Menu, SunMoon, X } from "lucide-react";
 import { Button } from "./ui/button";
 import { useTheme } from "@/context/ThemeProvider";
+import { useAuth } from "@/context/AuthContext";
 
 interface BurgerMenuProps {
   isOpen: boolean;
@@ -15,6 +12,8 @@ interface BurgerMenuProps {
 
 export const BurgerMenu = ({ isOpen, setIsOpen }: BurgerMenuProps) => {
   const { flipTheme } = useTheme();
+  const { isLoggedIn, user, logout } = useAuth();
+
   return (
     <div className="relative flex gap-3 items-center lg:hidden">
       <Button
@@ -33,22 +32,8 @@ export const BurgerMenu = ({ isOpen, setIsOpen }: BurgerMenuProps) => {
         onClick={() => setIsOpen(!isOpen)}
       >
         {isOpen ? (
-          // <img
-          //   src={X_IMAGE}
-          //   alt="x"
-          //   width={24}
-          //   height={24}
-          //   className="inline-block cursor-pointer"
-          // ></img>
           <X className="size-5 inline-block cursor-pointer" />
         ) : (
-          // <img
-          //   src={MENU_IMAGE}
-          //   alt="menu"
-          //   width={24}
-          //   height={24}
-          //   className="inline-block cursor-pointer"
-          // ></img>
           <Menu className="size-5 inline-block cursor-pointer" />
         )}
       </Button>
@@ -73,6 +58,15 @@ export const BurgerMenu = ({ isOpen, setIsOpen }: BurgerMenuProps) => {
                 </Link>
               ))}
             </ul>
+            {isLoggedIn && user ? (
+              <Button onClick={logout}> Logout</Button>
+            ) : (
+              <Button>
+                <Link key="Login" to="/login">
+                  Login
+                </Link>
+              </Button>
+            )}
           </nav>
         )}
       </div>
