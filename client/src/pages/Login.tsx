@@ -13,7 +13,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Alert, AlertTitle } from "@/components/ui/alert";
-import { AlertCircleIcon, GalleryVerticalEnd, Volleyball } from "lucide-react";
+import { AlertCircleIcon, Volleyball, X } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 import type { LoginPayload } from "@/types/Auth";
 
@@ -110,8 +110,13 @@ const Login = () => {
                 >
                   <AlertCircleIcon />
                   <AlertTitle className="text-center">{error}</AlertTitle>
-                  <Button variant="destructive" onClick={() => setError("")}>
-                    X
+                  <Button
+                    variant="destructive"
+                    size="icon"
+                    className="size-5"
+                    onClick={() => setError("")}
+                  >
+                    <X className="size-4" />
                   </Button>
                 </Alert>
               )}
