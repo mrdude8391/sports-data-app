@@ -19,7 +19,7 @@ const Navbar = () => {
       <nav className="sticky w-full top-0 left-0 z-30 shadow-sm bg-background ">
         <div className="flex items-center justify-between max-container padding-container z-30 py-1">
           <Link to="/" onClick={closeMenu}>
-            <p className=" transition-all hover:font-bold py-3 px-3">
+            <p className=" transition-all font-semibold hover:font-bold py-3 px-3">
               Volleyball Tracker
             </p>
           </Link>
