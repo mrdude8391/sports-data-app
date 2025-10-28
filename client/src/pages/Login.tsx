@@ -4,9 +4,16 @@ import * as sportsDataservice from "../services/sportsDataService";
 import { Link, useNavigate } from "react-router-dom";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
-import { Card, CardContent, CardFooter } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Alert, AlertTitle } from "@/components/ui/alert";
-import { AlertCircleIcon } from "lucide-react";
+import { AlertCircleIcon, GalleryVerticalEnd, Volleyball } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 import type { LoginPayload } from "@/types/Auth";
 
@@ -39,61 +46,79 @@ const Login = () => {
 
   return (
     <>
-      <Card className="w-full max-w-sm">
-        <CardContent>
-          <form id="loginForm" onSubmit={handleSubmit}>
-            <div className="flex flex-col gap-6">
-              <div className="grid gap-3">
-                <Label htmlFor="email">Email</Label>
-                <Input
-                  type="email"
-                  placeholder="Email"
-                  name="email"
-                  id="email"
-                  required
-                  onChange={handleChange}
-                ></Input>
-              </div>
-
-              <div className="grid gap-3">
-                <Label htmlFor="password">Password</Label>
-                <Input
-                  type="password"
-                  placeholder="Password"
-                  name="password"
-                  id="password"
-                  required
-                  onChange={handleChange}
-                ></Input>
-              </div>
+      <div className="flex w-full min-h-svh flex-col items-center justify-center gap-6 p-6 md:p-10">
+        <div className="flex w-full max-w-sm flex-col gap-6">
+          <a
+            href="#"
+            className="flex items-center gap-2 self-center font-medium"
+          >
+            <div className="bg-primary text-primary-foreground flex size-6 items-center justify-center rounded-md">
+              <Volleyball className="size-5" />
             </div>
-          </form>
-        </CardContent>
-        <CardFooter className="flex-col gap-2 justify-between">
-          <Button className="w-full" type="submit" form="loginForm">
-            Login
-          </Button>
+            Volleyball Tracker
+          </a>
+          <Card className="w-full max-w-sm">
+            <CardHeader>
+              <CardTitle>Login to your account</CardTitle>
+              <CardDescription>
+                Enter your email below to login to your account
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <form id="loginForm" onSubmit={handleSubmit}>
+                <div className="flex flex-col gap-6">
+                  <div className="grid gap-3">
+                    <Label htmlFor="email">Email</Label>
+                    <Input
+                      type="email"
+                      placeholder="m@example.com"
+                      name="email"
+                      id="email"
+                      required
+                      onChange={handleChange}
+                    ></Input>
+                  </div>
 
-          <Link className="w-full" to="/register">
-            <Button variant="outline" className="w-full">
-              Sign Up
-            </Button>
-          </Link>
-
-          {error && (
-            <Alert
-              variant="destructive"
-              className="flex justify-between items-center"
-            >
-              <AlertCircleIcon />
-              <AlertTitle className="text-center">{error}</AlertTitle>
-              <Button variant="destructive" onClick={() => setError("")}>
-                X
+                  <div className="grid gap-3">
+                    <Label htmlFor="password">Password</Label>
+                    <Input
+                      type="password"
+                      name="password"
+                      id="password"
+                      required
+                      onChange={handleChange}
+                    ></Input>
+                  </div>
+                </div>
+              </form>
+            </CardContent>
+            <CardFooter className="flex-col gap-2 justify-between">
+              <Button className="w-full" type="submit" form="loginForm">
+                Login
               </Button>
-            </Alert>
-          )}
-        </CardFooter>
-      </Card>
+
+              <Link className="w-full" to="/register">
+                <Button variant="outline" className="w-full">
+                  Sign Up
+                </Button>
+              </Link>
+
+              {error && (
+                <Alert
+                  variant="destructive"
+                  className="flex justify-between items-center"
+                >
+                  <AlertCircleIcon />
+                  <AlertTitle className="text-center">{error}</AlertTitle>
+                  <Button variant="destructive" onClick={() => setError("")}>
+                    X
+                  </Button>
+                </Alert>
+              )}
+            </CardFooter>
+          </Card>
+        </div>
+      </div>
     </>
   );
 };
