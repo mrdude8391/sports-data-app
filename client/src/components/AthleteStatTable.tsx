@@ -74,7 +74,7 @@ const AthleteStatTable = (props: AthleteStatTableProps) => {
             <TableRow>
               <TableHead>Date</TableHead>
               {data.map(({ key, label }) => (
-                <TableHead>{label}</TableHead>
+                <TableHead key={key}>{label}</TableHead>
               ))}
             </TableRow>
           </TableHeader>
@@ -87,7 +87,7 @@ const AthleteStatTable = (props: AthleteStatTableProps) => {
                   {stat.recordedAt.toLocaleDateString("en-UB")}
                 </TableCell>
                 {data.map(({ key, label }) => (
-                  <TableCell>{(stat as any)[select][key]}</TableCell>
+                  <TableCell key={key}>{(stat as any)[select][key]}</TableCell>
                 ))}
               </TableRow>
             ))}
