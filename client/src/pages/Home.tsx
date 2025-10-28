@@ -5,11 +5,13 @@ import { Link } from "react-router-dom";
 const Home = () => {
   const { isLoggedIn } = useAuth();
   return (
-    <div>
+    <div className="flex flex-col w-full h-svh items-center justify-center">
       {isLoggedIn ? (
-        <div>Logged in home</div>
+        <div className="card-container flex justify-center">
+          <p>Logged in home</p>
+        </div>
       ) : (
-        <div className="flex flex-col gap-3">
+        <div className="card-container flex flex-col items-center gap-3">
           <p>! Logged in Home</p>
           <Link key="Login" to="/login">
             <Button>Click to login</Button>
