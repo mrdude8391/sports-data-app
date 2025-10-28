@@ -1,6 +1,6 @@
 const About = () => {
   return (
-    <div>
+    <div className="flex flex-col w-full h-svh items-center justify-center">
       <h1>
         An app to record stats for your volleyball players and visualize your
         progress
