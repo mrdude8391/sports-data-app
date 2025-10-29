@@ -23,6 +23,7 @@ const statSchema = new mongoose.Schema(
     setting: {
       assists: { type: Number, default: 0 },
       errors: { type: Number, default: 0 },
+      attempts: { type: Number, default: 0 },
     },
     serving: {
       rating: { type: Number, default: 0 },
