@@ -24,27 +24,32 @@ const Athletes = () => {
   if (error) return <p>... No Athletes Found</p>;
 
   return (
-    <div className="card-container w-full sm:w-lg flex flex-col gap-6">
-      <div className="flex justify-between">
-        <CreateAthlete />
-        <Button variant="outline" onClick={() => setIsEdit(!isEdit)}>
-          <EllipsisVertical />
-        </Button>
+    <div className="flex flex-col gap-6 w-full sm:w-lg items-center">
+      <div className="w-full">
+        <h1>Athletes</h1>
       </div>
+      <div className="card-container w-full flex flex-col gap-6">
+        <div className="flex justify-between">
+          <CreateAthlete />
+          <Button variant="outline" onClick={() => setIsEdit(!isEdit)}>
+            <EllipsisVertical />
+          </Button>
+        </div>
 
-      <div className="flex flex-col gap-1">
-        {athletes && athletes.length > 0 ? (
-          athletes.map((a: Athlete) => (
-            <div key={a._id} className="flex w-full flex-row items-center ">
-              <div className="w-full ">
-                <AthleteCard imageSrc={sampleImage} athlete={a} />{" "}
+        <div className="flex flex-col gap-1 w-full">
+          {athletes && athletes.length > 0 ? (
+            athletes.map((a: Athlete) => (
+              <div key={a._id} className="flex w-full flex-row items-center ">
+                <div className="w-full ">
+                  <AthleteCard imageSrc={sampleImage} athlete={a} />{" "}
+                </div>
+                {isEdit && <DeleteAthlete id={a._id} />}
               </div>
-              {isEdit && <DeleteAthlete id={a._id} />}
-            </div>
-          ))
-        ) : (
-          <p>No Athletes</p>
-        )}
+            ))
+          ) : (
+            <p>No Athletes</p>
+          )}
+        </div>
       </div>
     </div>
   );
