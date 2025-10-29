@@ -37,7 +37,7 @@ const Login = () => {
       const user = await sportsDataservice.login(form);
       console.log("login Successful");
       login(user);
-      navigate("/profile");
+      navigate("/athletes");
     } catch (err: any) {
       setError(err.message);
       console.log(err.message);
