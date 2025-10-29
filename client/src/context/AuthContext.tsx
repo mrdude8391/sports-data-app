@@ -21,6 +21,7 @@ export const AuthContext = createContext<AuthContextType | null>(null);
 const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<AuthResponse | null>(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const navigate = useNavigate();
 
   const login = (user: AuthResponse) => {
     localStorage.setItem("user", JSON.stringify(user));
@@ -28,7 +29,6 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
     console.log("set user", user);
     setIsLoggedIn(true);
   };
-  const navigate = useNavigate();
 
   const logout = () => {
     console.log("Logout Called");
