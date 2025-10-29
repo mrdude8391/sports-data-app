@@ -45,13 +45,13 @@ export const BurgerMenu = ({ isOpen, setIsOpen }: BurgerMenuProps) => {
         } transition-opacity duration-300`}
       >
         {isOpen && (
-          <nav className="py-4 ">
-            <ul className=" space-y-4 flex items-center justify-end flex-col p-2">
+          <nav className="py-2 ">
+            <ul className="space-y-2 flex items-center justify-end flex-col p-2">
               {NAV_LINKS.map((link) => (
                 <Link
                   to={link.href}
                   key={link.key}
-                  className=" text-white hover:font-bold"
+                  className=" text-white hover:font-bold py-1 w-full text-center"
                   onClick={() => setIsOpen(false)}
                 >
                   {link.label}
