@@ -86,8 +86,6 @@ const AthleteStatRadar = (props: AthleteStatRadarProps) => {
       count += 1;
     });
 
-    console.log(settingAssistsTotal, settingErrorsTotal, settingAttempts);
-
     const formatted = [
       {
         // chance of player scoring on attack
