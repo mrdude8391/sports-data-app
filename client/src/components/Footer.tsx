@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 const Footer = () => {
   return (
     <>
-      <footer className="bg-accent flex flex-col items-center justify-center py-10">
+      <footer className="bg-accent flex flex-col items-center justify-center pb-16 lg:pb-10 py-10">
         <div className="max-container padding-container flex w-full flex-col gap-10">
           {/* Line break 
           <hr className="shadow" />
@@ -29,7 +29,7 @@ const Footer = () => {
             </div>
 
             {/* Navigation Menu */}
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-col gap-2 ">
               {/* <p className="font-bold mb-1">Menu</p> */}
               <ul className="h-full gap-3 flex ">
                 {NAV_LINKS.map((link) => (
