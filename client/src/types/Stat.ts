@@ -10,6 +10,7 @@ type BaseStatData = {
     setting: {
       assists: number,
       errors: number,
+      attempts: number,
     },
     serving: {
       rating: number,
@@ -55,6 +56,7 @@ export type Stat= {
     setting: {
       assists: number,
       errors: number,
+      attempts: number,
     },
     serving: {
       rating: number,
@@ -125,6 +127,8 @@ export const initialStatForm: StatForm = {
     setting: {
       assists: 0,
       errors: 0,
+      attempts: 0,
+
     },
     serving: {
       rating: 0,

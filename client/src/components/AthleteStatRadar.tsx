@@ -65,6 +65,7 @@ const AthleteStatRadar = (props: AthleteStatRadarProps) => {
     let attackPercentageTotal = 0;
     let settingAssistsTotal = 0;
     let settingErrorsTotal = 0;
+    let settingAttempts = 0;
     let servingPercentageTotal = 0;
     let receivingRatingTotal = 0;
     let defenseRatingTotal = 0;
@@ -76,6 +77,7 @@ const AthleteStatRadar = (props: AthleteStatRadarProps) => {
       attackPercentageTotal += stat.attack.percentage;
       settingAssistsTotal += stat.setting.assists;
       settingErrorsTotal += stat.setting.errors;
+      settingAttempts += stat.setting.attempts;
       servingPercentageTotal += stat.serving.percentage;
       receivingRatingTotal += stat.receiving.rating;
       defenseRatingTotal += stat.defense.rating;
@@ -83,6 +85,8 @@ const AthleteStatRadar = (props: AthleteStatRadarProps) => {
       blockingAttempts += stat.blocking.attempts;
       count += 1;
     });
+
+    console.log(settingAssistsTotal, settingErrorsTotal, settingAttempts);
 
     const formatted = [
       {
@@ -113,7 +117,10 @@ const AthleteStatRadar = (props: AthleteStatRadarProps) => {
         // how often a players sets results in an assist vs an error
         category: "Setting",
         value: settingErrorsTotal
-          ? Math.round((settingAssistsTotal / settingErrorsTotal) * 1000) / 10
+          ? Math.round(
+              ((settingAssistsTotal - settingErrorsTotal) / settingAttempts) *
+                1000
+            ) / 10
           : 0,
       },
       {

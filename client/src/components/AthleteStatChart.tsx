@@ -18,7 +18,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useEffect, useState } from "react";
-import { STAT_FIELDS, STAT_INDEX } from "@/constants";
+import { STAT_INDEX } from "@/constants";
 
 interface AthleteStatChartProps {
   stats: Stat[];
