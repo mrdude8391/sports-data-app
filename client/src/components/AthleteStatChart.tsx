@@ -7,6 +7,8 @@ import {
   Tooltip,
   Legend,
   ResponsiveContainer,
+  CartesianAxis,
+  ReferenceLine,
 } from "recharts";
 import {
   Select,
@@ -76,6 +78,8 @@ const AthleteStatChart = (props: AthleteStatChartProps) => {
                 new Date(date).toLocaleDateString("en-UB")
               }
             />
+            <ReferenceLine y={0} strokeDasharray="3 3" />
+
             <YAxis />
             <Tooltip
               labelFormatter={(date) =>
