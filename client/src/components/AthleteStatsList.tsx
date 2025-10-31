@@ -8,8 +8,19 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
+
 import DeleteAthleteStat from "./DeleteAthleteStat";
 import EditAthleteStat from "./EditAthleteStat";
+import { useState } from "react";
 
 interface AthleteStatsListProps {
   stats: Stat[];
@@ -18,16 +29,23 @@ interface AthleteStatsListProps {
 const AthleteStatsList = (props: AthleteStatsListProps) => {
   const { stats } = props;
 
+  const [page, setPage] = useState(0);
+  const [count, setCount] = useState(10);
+
+  const firstStatIdx = page * count;
+  const lastStatIdx = firstStatIdx + count;
+  const currentStats = stats.slice(firstStatIdx, lastStatIdx);
+
   return (
     <div className="card-container flex flex-col gap-6">
       <h3>List of Games</h3>
       <Accordion type="single" collapsible className="w-full">
-        {stats.map((stat, index) => (
-          <AccordionItem key={stat._id} value={`game-${index}`}>
+        {currentStats.map((stat, index) => (
+          <AccordionItem key={stat._id} value={`game-${index + firstStatIdx}`}>
             <AccordionTrigger>
               <div className="flex justify-between w-full">
                 <span>
-                  Game {index + 1} —{" "}
+                  Game {index + 1 + firstStatIdx} —{" "}
                   {new Date(stat.recordedAt).toLocaleDateString()}
                 </span>
                 <div className="flex gap-2 "></div>
@@ -60,6 +78,58 @@ const AthleteStatsList = (props: AthleteStatsListProps) => {
           </AccordionItem>
         ))}
       </Accordion>
+      <Pagination>
+        <PaginationContent>
+          <PaginationItem>
+            <PaginationPrevious
+              className={
+                page === 0 ? "cursor-not-allowed opacity-20" : "cursor-pointer"
+              }
+              onClick={() =>
+                setPage((prev) => {
+                  if (prev > 0) {
+                    return prev - 1;
+                  }
+                  return 0;
+                })
+              }
+            />
+          </PaginationItem>
+          <PaginationItem hidden={lastStatIdx < stats.length}>
+            <PaginationLink>{page - 1}</PaginationLink>
+          </PaginationItem>
+          <PaginationItem hidden={page === 0}>
+            <PaginationLink>{page}</PaginationLink>
+          </PaginationItem>
+          <PaginationItem>
+            <PaginationLink isActive={true}>{page + 1}</PaginationLink>
+          </PaginationItem>
+          <PaginationItem hidden={lastStatIdx > stats.length}>
+            <PaginationLink>{page + 2}</PaginationLink>
+          </PaginationItem>
+          <PaginationItem hidden={page !== 0}>
+            <PaginationLink>{page + 3}</PaginationLink>
+          </PaginationItem>
+          <PaginationItem>
+            <PaginationEllipsis />
+          </PaginationItem>
+          <PaginationItem>
+            <PaginationNext
+              className={
+                lastStatIdx > stats.length
+                  ? "cursor-not-allowed opacity-20"
+                  : "cursor-pointer"
+              }
+              onClick={() =>
+                setPage((prev) => {
+                  if (lastStatIdx < stats.length) return prev + 1;
+                  return prev;
+                })
+              }
+            />
+          </PaginationItem>
+        </PaginationContent>
+      </Pagination>
     </div>
   );
 };
