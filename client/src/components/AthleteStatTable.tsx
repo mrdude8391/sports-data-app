@@ -168,9 +168,17 @@ const AthleteStatTable = (props: AthleteStatTableProps) => {
           <PaginationItem>
             <PaginationLink isActive={true}>
               <Input
+                type="tel"
+                inputMode="numeric"
                 placeholder={`${page + 1}`}
                 onChange={handlePageChange}
                 value={page + 1}
+                onClick={(e: any) => (e.target.value = "")}
+                onKeyDown={(e: any) => {
+                  if (e.key === "Backspace") {
+                    e.target.value = "";
+                  }
+                }}
               ></Input>
             </PaginationLink>
           </PaginationItem>
