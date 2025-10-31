@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 const Footer = () => {
   return (
     <>
-      <footer className="bg-accent flex flex-col items-center justify-center pb-16 lg:pb-10 pt-5">
+      <footer className="bg-accent flex flex-col items-center justify-center pb-16 lg:pb-4 pt-4">
         <div className="max-container padding-container flex w-full flex-col gap-10">
           {/* Line break 
           <hr className="shadow" />
