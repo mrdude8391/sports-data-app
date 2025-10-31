@@ -25,9 +25,10 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
-import { useState } from "react";
+import { useState, type ChangeEvent } from "react";
 import { STAT_INDEX } from "@/constants";
 import type { Stat } from "@/types/Stat";
+import { Input } from "./ui/input";
 
 interface AthleteStatTableProps {
   stats: Stat[];
@@ -39,11 +40,28 @@ const AthleteStatTable = (props: AthleteStatTableProps) => {
   const [select, setSelect] = useState("");
 
   const [page, setPage] = useState(0);
-  const [count, setCount] = useState(10);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
 
-  const firstStatIdx = page * count;
-  const lastStatIdx = firstStatIdx + count;
+  const firstStatIdx = page * itemsPerPage;
+  const lastStatIdx = firstStatIdx + itemsPerPage;
   const currentStats = stats.slice(firstStatIdx, lastStatIdx);
+
+  const totalPages = Math.ceil(stats.length / itemsPerPage);
+
+  const handlePageChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const { value } = e.target;
+    const num = Number(value);
+    if (!num) return;
+    if (num > totalPages) {
+      setPage(totalPages - 1);
+      return;
+    }
+    if (num < 0) {
+      setPage(1);
+      return;
+    }
+    setPage(num - 1);
+  };
 
   const capitalize = (str: string) => {
     if (str == undefined || str.length === 0) return "";
@@ -128,22 +146,51 @@ const AthleteStatTable = (props: AthleteStatTableProps) => {
               }
             />
           </PaginationItem>
+          <PaginationItem hidden={page < 2}>
+            <PaginationEllipsis />
+          </PaginationItem>
           <PaginationItem hidden={lastStatIdx < stats.length}>
-            <PaginationLink>{page - 1}</PaginationLink>
+            <PaginationLink
+              className="cursor-pointer"
+              onClick={() => setPage((prev) => prev - 2)}
+            >
+              {page - 1}
+            </PaginationLink>
           </PaginationItem>
           <PaginationItem hidden={page === 0}>
-            <PaginationLink>{page}</PaginationLink>
+            <PaginationLink
+              className="cursor-pointer"
+              onClick={() => setPage((prev) => prev - 1)}
+            >
+              {page}
+            </PaginationLink>
           </PaginationItem>
           <PaginationItem>
-            <PaginationLink isActive={true}>{page + 1}</PaginationLink>
+            <PaginationLink isActive={true}>
+              <Input
+                placeholder={`${page + 1}`}
+                onChange={handlePageChange}
+                value={page + 1}
+              ></Input>
+            </PaginationLink>
           </PaginationItem>
           <PaginationItem hidden={lastStatIdx > stats.length}>
-            <PaginationLink>{page + 2}</PaginationLink>
+            <PaginationLink
+              className="cursor-pointer"
+              onClick={() => setPage((prev) => prev + 1)}
+            >
+              {page + 2}
+            </PaginationLink>
           </PaginationItem>
           <PaginationItem hidden={page !== 0}>
-            <PaginationLink>{page + 3}</PaginationLink>
+            <PaginationLink
+              className="cursor-pointer"
+              onClick={() => setPage((prev) => prev + 2)}
+            >
+              {page + 3}
+            </PaginationLink>
           </PaginationItem>
-          <PaginationItem>
+          <PaginationItem hidden={page > totalPages - 3}>
             <PaginationEllipsis />
           </PaginationItem>
           <PaginationItem>
