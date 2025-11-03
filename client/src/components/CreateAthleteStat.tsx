@@ -201,7 +201,7 @@ const CreateAthleteStat = () => {
                   <div className="grid grid-cols-2 gap-4 mt-2">
                     {fields.map(({ key, label }) => (
                       <Label key={key} className="flex flex-col">
-                        <span className="text-sm text-gray-700">{label}</span>
+                        <span className="text-sm">{label}</span>
                         <Input
                           type="number"
                           value={

@@ -13,7 +13,7 @@ const Footer = () => {
           */}
 
           {/* Footer Elements */}
-          <div className="flex flex-col lg:flex-row w-full justify-between gap-8">
+          <div className="flex flex-col lg:flex-row w-full justify-between gap-8 text-foreground/90">
             {/* YMT logo link to home*/}
             <div className="flex flex-col items-start gap-2">
               <Link to="/">
