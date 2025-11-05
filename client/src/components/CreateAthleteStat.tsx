@@ -145,7 +145,7 @@ const CreateAthleteStat = () => {
               Add New Game Stats
             </Button>
           </DialogTrigger>
-          <DialogContent className="max-h-11/12 flex flex-col overflow-hidden">
+          <DialogContent className="max-h-11/12 flex flex-col overflow-hidden ">
             <DialogHeader className="sticky">
               <DialogTitle>Create New Stats</DialogTitle>
               <DialogDescription>
