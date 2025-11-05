@@ -55,6 +55,13 @@ const AthleteStatRadar = (props: AthleteStatRadarProps) => {
           : 0,
       },
       {
+        // chances of the player getting a block
+        category: "Blocking",
+        value: blockingAttempts
+          ? Math.round((blockingTotal / blockingAttempts) * 1000) / 10
+          : 0,
+      },
+      {
         // chance of player serving without error
         category: "Serving",
         value: count
@@ -72,16 +79,6 @@ const AthleteStatRadar = (props: AthleteStatRadarProps) => {
         // divide by 3 because 3 is a perfect pass, so we are taking the average pass rating total/ perfect pass
       },
       {
-        // how often a players sets results in an assist vs an error
-        category: "Setting",
-        value: settingErrorsTotal
-          ? Math.round(
-              ((settingAssistsTotal - settingErrorsTotal) / settingAttempts) *
-                1000
-            ) / 10
-          : 0,
-      },
-      {
         // rating of a players passes while on defense
         category: "Defense",
         value: count
@@ -90,11 +87,15 @@ const AthleteStatRadar = (props: AthleteStatRadarProps) => {
             ) / 10
           : 0,
       },
+
       {
-        // chances of the player getting a block
-        category: "Blocking",
-        value: blockingAttempts
-          ? Math.round((blockingTotal / blockingAttempts) * 1000) / 10
+        // how often a players sets results in an assist vs an error
+        category: "Setting",
+        value: settingErrorsTotal
+          ? Math.round(
+              ((settingAssistsTotal - settingErrorsTotal) / settingAttempts) *
+                1000
+            ) / 10
           : 0,
       },
     ];
@@ -105,9 +106,12 @@ const AthleteStatRadar = (props: AthleteStatRadarProps) => {
   const chartData = transformData(stats);
 
   return (
-    <div className="card-container w-full">
+    <div className="card-container w-full p-0">
       <ResponsiveContainer width={"100%"} height={350}>
-        <RadarChart outerRadius={150} width={730} height={300} data={chartData}>
+        <RadarChart
+          margin={{ top: 5, right: 32, bottom: 5, left: 32 }}
+          data={chartData}
+        >
           <PolarGrid />
           <PolarAngleAxis dataKey={"category"} />
           <PolarRadiusAxis angle={30} domain={[0, 100]} />
