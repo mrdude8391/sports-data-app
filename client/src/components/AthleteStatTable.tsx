@@ -80,7 +80,7 @@ const AthleteStatTable = (props: AthleteStatTableProps) => {
         <SelectTrigger className="w-full text-2xl font-semibold py-6">
           <SelectValue
             className=""
-            placeholder="Select a category to display chart"
+            placeholder="Select a category to display table"
           />
         </SelectTrigger>
         <SelectContent>
