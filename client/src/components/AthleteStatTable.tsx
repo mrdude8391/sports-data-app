@@ -149,7 +149,9 @@ const AthleteStatTable = (props: AthleteStatTableProps) => {
           <PaginationItem hidden={page < 2}>
             <PaginationEllipsis />
           </PaginationItem>
-          <PaginationItem hidden={lastStatIdx < stats.length}>
+          <PaginationItem
+            hidden={firstStatIdx < stats.length || page !== totalPages - 1}
+          >
             <PaginationLink
               className="cursor-pointer"
               onClick={() => setPage((prev) => prev - 2)}
@@ -182,7 +184,9 @@ const AthleteStatTable = (props: AthleteStatTableProps) => {
               ></Input>
             </PaginationLink>
           </PaginationItem>
-          <PaginationItem hidden={lastStatIdx > stats.length}>
+          <PaginationItem
+            hidden={firstStatIdx + 1 * itemsPerPage > stats.length}
+          >
             <PaginationLink
               className="cursor-pointer"
               onClick={() => setPage((prev) => prev + 1)}
@@ -190,7 +194,11 @@ const AthleteStatTable = (props: AthleteStatTableProps) => {
               {page + 2}
             </PaginationLink>
           </PaginationItem>
-          <PaginationItem hidden={page !== 0}>
+          <PaginationItem
+            hidden={
+              page !== 0 || firstStatIdx + 2 * itemsPerPage > stats.length
+            }
+          >
             <PaginationLink
               className="cursor-pointer"
               onClick={() => setPage((prev) => prev + 2)}
