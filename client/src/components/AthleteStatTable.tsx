@@ -1,3 +1,4 @@
+"use client";
 import {
   Table,
   TableBody,
@@ -25,6 +26,13 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
+
+import {
+  flexRender,
+  getCoreRowModel,
+  useReactTable,
+  type ColumnDef,
+} from "@tanstack/react-table";
 import { useState, type ChangeEvent } from "react";
 import { STAT_INDEX } from "@/constants";
 import type { Stat } from "@/types/Stat";
@@ -38,6 +46,8 @@ const AthleteStatTable = (props: AthleteStatTableProps) => {
   const { stats } = props;
   const [selectedStatCategory, setSelectedStatCategory] = useState([]);
   const [select, setSelect] = useState("");
+
+  const [columns, setColumns] = useState([]);
 
   const [page, setPage] = useState(0);
   const [itemsPerPage, setItemsPerPage] = useState(10);
@@ -68,10 +78,27 @@ const AthleteStatTable = (props: AthleteStatTableProps) => {
     return str.charAt(0).toUpperCase() + str.slice(1);
   };
 
+  const table = useReactTable({
+    data: stats,
+    columns,
+    getCoreRowModel: getCoreRowModel(),
+    getRowId: (originalRow) => originalRow._id!,
+  });
+
   const handleValueChange = (value: string) => {
     const selection: any = STAT_INDEX.find((s) => s.category === value)?.fields;
     setSelectedStatCategory(selection);
     setSelect(value);
+    setColumns(
+      selection.map((o: any) => {
+        return {
+          accessorKey: value + "." + o.key,
+          header: o.label,
+        };
+      })
+    );
+    console.log(table.getRowModel().rows);
+    console.log(table.getAllColumns());
     // Perform any other actions with the selected value here
   };
   return (
@@ -97,6 +124,58 @@ const AthleteStatTable = (props: AthleteStatTableProps) => {
           ))}
         </SelectContent>
       </Select>
+
+      <div className="overflow-hidden rounded-md border">
+        <Table>
+          <TableHeader>
+            {table.getHeaderGroups().map((headerGroup) => (
+              <TableRow key={headerGroup.id}>
+                {headerGroup.headers.map((header) => {
+                  return (
+                    <TableHead key={header.id}>
+                      {header.isPlaceholder
+                        ? null
+                        : flexRender(
+                            header.column.columnDef.header,
+                            header.getContext()
+                          )}
+                    </TableHead>
+                  );
+                })}
+              </TableRow>
+            ))}
+          </TableHeader>
+          <TableBody>
+            {table.getRowModel().rows?.length ? (
+              table.getRowModel().rows.map((row) => (
+                <TableRow
+                  key={row.id}
+                  data-state={row.getIsSelected() && "selected"}
+                >
+                  {row.getVisibleCells().map((cell) => (
+                    <TableCell key={cell.id}>
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext()
+                      )}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell
+                  colSpan={columns.length}
+                  className="h-24 text-center"
+                >
+                  No results.
+                </TableCell>
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
+      </div>
+
       <Table className="min-w-full divide-y divide-gray-200 text-sm">
         {select == "" ? (
           <TableCaption>Select a category to display table</TableCaption>
@@ -129,6 +208,7 @@ const AthleteStatTable = (props: AthleteStatTableProps) => {
           </TableBody>
         )}
       </Table>
+
       <Pagination>
         <PaginationContent>
           <PaginationItem>
