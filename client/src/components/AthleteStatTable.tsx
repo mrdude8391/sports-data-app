@@ -30,6 +30,7 @@ import {
 import {
   flexRender,
   getCoreRowModel,
+  getPaginationRowModel,
   useReactTable,
   type ColumnDef,
 } from "@tanstack/react-table";
@@ -37,6 +38,8 @@ import { useState, type ChangeEvent } from "react";
 import { STAT_INDEX } from "@/constants";
 import type { Stat } from "@/types/Stat";
 import { Input } from "./ui/input";
+import { Button } from "./ui/button";
+import { Label } from "./ui/label";
 
 interface AthleteStatTableProps {
   stats: Stat[];
@@ -47,7 +50,7 @@ const AthleteStatTable = (props: AthleteStatTableProps) => {
   const [selectedStatCategory, setSelectedStatCategory] = useState([]);
   const [select, setSelect] = useState("");
 
-  const [columns, setColumns] = useState([]);
+  const [columns, setColumns] = useState<any>([]);
 
   const [page, setPage] = useState(0);
   const [itemsPerPage, setItemsPerPage] = useState(10);
@@ -83,22 +86,28 @@ const AthleteStatTable = (props: AthleteStatTableProps) => {
     columns,
     getCoreRowModel: getCoreRowModel(),
     getRowId: (originalRow) => originalRow._id!,
+    getPaginationRowModel: getPaginationRowModel(),
   });
 
   const handleValueChange = (value: string) => {
     const selection: any = STAT_INDEX.find((s) => s.category === value)?.fields;
     setSelectedStatCategory(selection);
     setSelect(value);
-    setColumns(
-      selection.map((o: any) => {
-        return {
-          accessorKey: value + "." + o.key,
-          header: o.label,
-        };
-      })
-    );
-    console.log(table.getRowModel().rows);
-    console.log(table.getAllColumns());
+    setColumns(() => {
+      const dateCol = {
+        accessorKey: "recordedAt",
+        header: "Date",
+        cell: (info: { getValue: () => string | number | Date }) => {
+          const date = new Date(info.getValue());
+          return date.toLocaleDateString("en-UB");
+        },
+      };
+      const data = selection.map((o: any) => ({
+        accessorKey: value + "." + o.key,
+        header: o.label,
+      }));
+      return [dateCol, ...data];
+    });
     // Perform any other actions with the selected value here
   };
   return (
@@ -175,8 +184,40 @@ const AthleteStatTable = (props: AthleteStatTableProps) => {
           </TableBody>
         </Table>
       </div>
+      <div className="flex items-center justify-end space-x-2 py-4">
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => table.previousPage()}
+          disabled={!table.getCanPreviousPage()}
+        >
+          Previous
+        </Button>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => table.nextPage()}
+          disabled={!table.getCanNextPage()}
+        >
+          Next
+        </Button>
+        <Label className="flex items-center gap-1">
+          Go to page:
+          <Input
+            type="number"
+            min="1"
+            max={table.getPageCount()}
+            defaultValue={table.getState().pagination.pageIndex + 1}
+            onChange={(e) => {
+              const page = e.target.value ? Number(e.target.value) - 1 : 0;
+              table.setPageIndex(page);
+            }}
+            className="border p-1 rounded w-16"
+          />
+        </Label>
+      </div>
 
-      <Table className="min-w-full divide-y divide-gray-200 text-sm">
+      {/* <Table className="min-w-full divide-y divide-gray-200 text-sm">
         {select == "" ? (
           <TableCaption>Select a category to display table</TableCaption>
         ) : (
@@ -207,105 +248,7 @@ const AthleteStatTable = (props: AthleteStatTableProps) => {
             ))}
           </TableBody>
         )}
-      </Table>
-
-      <Pagination>
-        <PaginationContent>
-          <PaginationItem>
-            <PaginationPrevious
-              className={
-                page === 0 ? "cursor-not-allowed opacity-20" : "cursor-pointer"
-              }
-              onClick={() =>
-                setPage((prev) => {
-                  if (prev > 0) {
-                    return prev - 1;
-                  }
-                  return 0;
-                })
-              }
-            />
-          </PaginationItem>
-          <PaginationItem hidden={page < 2}>
-            <PaginationEllipsis />
-          </PaginationItem>
-          <PaginationItem
-            hidden={firstStatIdx < stats.length || page !== totalPages - 1}
-          >
-            <PaginationLink
-              className="cursor-pointer"
-              onClick={() => setPage((prev) => prev - 2)}
-            >
-              {page - 1}
-            </PaginationLink>
-          </PaginationItem>
-          <PaginationItem hidden={page === 0}>
-            <PaginationLink
-              className="cursor-pointer"
-              onClick={() => setPage((prev) => prev - 1)}
-            >
-              {page}
-            </PaginationLink>
-          </PaginationItem>
-          <PaginationItem>
-            <PaginationLink isActive={true}>
-              <Input
-                type="tel"
-                inputMode="numeric"
-                placeholder={`${page + 1}`}
-                onChange={handlePageChange}
-                value={page + 1}
-                onClick={(e: any) => (e.target.value = "")}
-                onKeyDown={(e: any) => {
-                  if (e.key === "Backspace") {
-                    e.target.value = "";
-                  }
-                }}
-              ></Input>
-            </PaginationLink>
-          </PaginationItem>
-          <PaginationItem
-            hidden={firstStatIdx + 1 * itemsPerPage > stats.length}
-          >
-            <PaginationLink
-              className="cursor-pointer"
-              onClick={() => setPage((prev) => prev + 1)}
-            >
-              {page + 2}
-            </PaginationLink>
-          </PaginationItem>
-          <PaginationItem
-            hidden={
-              page !== 0 || firstStatIdx + 2 * itemsPerPage > stats.length
-            }
-          >
-            <PaginationLink
-              className="cursor-pointer"
-              onClick={() => setPage((prev) => prev + 2)}
-            >
-              {page + 3}
-            </PaginationLink>
-          </PaginationItem>
-          <PaginationItem hidden={page > totalPages - 3}>
-            <PaginationEllipsis />
-          </PaginationItem>
-          <PaginationItem>
-            <PaginationNext
-              className={
-                lastStatIdx > stats.length
-                  ? "cursor-not-allowed opacity-20"
-                  : "cursor-pointer"
-              }
-              onClick={() =>
-                setPage((prev) => {
-                  if (lastStatIdx < stats.length) return prev + 1;
-                  return prev;
-                })
-              }
-            />
-          </PaginationItem>
-        </PaginationContent>
-      </Pagination>
+      </Table> */}
     </div>
   );
 };
