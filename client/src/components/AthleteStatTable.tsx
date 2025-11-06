@@ -111,7 +111,7 @@ const AthleteStatTable = (props: AthleteStatTableProps) => {
     // Perform any other actions with the selected value here
   };
   return (
-    <div className="card-container flex flex-col gap-6">
+    <div className="card-container flex flex-col gap-8">
       <Select onValueChange={handleValueChange}>
         <SelectTrigger className="w-full text-2xl font-semibold py-6">
           <SelectValue
@@ -184,7 +184,7 @@ const AthleteStatTable = (props: AthleteStatTableProps) => {
           </TableBody>
         </Table>
       </div>
-      <div className="flex items-center justify-end space-x-2 py-4">
+      <div className="flex items-center justify-center sm:justify-end gap-2 ">
         <Button
           variant="outline"
           size="sm"
@@ -201,20 +201,55 @@ const AthleteStatTable = (props: AthleteStatTableProps) => {
         >
           Next
         </Button>
-        <Label className="flex items-center gap-1">
-          Go to page:
-          <Input
-            type="number"
-            min="1"
-            max={table.getPageCount()}
-            defaultValue={table.getState().pagination.pageIndex + 1}
-            onChange={(e) => {
-              const page = e.target.value ? Number(e.target.value) - 1 : 0;
-              table.setPageIndex(page);
+      </div>
+      <div className="flex items-center justify-center sm:justify-end gap-2 ">
+        <div>
+          <Label className="flex items-center gap-1">
+            <p>Page</p>
+            <Input
+              type="number"
+              min="1"
+              max={table.getPageCount()}
+              value={table.getState().pagination.pageIndex + 1}
+              onChange={(e) => {
+                const page = e.target.value ? Number(e.target.value) - 1 : 0;
+                table.setPageIndex(page);
+              }}
+              onKeyDown={(e: any) => {
+                if (e.key === "Backspace") {
+                  if (e.target.value.length === 1) {
+                    e.target.value = "";
+                  }
+                  e.target.value.slice(0, -1);
+                }
+              }}
+              className="border p-1 rounded w-16"
+            />
+            <strong>of {table.getPageCount().toLocaleString()}</strong>
+          </Label>
+        </div>
+
+        <div>
+          <Select
+            onValueChange={(pageSize) => {
+              table.setPageSize(Number(pageSize));
             }}
-            className="border p-1 rounded w-16"
-          />
-        </Label>
+            defaultValue="10"
+          >
+            <SelectTrigger>
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                {[10, 20, 30, 40, 50].map((pageSize) => (
+                  <SelectItem key={pageSize} value={pageSize.toLocaleString()}>
+                    Show {pageSize}
+                  </SelectItem>
+                ))}
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+        </div>
       </div>
 
       {/* <Table className="min-w-full divide-y divide-gray-200 text-sm">
@@ -249,6 +284,104 @@ const AthleteStatTable = (props: AthleteStatTableProps) => {
           </TableBody>
         )}
       </Table> */}
+
+      {/* <Pagination>
+        <PaginationContent>
+          <PaginationItem>
+            <PaginationPrevious
+              className={
+                page === 0 ? "cursor-not-allowed opacity-20" : "cursor-pointer"
+              }
+              onClick={() =>
+                setPage((prev) => {
+                  if (prev > 0) {
+                    return prev - 1;
+                  }
+                  return 0;
+                })
+              }
+            />
+          </PaginationItem>
+          <PaginationItem hidden={page < 2}>
+            <PaginationEllipsis />
+          </PaginationItem>
+          <PaginationItem
+            hidden={firstStatIdx < stats.length || page !== totalPages - 1}
+          >
+            <PaginationLink
+              className="cursor-pointer"
+              onClick={() => setPage((prev) => prev - 2)}
+            >
+              {page - 1}
+            </PaginationLink>
+          </PaginationItem>
+          <PaginationItem hidden={page === 0}>
+            <PaginationLink
+              className="cursor-pointer"
+              onClick={() => setPage((prev) => prev - 1)}
+            >
+              {page}
+            </PaginationLink>
+          </PaginationItem>
+          <PaginationItem>
+            <PaginationLink isActive={true}>
+              <Input
+                type="tel"
+                inputMode="numeric"
+                placeholder={`${page + 1}`}
+                onChange={handlePageChange}
+                value={page + 1}
+                onClick={(e: any) => (e.target.value = "")}
+                onKeyDown={(e: any) => {
+                  if (e.key === "Backspace") {
+                    e.target.value = "";
+                  }
+                }}
+              ></Input>
+            </PaginationLink>
+          </PaginationItem>
+          <PaginationItem
+            hidden={firstStatIdx + 1 * itemsPerPage > stats.length}
+          >
+            <PaginationLink
+              className="cursor-pointer"
+              onClick={() => setPage((prev) => prev + 1)}
+            >
+              {page + 2}
+            </PaginationLink>
+          </PaginationItem>
+          <PaginationItem
+            hidden={
+              page !== 0 || firstStatIdx + 2 * itemsPerPage > stats.length
+            }
+          >
+            <PaginationLink
+              className="cursor-pointer"
+              onClick={() => setPage((prev) => prev + 2)}
+            >
+              {page + 3}
+            </PaginationLink>
+          </PaginationItem>
+          <PaginationItem hidden={page > totalPages - 3}>
+            <PaginationEllipsis />
+          </PaginationItem>
+          <PaginationItem>
+            <PaginationNext
+              className={
+                lastStatIdx > stats.length
+                  ? "cursor-not-allowed opacity-20"
+                  : "cursor-pointer"
+              }
+              onClick={() =>
+                setPage((prev) => {
+                  if (lastStatIdx < stats.length) return prev + 1;
+                  return prev;
+                })
+              }
+            />
+          </PaginationItem>
+        </PaginationContent>
+      </Pagination> */}
     </div>
   );
 };
