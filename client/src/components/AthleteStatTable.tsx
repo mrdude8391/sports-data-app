@@ -24,11 +24,8 @@ import {
 } from "@tanstack/react-table";
 import { useState } from "react";
 import { STAT_INDEX } from "@/constants";
-import type { Stat, StatCategory } from "@/types/Stat";
-import { Input } from "./ui/input";
-import { Button } from "./ui/button";
-import { Label } from "./ui/label";
-import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
+import type { Stat } from "@/types/Stat";
+
 import PaginationComponent from "./PaginationComponent";
 
 interface AthleteStatTableProps {

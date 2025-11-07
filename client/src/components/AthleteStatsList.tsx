@@ -22,6 +22,13 @@ import DeleteAthleteStat from "./DeleteAthleteStat";
 import EditAthleteStat from "./EditAthleteStat";
 import { useState, type ChangeEvent } from "react";
 import { Input } from "./ui/input";
+import PaginationComponent from "./PaginationComponent";
+import {
+  flexRender,
+  getCoreRowModel,
+  getPaginationRowModel,
+  useReactTable,
+} from "@tanstack/react-table";
 
 interface AthleteStatsListProps {
   stats: Stat[];
@@ -38,6 +45,16 @@ const AthleteStatsList = (props: AthleteStatsListProps) => {
   const currentStats = stats.slice(firstStatIdx, lastStatIdx);
 
   const totalPages = Math.ceil(stats.length / itemsPerPage);
+
+  const [columns, setColumns] = useState<any>([]);
+
+  const table = useReactTable({
+    data: stats,
+    columns,
+    getCoreRowModel: getCoreRowModel(),
+    getRowId: (originalRow) => originalRow._id!,
+    getPaginationRowModel: getPaginationRowModel(),
+  });
 
   const handlePageChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
@@ -57,6 +74,52 @@ const AthleteStatsList = (props: AthleteStatsListProps) => {
   return (
     <div className="card-container flex flex-col gap-6">
       <h1>List of Games</h1>
+      <Accordion type="single" collapsible className="w-full">
+        {table
+          .getRowModel()
+          .rows.map((row) => row.original)
+          .map((stat, index) => (
+            <AccordionItem
+              key={stat._id}
+              value={`game-${index + firstStatIdx}`}
+            >
+              <AccordionTrigger>
+                <div className="flex justify-between w-full">
+                  <span>
+                    Game {index + 1 + firstStatIdx} —{" "}
+                    {new Date(stat.recordedAt).toLocaleDateString()}
+                  </span>
+                  <div className="flex gap-2 "></div>
+                </div>
+              </AccordionTrigger>
+
+              <AccordionContent>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-4 gap-x-8 mt-2">
+                  {STAT_INDEX.map(({ category, fields }) => (
+                    <div key={category}>
+                      <h4 className="font-semibold capitalize mb-1">
+                        {category}
+                      </h4>
+                      <div className="grid grid-cols-2 gap-1 text-sm">
+                        {fields.map(({ key, label }) => (
+                          <div key={key} className="flex justify-between">
+                            <span>{label}</span>
+                            <span>{(stat as any)[category][key]}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                <div className="flex justify-end pt-3 gap-3">
+                  <EditAthleteStat stat={stat} />
+                  <DeleteAthleteStat statId={stat._id} />
+                </div>
+              </AccordionContent>
+            </AccordionItem>
+          ))}
+      </Accordion>
+      <PaginationComponent table={table}></PaginationComponent>
       <Accordion type="single" collapsible className="w-full">
         {currentStats.map((stat, index) => (
           <AccordionItem key={stat._id} value={`game-${index + firstStatIdx}`}>
@@ -96,6 +159,7 @@ const AthleteStatsList = (props: AthleteStatsListProps) => {
           </AccordionItem>
         ))}
       </Accordion>
+
       <Pagination>
         <PaginationContent>
           <PaginationItem>
