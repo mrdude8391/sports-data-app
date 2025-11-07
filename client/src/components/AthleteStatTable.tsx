@@ -24,7 +24,7 @@ import {
 } from "@tanstack/react-table";
 import { useState } from "react";
 import { STAT_INDEX } from "@/constants";
-import type { Stat } from "@/types/Stat";
+import type { Stat, StatCategory } from "@/types/Stat";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import { Label } from "./ui/label";
@@ -78,10 +78,13 @@ const AthleteStatTable = (props: AthleteStatTableProps) => {
     getPaginationRowModel: getPaginationRowModel(),
   });
 
-  const handleValueChange = (value: string) => {
-    const selection: any = STAT_INDEX.find((s) => s.category === value)?.fields;
-    // setSelectedStatCategory(selection);
-    // setSelect(value);
+  const handleStatCategorySelectChange = (category: string) => {
+    // Get fields of selected stat category
+    const fields: any = STAT_INDEX.find((s) => s.category === category)!.fields;
+    // setSelectedStatCategory(fields);
+    // setSelect(statCategory);
+
+    // Set the columns of the tanstack table
     setColumns(() => {
       const dateCol = {
         accessorKey: "recordedAt",
@@ -91,26 +94,24 @@ const AthleteStatTable = (props: AthleteStatTableProps) => {
           return date.toLocaleDateString("en-UB");
         },
       };
-      const data = selection.map((o: any) => ({
-        accessorKey: value + "." + o.key,
-        header: o.label,
+      const fieldCols = fields.map((field: any) => ({
+        accessorKey: category + "." + field.key,
+        header: field.label,
       }));
-      return [dateCol, ...data];
+      return [dateCol, ...fieldCols];
     });
-    // Perform any other actions with the selected value here
+    // Perform any other actions with the selected statCategory here
   };
   return (
     <div className="card-container flex flex-col gap-4 py-4">
-      <Select onValueChange={handleValueChange}>
-        <SelectTrigger className="w-full font-semibold py-6">
-          <SelectValue
-            className=""
-            placeholder="Select a category to display table"
-          />
+      <h1>Stats by category</h1>
+      <Select onValueChange={handleStatCategorySelectChange}>
+        <SelectTrigger className="w-48">
+          <SelectValue placeholder="Select a category" />
         </SelectTrigger>
         <SelectContent>
-          {STAT_INDEX.map(({ category }) => (
-            <SelectGroup key={category}>
+          <SelectGroup>
+            {STAT_INDEX.map(({ category }) => (
               <SelectItem
                 key={category}
                 value={category}
@@ -118,12 +119,12 @@ const AthleteStatTable = (props: AthleteStatTableProps) => {
               >
                 {capitalize(category)}
               </SelectItem>
-            </SelectGroup>
-          ))}
+            ))}
+          </SelectGroup>
         </SelectContent>
       </Select>
 
-      <div className="overflow-hidden rounded-md border">
+      <div className="rounded-md border">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
@@ -173,6 +174,7 @@ const AthleteStatTable = (props: AthleteStatTableProps) => {
           </TableBody>
         </Table>
       </div>
+
       <div className="flex flex-col sm:flex-row items-center justify-center gap-4 ">
         <div className="flex items-center justify-center  gap-4 ">
           <Button
