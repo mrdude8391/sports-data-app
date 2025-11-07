@@ -137,12 +137,12 @@
   }
 
   .padding-container {
-    @apply px-6 lg:px-20;
+    @apply px-4 lg:px-20;
   }
 }
 
 @layer components {
   .card-container {
-    @apply border shadow-sm bg-card dark:bg-card px-4 py-3 rounded-md;
+    @apply border shadow-sm bg-card dark:bg-card px-4 py-4 rounded-md;
   }
 }

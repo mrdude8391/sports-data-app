@@ -28,6 +28,7 @@ import type { Stat } from "@/types/Stat";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import { Label } from "./ui/label";
+import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 
 interface AthleteStatTableProps {
   stats: Stat[];
@@ -99,7 +100,7 @@ const AthleteStatTable = (props: AthleteStatTableProps) => {
     // Perform any other actions with the selected value here
   };
   return (
-    <div className="card-container flex flex-col gap-8">
+    <div className="card-container flex flex-col gap-4 py-4">
       <Select onValueChange={handleValueChange}>
         <SelectTrigger className="w-full font-semibold py-6">
           <SelectValue
@@ -172,74 +173,83 @@ const AthleteStatTable = (props: AthleteStatTableProps) => {
           </TableBody>
         </Table>
       </div>
-      <div className="flex items-center justify-center sm:justify-end gap-2 ">
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => table.previousPage()}
-          disabled={!table.getCanPreviousPage()}
-        >
-          Previous
-        </Button>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => table.nextPage()}
-          disabled={!table.getCanNextPage()}
-        >
-          Next
-        </Button>
-      </div>
-      <div className="flex items-center justify-center sm:justify-end gap-2 ">
-        <div>
-          <Label className="flex items-center gap-1">
-            <p>Page</p>
-            <Input
-              type="number"
-              min="1"
-              max={table.getPageCount()}
-              value={table.getState().pagination.pageIndex + 1}
-              onChange={(e) => {
-                const page = e.target.value ? Number(e.target.value) - 1 : 0;
-                table.setPageIndex(page);
-              }}
-              onKeyDown={(e: any) => {
-                if (e.key === "Backspace") {
-                  if (e.target.value.length === 1) {
-                    e.target.value = "";
-                  }
-                  e.target.value.slice(0, -1);
-                }
-              }}
-              className="border p-1 rounded w-16"
-            />
-            <strong>of {table.getPageCount().toLocaleString()}</strong>
-          </Label>
-        </div>
-
-        <div>
-          <Select
-            onValueChange={(pageSize) => {
-              table.setPageSize(Number(pageSize));
-            }}
-            defaultValue="10"
+      <div className="flex flex-col sm:flex-row items-center justify-center gap-4 ">
+        <div className="flex items-center justify-center  gap-4 ">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => table.previousPage()}
+            disabled={!table.getCanPreviousPage()}
+            className="w-12 sm:w-24"
           >
-            <SelectTrigger>
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectGroup>
-                {[10, 20, 30, 40, 50].map((pageSize) => (
-                  <SelectItem key={pageSize} value={pageSize.toLocaleString()}>
-                    Show {pageSize}
-                  </SelectItem>
-                ))}
-              </SelectGroup>
-            </SelectContent>
-          </Select>
+            <ChevronLeftIcon />
+            <span className="hidden sm:block ">Previous</span>
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => table.nextPage()}
+            disabled={!table.getCanNextPage()}
+            className="w-12 sm:w-24"
+          >
+            <span className="hidden sm:block ">Next</span>
+            <ChevronRightIcon />
+          </Button>
+        </div>
+
+        <div className="flex items-center justify-center  gap-2 ">
+          <div>
+            <Label className="flex items-center gap-1">
+              <p>Page</p>
+              <Input
+                type="number"
+                min="1"
+                max={table.getPageCount()}
+                value={table.getState().pagination.pageIndex + 1}
+                onChange={(e) => {
+                  const page = e.target.value ? Number(e.target.value) - 1 : 0;
+                  table.setPageIndex(page);
+                }}
+                onKeyDown={(e: any) => {
+                  if (e.key === "Backspace") {
+                    if (e.target.value.length === 1) {
+                      e.target.value = "";
+                    }
+                    e.target.value.slice(0, -1);
+                  }
+                }}
+                className="border p-1 rounded w-16"
+              />
+              <strong>of {table.getPageCount().toLocaleString()}</strong>
+            </Label>
+          </div>
+
+          <div>
+            <Select
+              onValueChange={(pageSize) => {
+                table.setPageSize(Number(pageSize));
+              }}
+              defaultValue="10"
+            >
+              <SelectTrigger>
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectGroup>
+                  {[10, 20, 30, 40, 50].map((pageSize) => (
+                    <SelectItem
+                      key={pageSize}
+                      value={pageSize.toLocaleString()}
+                    >
+                      Show {pageSize}
+                    </SelectItem>
+                  ))}
+                </SelectGroup>
+              </SelectContent>
+            </Select>
+          </div>
         </div>
       </div>
-
       {/* <Table className="min-w-full divide-y divide-gray-200 text-sm">
         {select == "" ? (
           <TableCaption>Select a category to display table</TableCaption>
