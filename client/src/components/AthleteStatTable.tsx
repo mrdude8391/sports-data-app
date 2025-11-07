@@ -178,7 +178,7 @@ const AthleteStatTable = (props: AthleteStatTableProps) => {
       <div className="flex flex-col sm:flex-row items-center justify-center gap-4 ">
         <div className="flex items-center justify-center  gap-4 ">
           <Button
-            variant="outline"
+            variant={!table.getCanPreviousPage() ? "ghost" : "outline"}
             size="sm"
             onClick={() => table.previousPage()}
             disabled={!table.getCanPreviousPage()}
@@ -188,7 +188,7 @@ const AthleteStatTable = (props: AthleteStatTableProps) => {
             <span className="hidden sm:block ">Previous</span>
           </Button>
           <Button
-            variant="outline"
+            variant={!table.getCanNextPage() ? "ghost" : "outline"}
             size="sm"
             onClick={() => table.nextPage()}
             disabled={!table.getCanNextPage()}
