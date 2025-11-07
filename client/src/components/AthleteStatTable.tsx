@@ -2,7 +2,6 @@
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
   TableHead,
   TableHeader,
@@ -18,23 +17,12 @@ import {
 } from "@/components/ui/select";
 
 import {
-  Pagination,
-  PaginationContent,
-  PaginationEllipsis,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from "@/components/ui/pagination";
-
-import {
   flexRender,
   getCoreRowModel,
   getPaginationRowModel,
   useReactTable,
-  type ColumnDef,
 } from "@tanstack/react-table";
-import { useState, type ChangeEvent } from "react";
+import { useState } from "react";
 import { STAT_INDEX } from "@/constants";
 import type { Stat } from "@/types/Stat";
 import { Input } from "./ui/input";
@@ -47,34 +35,34 @@ interface AthleteStatTableProps {
 
 const AthleteStatTable = (props: AthleteStatTableProps) => {
   const { stats } = props;
-  const [selectedStatCategory, setSelectedStatCategory] = useState([]);
-  const [select, setSelect] = useState("");
+  // const [selectedStatCategory, setSelectedStatCategory] = useState([]);
+  // const [select, setSelect] = useState("");
 
   const [columns, setColumns] = useState<any>([]);
 
-  const [page, setPage] = useState(0);
-  const [itemsPerPage, setItemsPerPage] = useState(10);
+  // const [page, setPage] = useState(0);
+  // const [itemsPerPage, setItemsPerPage] = useState(10);
 
-  const firstStatIdx = page * itemsPerPage;
-  const lastStatIdx = firstStatIdx + itemsPerPage;
-  const currentStats = stats.slice(firstStatIdx, lastStatIdx);
+  // const firstStatIdx = page * itemsPerPage;
+  // const lastStatIdx = firstStatIdx + itemsPerPage;
+  // const currentStats = stats.slice(firstStatIdx, lastStatIdx);
 
-  const totalPages = Math.ceil(stats.length / itemsPerPage);
+  // const totalPages = Math.ceil(stats.length / itemsPerPage);
 
-  const handlePageChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const { value } = e.target;
-    const num = Number(value);
-    if (!num) return;
-    if (num > totalPages) {
-      setPage(totalPages - 1);
-      return;
-    }
-    if (num < 0) {
-      setPage(1);
-      return;
-    }
-    setPage(num - 1);
-  };
+  // const handlePageChange = (e: ChangeEvent<HTMLInputElement>) => {
+  //   const { value } = e.target;
+  //   const num = Number(value);
+  //   if (!num) return;
+  //   if (num > totalPages) {
+  //     setPage(totalPages - 1);
+  //     return;
+  //   }
+  //   if (num < 0) {
+  //     setPage(1);
+  //     return;
+  //   }
+  //   setPage(num - 1);
+  // };
 
   const capitalize = (str: string) => {
     if (str == undefined || str.length === 0) return "";
@@ -91,8 +79,8 @@ const AthleteStatTable = (props: AthleteStatTableProps) => {
 
   const handleValueChange = (value: string) => {
     const selection: any = STAT_INDEX.find((s) => s.category === value)?.fields;
-    setSelectedStatCategory(selection);
-    setSelect(value);
+    // setSelectedStatCategory(selection);
+    // setSelect(value);
     setColumns(() => {
       const dateCol = {
         accessorKey: "recordedAt",
@@ -113,14 +101,14 @@ const AthleteStatTable = (props: AthleteStatTableProps) => {
   return (
     <div className="card-container flex flex-col gap-8">
       <Select onValueChange={handleValueChange}>
-        <SelectTrigger className="w-full text-2xl font-semibold py-6">
+        <SelectTrigger className="w-full font-semibold py-6">
           <SelectValue
             className=""
             placeholder="Select a category to display table"
           />
         </SelectTrigger>
         <SelectContent>
-          {STAT_INDEX.map(({ category, fields }) => (
+          {STAT_INDEX.map(({ category }) => (
             <SelectGroup key={category}>
               <SelectItem
                 key={category}
