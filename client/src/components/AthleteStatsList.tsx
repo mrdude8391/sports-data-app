@@ -56,7 +56,7 @@ const AthleteStatsList = (props: AthleteStatsListProps) => {
 
   return (
     <div className="card-container flex flex-col gap-6">
-      <h3>List of Games</h3>
+      <h1>List of Games</h1>
       <Accordion type="single" collapsible className="w-full">
         {currentStats.map((stat, index) => (
           <AccordionItem key={stat._id} value={`game-${index + firstStatIdx}`}>
