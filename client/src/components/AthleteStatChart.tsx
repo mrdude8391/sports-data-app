@@ -7,7 +7,6 @@ import {
   Tooltip,
   Legend,
   ResponsiveContainer,
-  CartesianAxis,
   ReferenceLine,
 } from "recharts";
 import {
@@ -19,37 +18,37 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { STAT_INDEX } from "@/constants";
 
 interface AthleteStatChartProps {
   stats: Stat[];
 }
 
+const chartStyle = {
+  marginLeft: -20,
+};
+
 const AthleteStatChart = (props: AthleteStatChartProps) => {
   const { stats } = props;
 
-  const [data, setData] = useState("");
-
-  //   const convertStats = (stats: Stat[]) => {
-  //     const data = stats.map((stat) => {});
-  //     return data;
-  //   };
+  const [field, setField] = useState("");
 
   const capitalize = (str: string) => {
     if (str == undefined || str.length === 0) return "";
     return str.charAt(0).toUpperCase() + str.slice(1);
   };
 
-  const handleValueChange = (value: any) => {
-    setData(value);
+  const handleStatFieldSelectChange = (field: string) => {
+    setField(field);
     // Perform any other actions with the selected value here
   };
 
   return (
-    <div className="card-container w-full flex flex-col gap-5">
-      <Select onValueChange={handleValueChange}>
-        <SelectTrigger className="w-[180px]">
+    <div className="card-container w-full flex flex-col gap-4">
+      <h1>Stat Chart</h1>
+      <Select onValueChange={handleStatFieldSelectChange}>
+        <SelectTrigger className="w-48">
           <SelectValue placeholder="Select a stat" />
         </SelectTrigger>
         <SelectContent>
@@ -68,9 +67,17 @@ const AthleteStatChart = (props: AthleteStatChartProps) => {
           ))}
         </SelectContent>
       </Select>
-      <div className="flex-1">
-        <ResponsiveContainer width={"100%"} height={250}>
-          <LineChart width={600} height={300} data={stats}>
+      <div className="w-full h-[200px] sm:h-[250px]">
+        <ResponsiveContainer width="100%" height="100%">
+          <LineChart
+            data={stats}
+            margin={{
+              top: 5,
+              right: 0,
+              left: -20,
+              bottom: 5,
+            }}
+          >
             <XAxis
               reversed
               dataKey="recordedAt"
@@ -82,11 +89,15 @@ const AthleteStatChart = (props: AthleteStatChartProps) => {
 
             <YAxis />
             <Tooltip
+              labelStyle={{
+                color: "oklch(0.145 0 0)",
+              }}
+              itemStyle={{ color: "oklch(0.49 0.22 264)" }}
               labelFormatter={(date) =>
                 new Date(date).toLocaleDateString("en-UB")
               }
               formatter={(value, name: string) => {
-                const [category, field] = name.split(".");
+                const [_, field] = name.split(".");
                 return [value, capitalize(field)];
               }}
             />
@@ -96,7 +107,12 @@ const AthleteStatChart = (props: AthleteStatChartProps) => {
                 return `${capitalize(category)} - ${capitalize(field)}`;
               }}
             />
-            <Line type="monotone" dataKey={data} />
+            <Line
+              type="monotone"
+              stroke="oklch(0.69 0.22 264)"
+              fill="oklch(0.69 0.22 264)"
+              dataKey={field}
+            />
           </LineChart>
         </ResponsiveContainer>
       </div>
