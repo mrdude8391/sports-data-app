@@ -25,10 +25,6 @@ interface AthleteStatChartProps {
   stats: Stat[];
 }
 
-const chartStyle = {
-  marginLeft: -20,
-};
-
 const AthleteStatChart = (props: AthleteStatChartProps) => {
   const { stats } = props;
 

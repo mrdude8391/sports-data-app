@@ -1,12 +1,11 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import * as sportsDataService from "@/services/sportsDataService";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { ChevronDownIcon, Loader } from "lucide-react";
-import type { AthleteStatResponse, Stat } from "@/types/Stat";
+import type { AthleteStatResponse } from "@/types/Stat";
 import AthleteStatsList from "@/components/AthleteStatsList";
 import CreateAthleteStat from "@/components/CreateAthleteStat";
-import type { Athlete } from "@/types/Athlete";
 import AthleteStatChart from "@/components/AthleteStatChart";
 import AthleteStatRadial from "@/components/AthleteStatRadar";
 import AthleteStatTable from "@/components/AthleteStatTable";
@@ -24,8 +23,6 @@ const AthleteStats = () => {
 
   const [open, setOpen] = useState(false);
   const [date, setDate] = useState<DateRange | undefined>();
-
-  const queryClient = useQueryClient();
 
   const {
     data: res,

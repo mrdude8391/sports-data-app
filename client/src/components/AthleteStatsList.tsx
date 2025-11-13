@@ -8,23 +8,11 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 
-import {
-  Pagination,
-  PaginationContent,
-  PaginationEllipsis,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from "@/components/ui/pagination";
-
 import DeleteAthleteStat from "./DeleteAthleteStat";
 import EditAthleteStat from "./EditAthleteStat";
-import { useState, type ChangeEvent } from "react";
-import { Input } from "./ui/input";
+import { useState } from "react";
 import PaginationComponent from "./PaginationComponent";
 import {
-  flexRender,
   getCoreRowModel,
   getPaginationRowModel,
   useReactTable,
@@ -46,7 +34,7 @@ const AthleteStatsList = (props: AthleteStatsListProps) => {
 
   // const totalPages = Math.ceil(stats.length / itemsPerPage);
 
-  const [columns, setColumns] = useState<any>([]);
+  const [columns] = useState<any>([]);
 
   const table = useReactTable({
     data: stats,

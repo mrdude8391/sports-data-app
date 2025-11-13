@@ -13,9 +13,9 @@ import { Input } from "@/components/ui/input";
 import { Alert, AlertTitle } from "@/components/ui/alert";
 import { Link, useNavigate } from "react-router-dom";
 import * as sportsDataService from "../services/sportsDataService";
-import type { UserPayload } from "@/types/User";
 import { AlertCircleIcon } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
+import type { RegisterPayload } from "@/types/Auth";
 
 const Register = () => {
   const [email, setEmail] = useState("");
@@ -31,8 +31,8 @@ const Register = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const userPayload: UserPayload = { username, email, password };
-      const user = await sportsDataService.register(userPayload);
+      const registerPayload: RegisterPayload = { username, email, password };
+      const user = await sportsDataService.register(registerPayload);
       if (user) {
         setError("");
         setShowAlert(true);

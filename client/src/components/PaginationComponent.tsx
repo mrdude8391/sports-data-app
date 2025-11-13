@@ -1,4 +1,3 @@
-import React from "react";
 import { Button } from "./ui/button";
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 import { Label } from "./ui/label";

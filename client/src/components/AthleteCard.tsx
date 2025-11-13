@@ -1,8 +1,4 @@
-import { Image } from "lucide-react";
-import React from "react";
 import { Link } from "react-router-dom";
-import { Button } from "./ui/button";
-import DeleteAthlete from "./DeleteAthlete";
 import type { Athlete } from "@/types/Athlete";
 
 interface AthleteCardProps {
@@ -11,7 +7,7 @@ interface AthleteCardProps {
 }
 
 const AthleteCard = (props: AthleteCardProps) => {
-  const { imageSrc, athlete } = props;
+  const { athlete } = props;
   return (
     <div className="w-full flex items-center justify-between gap-3 rounded-lg ">
       <Link

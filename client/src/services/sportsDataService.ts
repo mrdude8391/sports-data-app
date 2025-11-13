@@ -1,5 +1,5 @@
 import type { Athlete } from '@/types/Athlete';
-import type { AthleteStatResponse, Stat, StatForm, StatPayload, StatResponse,  } from "@/types/Stat"
+import type { AthleteStatResponse, StatForm, StatPayload, StatResponse,  } from "@/types/Stat"
 import axios from "axios";
 import type { LoginPayload, AuthResponse, RegisterPayload } from '@/types/Auth';
 

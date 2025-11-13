@@ -1,6 +1,5 @@
 import type { Stat } from "@/types/Stat";
 import {
-  Legend,
   PolarAngleAxis,
   PolarGrid,
   PolarRadiusAxis,
