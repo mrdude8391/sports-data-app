@@ -1,9 +1,13 @@
-export const NAV_LINKS = [
+export const NAV_LINKS_LOGGED_IN = [
     { href: '/', key: "Home", label: "Home"  },
     { href: '/about', key: "About", label: "About"  },
-    // { href: '/login', key: "Login", label: "Login"  },
     { href: '/profile', key: "Profile", label: "Profile"  },
     { href: '/athletes', key: "Athletes", label: "Athletes"  },
+]
+
+export const NAV_LINKS_LOGGED_OUT = [
+    { href: '/', key: "Home", label: "Home"  },
+    { href: '/about', key: "About", label: "About"  },
 ]
 
 // export const STAT_FIELDS = {

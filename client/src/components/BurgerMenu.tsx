@@ -1,4 +1,4 @@
-import { NAV_LINKS } from "@/constants";
+import { NAV_LINKS_LOGGED_IN, NAV_LINKS_LOGGED_OUT } from "@/constants";
 import { Link } from "react-router-dom";
 import { Menu, SunMoon, X } from "lucide-react";
 import { Button } from "./ui/button";
@@ -47,16 +47,27 @@ export const BurgerMenu = ({ isOpen, setIsOpen }: BurgerMenuProps) => {
         {isOpen && (
           <nav className="py-2 ">
             <ul className="space-y-2 flex items-center justify-end flex-col p-2">
-              {NAV_LINKS.map((link) => (
-                <Link
-                  to={link.href}
-                  key={link.key}
-                  className=" text-white hover:font-bold py-1 w-full text-center"
-                  onClick={() => setIsOpen(false)}
-                >
-                  {link.label}
-                </Link>
-              ))}
+              {isLoggedIn && user
+                ? NAV_LINKS_LOGGED_IN.map((link) => (
+                    <Link
+                      to={link.href}
+                      key={link.key}
+                      className=" text-white hover:font-bold py-1 w-full text-center"
+                      onClick={() => setIsOpen(false)}
+                    >
+                      {link.label}
+                    </Link>
+                  ))
+                : NAV_LINKS_LOGGED_OUT.map((link) => (
+                    <Link
+                      to={link.href}
+                      key={link.key}
+                      className=" text-white hover:font-bold py-1 w-full text-center"
+                      onClick={() => setIsOpen(false)}
+                    >
+                      {link.label}
+                    </Link>
+                  ))}
               {isLoggedIn && user ? (
                 <Button variant="secondary" onClick={logout}>
                   Logout
