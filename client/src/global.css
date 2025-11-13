@@ -147,6 +147,6 @@
   }
 
   .nav-link-button {
-    @apply flex  items-center justify-center w-full transition-all p-2 rounded-sm hover:bg-accent;
+    @apply flex  items-center justify-center w-full transition-all p-2 rounded-sm hover:bg-accent hover:font-semibold;
   }
 }

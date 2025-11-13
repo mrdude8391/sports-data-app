@@ -20,10 +20,12 @@ const Navbar = () => {
     <>
       <nav className="sticky w-full h-16 border-2 top-0 left-0 z-30 shadow-sm bg-background ">
         <div className="flex items-center h-full justify-between max-container padding-container z-30 py-1">
-          <Link to="/" onClick={closeMenu}>
-            <p className=" transition-all font-semibold hover:font-bold py-3 px-3">
-              Volleyball Tracker
-            </p>
+          <Link
+            to="/"
+            onClick={closeMenu}
+            className="w-auto py-3 px-3 font-semibold hover:font-bold"
+          >
+            Volleyball Tracker
           </Link>
 
           <ul className="hidden lg:flex h-full gap-6 items-center">
@@ -31,7 +33,7 @@ const Navbar = () => {
               <li
                 className={
                   currentLocation == link.href
-                    ? "h-full flex items-center border-b-2 border-primary "
+                    ? "h-full flex items-center font-semibold border-b-2 border-primary "
                     : "h-full flex items-center"
                 }
               >
