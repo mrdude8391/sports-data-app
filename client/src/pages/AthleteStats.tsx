@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import * as sportsDataService from "@/services/sportsDataService";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { ChevronDownIcon, Loader } from "lucide-react";
 import type { AthleteStatResponse } from "@/types/Stat";
 import AthleteStatsList from "@/components/AthleteStatsList";
@@ -29,11 +29,10 @@ const AthleteStats = () => {
     isLoading,
     error,
   } = useQuery<AthleteStatResponse>({
-    queryKey: ["stats"],
+    queryKey: ["stats", athleteId],
     queryFn: () => sportsDataService.getStats(athleteId!),
     enabled: !!athleteId,
   });
-
   const filteredStats = res
     ? res.stats.filter((stat) => {
         if (date && date.from && date.to) {
@@ -42,10 +41,6 @@ const AthleteStats = () => {
         }
       })
     : undefined;
-
-  useEffect(() => {
-    console.log("query athlete cache", res?.athlete);
-  }, []);
 
   if (isLoading) return <Loader className="animate-spin" />;
   if (error) return <p>{error.message}</p>;
