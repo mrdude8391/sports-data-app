@@ -100,7 +100,7 @@ const AthleteStatsList = (props: AthleteStatsListProps) => {
                         {fields.map(({ key, label }) => (
                           <div
                             key={key}
-                            className="flex justify-between hover:bg-accent rounded-sm px-2 "
+                            className="flex justify-between transition-all ease-out hover:bg-accent rounded-sm px-2 "
                           >
                             <span>{label}</span>
                             <span>{(stat as any)[category][key]}</span>
