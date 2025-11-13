@@ -1,7 +1,7 @@
 import { NAV_LINKS } from "@/constants";
 import { useAuth } from "@/context/AuthContext";
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { Button } from "./ui/button";
 import { BurgerMenu } from "./BurgerMenu";
 import { SunMoon } from "lucide-react";
@@ -13,33 +13,43 @@ const Navbar = () => {
   const closeMenu = () => setIsOpen(false);
   const { user, isLoggedIn, logout } = useAuth();
   const { flipTheme } = useTheme();
+  let location = useLocation();
+  const currentLocation = "/" + location.pathname.split("/")[1];
 
   return (
     <>
-      <nav className="sticky w-full top-0 left-0 z-30 shadow-sm bg-background ">
-        <div className="flex items-center justify-between max-container padding-container z-30 py-1">
+      <nav className="sticky w-full h-16 border-2 top-0 left-0 z-30 shadow-sm bg-background ">
+        <div className="flex items-center h-full justify-between max-container padding-container z-30 py-1">
           <Link to="/" onClick={closeMenu}>
             <p className=" transition-all font-semibold hover:font-bold py-3 px-3">
               Volleyball Tracker
             </p>
           </Link>
 
-          <ul className="hidden lg:flex h-full gap-12 ">
+          <ul className="hidden lg:flex h-full gap-6 items-center">
             {NAV_LINKS.map((link) => (
-              <Link
-                key={link.key}
-                to={link.href}
-                className="flex items-center justify-center transition-all hover:font-bold"
+              <li
+                className={
+                  currentLocation == link.href
+                    ? "h-full flex items-center border-b-2 border-primary "
+                    : "h-full flex items-center"
+                }
               >
-                {link.label}
-              </Link>
+                <Link key={link.key} to={link.href} className="nav-link-button">
+                  {link.label}
+                </Link>
+              </li>
             ))}
             {isLoggedIn && user ? (
-              <Button onClick={logout}>Logout</Button>
+              <li>
+                <Button onClick={logout}>Logout</Button>
+              </li>
             ) : (
-              <Link key="Login" to="/login">
-                <Button>Login</Button>
-              </Link>
+              <li>
+                <Link key="Login" to="/login">
+                  <Button>Login</Button>
+                </Link>
+              </li>
             )}
             <Button size="icon" variant="ghost" onClick={flipTheme}>
               <SunMoon className="size-5" />
