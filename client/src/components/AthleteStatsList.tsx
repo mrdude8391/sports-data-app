@@ -96,9 +96,12 @@ const AthleteStatsList = (props: AthleteStatsListProps) => {
                       <h4 className="font-semibold capitalize mb-1">
                         {category}
                       </h4>
-                      <div className="grid grid-cols-2 gap-1 text-sm">
+                      <div className="grid grid-cols-2 gap-1 text-sm  ">
                         {fields.map(({ key, label }) => (
-                          <div key={key} className="flex justify-between">
+                          <div
+                            key={key}
+                            className="flex justify-between hover:bg-accent rounded-sm px-2 "
+                          >
                             <span>{label}</span>
                             <span>{(stat as any)[category][key]}</span>
                           </div>
