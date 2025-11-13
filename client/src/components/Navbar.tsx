@@ -18,8 +18,8 @@ const Navbar = () => {
 
   return (
     <>
-      <nav className="sticky w-full h-16 border-2 top-0 left-0 z-30 shadow-sm bg-background ">
-        <div className="flex items-center h-full justify-between max-container padding-container z-30 py-1">
+      <nav className="sticky w-full h-16 top-0 left-0 z-30 shadow-sm bg-background ">
+        <div className="flex items-center h-full justify-between max-container padding-container z-30 py-2">
           <Link
             to="/"
             onClick={closeMenu}
