@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "./ui/button";
 import { BurgerMenu } from "./BurgerMenu";
-import { SunMoon } from "lucide-react";
+import { SunMoon, Volleyball } from "lucide-react";
 import { useTheme } from "@/context/ThemeProvider";
 
 const Navbar = () => {
@@ -23,8 +23,9 @@ const Navbar = () => {
           <Link
             to="/"
             onClick={closeMenu}
-            className="w-auto py-3 px-3 font-semibold hover:font-bold"
+            className="w-auto flex items-center py-3 px-3 font-semibold hover:font-bold"
           >
+            <Volleyball className="size-5 mx-2" />
             Volleyball Tracker
           </Link>
 
