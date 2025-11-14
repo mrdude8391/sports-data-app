@@ -105,7 +105,7 @@ const AthleteStatRadar = (props: AthleteStatRadarProps) => {
   const chartData = transformData(stats);
 
   return (
-    <div className="card-container w-full p-0">
+    <div className="w-full p-0">
       <ResponsiveContainer width={"100%"} height={350}>
         <RadarChart
           margin={{ top: 5, right: 32, bottom: 5, left: 32 }}
@@ -113,7 +113,7 @@ const AthleteStatRadar = (props: AthleteStatRadarProps) => {
         >
           <PolarGrid />
           <PolarAngleAxis dataKey={"category"} />
-          <PolarRadiusAxis angle={30} domain={[0, 100]} />
+          <PolarRadiusAxis angle={60} domain={[0, 100]} />
           <Radar
             dataKey="value"
             stroke="oklch(0.49 0.22 264)"

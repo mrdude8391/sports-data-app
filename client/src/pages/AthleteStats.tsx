@@ -49,19 +49,22 @@ const AthleteStats = () => {
     <>
       {res && res.stats.length > 0 ? (
         <div className="flex flex-col gap-6 w-full max-w-6xl py-3">
-          <div className="card-container w-full">
-            <h1>{res.athlete.name}</h1>
-            <p>Age {res.athlete.age}</p>
-            <p>Height {res.athlete.height}</p>
+          <div className="card-container w-full grid sm:grid-cols-2">
+            <div className="px-2 flex flex-col">
+              <h1>{res.athlete.name}</h1>
+              <p className="text-foreground/80">Age: {res.athlete.age}</p>
+              <p className="text-foreground/80">
+                Height: {res.athlete.height} cm
+              </p>
+            </div>
+            <AthleteStatRadial
+              stats={
+                filteredStats && filteredStats.length > 0
+                  ? filteredStats
+                  : res?.stats!
+              }
+            />
           </div>
-          <AthleteStatRadial
-            stats={
-              filteredStats && filteredStats.length > 0
-                ? filteredStats
-                : res?.stats!
-            }
-          />
-
           <CreateAthleteStat />
 
           <div className="card-container w-full flex flex-col gap-4">
