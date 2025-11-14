@@ -13,7 +13,7 @@ import { Input } from "@/components/ui/input";
 import { Alert, AlertTitle } from "@/components/ui/alert";
 import { Link, useNavigate } from "react-router-dom";
 import * as sportsDataService from "../services/sportsDataService";
-import { AlertCircleIcon } from "lucide-react";
+import { AlertCircleIcon, Volleyball } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 import type { RegisterPayload } from "@/types/Auth";
 
@@ -47,7 +47,13 @@ const Register = () => {
 
   return (
     <>
-      <div className="w-full max-w-sm">
+      <div className="w-full max-w-sm flex flex-col gap-6">
+        <a href="#" className="flex items-center gap-2 self-center font-medium">
+          <div className="bg-primary text-primary-foreground flex size-6 items-center justify-center rounded-md">
+            <Volleyball className="size-5" />
+          </div>
+          Volleyball Tracker
+        </a>
         <Card>
           <CardHeader>
             <CardTitle>Register</CardTitle>
