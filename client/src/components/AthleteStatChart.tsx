@@ -78,7 +78,10 @@ const AthleteStatChart = (props: AthleteStatChartProps) => {
               reversed
               dataKey="recordedAt"
               tickFormatter={(date) =>
-                new Date(date).toLocaleDateString("en-UB")
+                new Date(date).toLocaleDateString("en-US", {
+                  month: "numeric",
+                  day: "numeric",
+                })
               }
             />
             <ReferenceLine y={0} strokeDasharray="3 3" />
