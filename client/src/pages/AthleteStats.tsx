@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useParams } from "react-router-dom";
 import * as sportsDataService from "@/services/sportsDataService";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { ChevronDownIcon, Loader } from "lucide-react";
 import type { AthleteStatResponse } from "@/types/Stat";
 import AthleteStatsList from "@/components/AthleteStatsList";
@@ -77,7 +77,7 @@ const AthleteStats = () => {
                 <Button
                   variant="outline"
                   id="date"
-                  className="w-48 justify-between font-normal"
+                  className="w-56 justify-between font-normal"
                 >
                   {date && date.from && date.to
                     ? `${date.from.toLocaleDateString()}  ${date.to.toLocaleDateString()}`
