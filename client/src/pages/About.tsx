@@ -36,11 +36,8 @@ const About = () => {
 
         <div>
           <h2>Receive rating</h2>
-          <p>
-            Average receive rating percentage normalized where a 1 pass is 0 and
-            a 3 pass is 100
-          </p>
-          <p>Total Receive rating / receive attempts</p>
+          <p>Percentage of passes that are perfect 3 passes</p>
+          <p>Total Receive rating /(3 * receive attempts)</p>
         </div>
 
         <div>

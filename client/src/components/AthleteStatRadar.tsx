@@ -26,7 +26,8 @@ const AthleteStatRadar = (props: AthleteStatRadarProps) => {
     let settingErrorsTotal = 0;
     let settingAttempts = 0;
     let servingPercentageTotal = 0;
-    let receivingRatingTotal = 0;
+    let receivingRating = 0;
+    let receivingattempts = 0;
     let defenseRatingTotal = 0;
     let digTotal = 0;
     let defenseAttempts = 0;
@@ -42,7 +43,8 @@ const AthleteStatRadar = (props: AthleteStatRadarProps) => {
       settingErrorsTotal += stat.setting.errors;
       settingAttempts += stat.setting.attempts;
       servingPercentageTotal += stat.serving.percentage;
-      receivingRatingTotal += stat.receiving.rating;
+      receivingRating += stat.receiving.rating;
+      receivingattempts += stat.receiving.attempts;
       defenseRatingTotal += stat.defense.rating;
       digTotal += stat.defense.digs;
       defenseAttempts += stat.defense.attempts;
@@ -81,7 +83,8 @@ const AthleteStatRadar = (props: AthleteStatRadarProps) => {
         category: "Receiving",
         value: count
           ? Math.round(
-              normalize(receivingRatingTotal / count / 3, 0.333, 1) * 1000
+              // normalize(receivingRating / count / 3, 0.333, 1) * 1000
+              (receivingRating / count / 3) * 1000
             ) / 10
           : 0,
         // divide by 3 because 3 is a perfect pass, so we are taking the average pass rating total/ perfect pass
@@ -91,7 +94,7 @@ const AthleteStatRadar = (props: AthleteStatRadarProps) => {
         category: "Defense",
         value: count
           ? Math.round(
-              (0.45 * ((receivingRatingTotal / count / 3) * 100) +
+              (0.45 * ((defenseRatingTotal / count / 3) * 100) +
                 0.45 * ((digTotal / defenseAttempts) * 100) -
                 0.9 * ((defenseErrors / defenseAttempts) * 100)) *
                 10
