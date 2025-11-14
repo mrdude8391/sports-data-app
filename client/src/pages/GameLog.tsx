@@ -14,12 +14,10 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 
 const GameLog = () => {
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
-  const [athleteList, setAthleteList] = useState([]);
+  const [athleteList] = useState([]);
 
   const handleChangeDate = (newDate: Date) => {
     setSelectedDate(newDate);
