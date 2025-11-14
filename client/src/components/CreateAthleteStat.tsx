@@ -40,7 +40,6 @@ const CreateAthleteStat = () => {
   const { athleteId } = useParams<{ athleteId: string }>();
 
   const [form, setForm] = useState<StatForm>(initialStatForm);
-  const [open, setOpen] = React.useState(false);
 
   const queryClient = useQueryClient();
 
@@ -157,7 +156,7 @@ const CreateAthleteStat = () => {
                 <Label htmlFor="date" className="px-1">
                   Date
                 </Label>
-                <Popover open={open} onOpenChange={setOpen}>
+                <Popover>
                   <PopoverTrigger asChild>
                     <Button
                       variant="outline"
@@ -188,7 +187,6 @@ const CreateAthleteStat = () => {
                           now.getMilliseconds()
                         );
                         setForm((prev) => ({ ...prev, recordedAt: merged }));
-                        setOpen(false);
                       }}
                     />
                   </PopoverContent>
