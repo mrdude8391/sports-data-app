@@ -28,7 +28,11 @@ const AthleteStatRadar = (props: AthleteStatRadarProps) => {
     let servingPercentageTotal = 0;
     let receivingRatingTotal = 0;
     let defenseRatingTotal = 0;
-    let blockingTotal = 0;
+    let digTotal = 0;
+    let defenseAttempts = 0;
+    let defenseErrors = 0;
+    let blockTotal = 0;
+    let blockErrors = 0;
     let blockingAttempts = 0;
 
     let count = 0;
@@ -40,7 +44,11 @@ const AthleteStatRadar = (props: AthleteStatRadarProps) => {
       servingPercentageTotal += stat.serving.percentage;
       receivingRatingTotal += stat.receiving.rating;
       defenseRatingTotal += stat.defense.rating;
-      blockingTotal += stat.blocking.total;
+      digTotal += stat.defense.digs;
+      defenseAttempts += stat.defense.attempts;
+      defenseErrors += stat.defense.errors;
+      blockTotal += stat.blocking.total;
+      blockErrors += stat.blocking.errors;
       blockingAttempts += stat.blocking.attempts;
       count += 1;
     });
@@ -57,7 +65,8 @@ const AthleteStatRadar = (props: AthleteStatRadarProps) => {
         // chances of the player getting a block
         category: "Blocking",
         value: blockingAttempts
-          ? Math.round((blockingTotal / blockingAttempts) * 1000) / 10
+          ? Math.round(((blockTotal - blockErrors) / blockingAttempts) * 1000) /
+            10
           : 0,
       },
       {
@@ -82,7 +91,10 @@ const AthleteStatRadar = (props: AthleteStatRadarProps) => {
         category: "Defense",
         value: count
           ? Math.round(
-              normalize(defenseRatingTotal / count / 3, 0.333, 1) * 1000
+              (0.45 * ((receivingRatingTotal / count / 3) * 100) +
+                0.45 * ((digTotal / defenseAttempts) * 100) -
+                0.9 * ((defenseErrors / defenseAttempts) * 100)) *
+                10
             ) / 10
           : 0,
       },
