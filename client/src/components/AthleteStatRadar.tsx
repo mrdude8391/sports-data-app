@@ -16,9 +16,9 @@ interface AthleteStatRadarProps {
 const AthleteStatRadar = (props: AthleteStatRadarProps) => {
   const { stats } = props;
 
-  const normalize = (raw: number, min: number, max: number) => {
-    return (raw - min) / (max - min);
-  };
+  // const normalize = (raw: number, min: number, max: number) => {
+  //   return (raw - min) / (max - min);
+  // };
 
   const transformData = (stats: Stat[]) => {
     let attackPercentageTotal = 0;
