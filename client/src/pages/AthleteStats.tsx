@@ -47,88 +47,109 @@ const AthleteStats = () => {
 
   return (
     <>
-      {res && res.stats.length > 0 ? (
-        <div className="flex flex-col gap-6 w-full max-w-6xl py-3">
-          <div className="card-container w-full grid sm:grid-cols-2">
-            <div className="px-2 flex flex-col">
-              <h1>{res.athlete.name}</h1>
-              <p className="text-foreground/80">Age: {res.athlete.age}</p>
-              <p className="text-foreground/80">
-                Height: {res.athlete.height} cm
-              </p>
-            </div>
-            <AthleteStatRadial
-              stats={
-                filteredStats && filteredStats.length > 0
-                  ? filteredStats
-                  : res?.stats!
-              }
-            />
-          </div>
-          <CreateAthleteStat />
+      {res && (
+        <div className="w-full max-w-6xl ">
+          {res.stats.length > 0 ? (
+            <div className="flex flex-col gap-6 w-full max-w-6xl py-3">
+              <div className="card-container w-full grid sm:grid-cols-2">
+                <div className="px-2 flex flex-col">
+                  <h1>{res.athlete.name}</h1>
+                  <p className="text-foreground/80">Age: {res.athlete.age}</p>
+                  <p className="text-foreground/80">
+                    Height: {res.athlete.height} cm
+                  </p>
+                </div>
+                <AthleteStatRadial
+                  stats={
+                    filteredStats && filteredStats.length > 0
+                      ? filteredStats
+                      : res?.stats!
+                  }
+                />
+              </div>
+              <CreateAthleteStat />
 
-          <div className="card-container w-full flex flex-col gap-4">
-            <h3>Select Date Range</h3>
-            {/* <p>
-              Selected Date{" "}
-              {date && date.from && date.to
-                ? `${date.from.toLocaleDateString()}  ${date.to.toLocaleDateString()}`
-                : ""}
-            </p> */}
-            <Popover open={open} onOpenChange={setOpen}>
-              <PopoverTrigger asChild>
-                <Button
-                  variant="outline"
-                  id="date"
-                  className="w-56 justify-between font-normal"
-                >
+              <div className="card-container w-full flex flex-col gap-4">
+                <h3>Select Date Range</h3>
+                {/* <p>
+                  Selected Date{" "}
                   {date && date.from && date.to
                     ? `${date.from.toLocaleDateString()}  ${date.to.toLocaleDateString()}`
-                    : "Select date"}
-                  <ChevronDownIcon />
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent
-                className="w-auto overflow-hidden p-0"
-                align="start"
-              >
-                <Calendar
-                  mode="range"
-                  selected={date}
-                  captionLayout="dropdown"
-                  onSelect={(date) => {
-                    setDate(date);
-                  }}
-                />
-              </PopoverContent>
-            </Popover>
-          </div>
+                    : ""}
+                      </p> */}
+                <Popover open={open} onOpenChange={setOpen}>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant="outline"
+                      id="date"
+                      className="w-56 justify-between font-normal"
+                    >
+                      {date && date.from && date.to
+                        ? `${date.from.toLocaleDateString()}  ${date.to.toLocaleDateString()}`
+                        : "Select date"}
+                      <ChevronDownIcon />
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent
+                    className="w-auto overflow-hidden p-0"
+                    align="start"
+                  >
+                    <Calendar
+                      mode="range"
+                      selected={date}
+                      captionLayout="dropdown"
+                      onSelect={(date) => {
+                        setDate(date);
+                      }}
+                    />
+                  </PopoverContent>
+                </Popover>
+              </div>
 
-          <AthleteStatChart
-            stats={
-              filteredStats && filteredStats.length > 0
-                ? filteredStats
-                : res?.stats!
-            }
-          />
-          <AthleteStatTable
-            stats={
-              filteredStats && filteredStats.length > 0
-                ? filteredStats
-                : res?.stats!
-            }
-          />
-          <AthleteStatsList
-            stats={
-              filteredStats && filteredStats.length > 0
-                ? filteredStats
-                : res?.stats!
-            }
-          />
-        </div>
-      ) : (
-        <div>
-          <p>No Stats</p>
+              <AthleteStatChart
+                stats={
+                  filteredStats && filteredStats.length > 0
+                    ? filteredStats
+                    : res?.stats!
+                }
+              />
+              <AthleteStatTable
+                stats={
+                  filteredStats && filteredStats.length > 0
+                    ? filteredStats
+                    : res?.stats!
+                }
+              />
+              <AthleteStatsList
+                stats={
+                  filteredStats && filteredStats.length > 0
+                    ? filteredStats
+                    : res?.stats!
+                }
+              />
+            </div>
+          ) : (
+            <div className="flex flex-col gap-6 w-full max-w-6xl py-3">
+              <div className="card-container w-full grid sm:grid-cols-2">
+                <div className="px-2 flex flex-col">
+                  <h1>{res.athlete.name}</h1>
+                  <p className="text-foreground/80">Age: {res.athlete.age}</p>
+                  <p className="text-foreground/80">
+                    Height: {res.athlete.height} cm
+                  </p>
+                </div>
+                <AthleteStatRadial
+                  stats={
+                    filteredStats && filteredStats.length > 0
+                      ? filteredStats
+                      : res?.stats!
+                  }
+                />
+              </div>
+              <CreateAthleteStat />
+              <p>No Stats</p>
+            </div>
+          )}
         </div>
       )}
     </>
