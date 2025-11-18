@@ -19,7 +19,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Alert, AlertTitle } from "./ui/alert";
-import { AlertCircleIcon } from "lucide-react";
+import { AlertCircleIcon, Loader } from "lucide-react";
 import * as React from "react";
 import { ChevronDownIcon } from "lucide-react";
 import { Calendar } from "@/components/ui/calendar";
@@ -134,7 +134,13 @@ const CreateAthleteStat = () => {
     }
   };
 
-  if (isPending) return <div>pending</div>;
+  if (isPending)
+    return (
+      <div className="flex gap-4">
+        <Loader className="animate-spin" />
+        Adding stats...
+      </div>
+    );
   return (
     <div>
       <Dialog>
