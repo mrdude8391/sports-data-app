@@ -15,7 +15,7 @@ export const BurgerMenu = ({ isOpen, setIsOpen }: BurgerMenuProps) => {
   const { isLoggedIn, user, logout } = useAuth();
 
   return (
-    <div className="relative flex gap-3 items-center lg:hidden">
+    <div className=" flex gap-3 items-center lg:hidden">
       <Button
         size="icon"
         variant="ghost"
@@ -40,9 +40,8 @@ export const BurgerMenu = ({ isOpen, setIsOpen }: BurgerMenuProps) => {
 
       {/* menu */}
       <div
-        className={`fixed bottom-0 left-0 top-11 mt-3 w-full h-full bg-neutral-900 shadow-md transform ${
-          isOpen ? "opacity-100  translate-y-0.5" : "opacity-0 translate-y-full"
-        } transition-opacity duration-300`}
+        className={`absolute top-[97%] left-0 right-0 h-0 opacity-0 overflow-hidden bg-neutral-900 shadow-md transform transition-all duration-300
+          ${isOpen ? "opacity-100 h-lvh max-h-lvh" : ""}`}
       >
         {isOpen && (
           <nav className="py-2 ">
@@ -69,11 +68,17 @@ export const BurgerMenu = ({ isOpen, setIsOpen }: BurgerMenuProps) => {
                     </Link>
                   ))}
               {isLoggedIn && user ? (
-                <Button variant="secondary" onClick={logout}>
+                <Button
+                  variant="secondary"
+                  onClick={() => {
+                    logout;
+                    setIsOpen(false);
+                  }}
+                >
                   Logout
                 </Button>
               ) : (
-                <Button variant="secondary">
+                <Button variant="secondary" onClick={() => setIsOpen(false)}>
                   <Link key="Login" to="/login">
                     Login
                   </Link>
