@@ -9,6 +9,7 @@ import Athletes from "./pages/Athletes.tsx";
 import Register from "./pages/Register.tsx";
 import AthleteStats from "./pages/AthleteStats.tsx";
 import GameLog from "./pages/GameLog.tsx";
+import NotFound from "./pages/NotFound.tsx";
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/athletes/:athleteId/stats" element={<AthleteStats />} />
           <Route path="/gamelog" element={<GameLog />} />
+          <Route path="*" element={<NotFound />} />
         </Route>
       </Routes>
     </>

@@ -14,7 +14,9 @@ const protect = async (req, res, next) => {
       // split the token from the header string
       token = req.headers.authorization.split(" ")[1];
       // decode the ID from the token using JWT
-      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+      const decoded = jwt.verify(token, process.env.JWT_SECRET, {
+        algorithms: ["HS256"],
+      });
       // get the user from the decoded ID, without the password, and attach to the request.user
       req.user = await User.findById(decoded.id).select("-password");
       next();

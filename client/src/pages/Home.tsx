@@ -1,9 +1,11 @@
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/context/AuthContext";
+import { useTheme } from "@/context/ThemeProvider";
 import { Link } from "react-router-dom";
 
 const Home = () => {
   const { isLoggedIn } = useAuth();
+  const { theme } = useTheme();
   return (
     <div className="flex flex-col w-full h-svh items-center justify-start">
       {isLoggedIn ? (
@@ -11,7 +13,9 @@ const Home = () => {
           <h1>Welcome to your volleyball tracker!</h1>
 
           <Link key="Login" to="/athletes">
-            <Button variant="secondary">Go to athletes</Button>
+            <Button variant={theme == "dark" ? "secondary" : "default"}>
+              Go to athletes
+            </Button>
           </Link>
         </div>
       ) : (

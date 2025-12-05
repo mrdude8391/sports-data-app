@@ -30,6 +30,7 @@ const Navbar = () => {
           </Link>
 
           <ul className="hidden lg:flex h-full gap-6 items-center">
+            {/* <ul className={!isOpen ? "nav-menu" : "nav-menu-open"}> */}
             {isLoggedIn && user
               ? NAV_LINKS_LOGGED_IN.map((link) => (
                   <li
