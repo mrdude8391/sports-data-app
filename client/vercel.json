@@ -1,9 +1,5 @@
 {
-  "redirects": [
-    {
-      "source": "/(.*)",
-      "destination": "/",
-      "permanent": true
-    }
-  ]
+    "rewrites": [
+        {"source": "/(.*)", "destination": "/"}
+    ]
 }
