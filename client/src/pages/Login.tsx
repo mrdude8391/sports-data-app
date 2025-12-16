@@ -13,7 +13,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Alert, AlertTitle } from "@/components/ui/alert";
-import { AlertCircleIcon, Volleyball, X } from "lucide-react";
+import { AlertCircleIcon, Loader, Volleyball, X } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 import type { LoginPayload } from "@/types/Auth";
 
@@ -25,6 +25,7 @@ const Login = () => {
   const [error, setError] = useState("");
   const navigate = useNavigate();
   const { login } = useAuth();
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleChange = (e: any) => {
     const { name, value } = e.target;
@@ -33,6 +34,7 @@ const Login = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     try {
+      setIsLoading(true);
       e.preventDefault();
       const user = await sportsDataservice.login(form);
       console.log("login Successful");
@@ -41,6 +43,8 @@ const Login = () => {
     } catch (err: any) {
       setError(err.message);
       console.log(err.message);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -93,7 +97,13 @@ const Login = () => {
               </form>
             </CardContent>
             <CardFooter className="flex-col gap-2 justify-between">
-              <Button className="w-full" type="submit" form="loginForm">
+              {isLoading && <Loader className="animate-spin" />}
+              <Button
+                className="w-full"
+                type="submit"
+                form="loginForm"
+                disabled={isLoading}
+              >
                 Login
               </Button>
 
@@ -106,9 +116,9 @@ const Login = () => {
               {error && (
                 <Alert
                   variant="destructive"
-                  className="flex justify-between items-center"
+                  className="flex flex-row justify-between items-center"
                 >
-                  <AlertCircleIcon />
+                  <AlertCircleIcon className="mb-1" />
                   <AlertTitle className="text-center">{error}</AlertTitle>
                   <Button
                     variant="destructive"
