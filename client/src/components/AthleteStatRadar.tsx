@@ -135,7 +135,11 @@ const AthleteStatRadar = (props: AthleteStatRadarProps) => {
             fill="oklch(0.49 0.22 264)"
             fillOpacity={0.6}
           />
-          <Tooltip />
+          <Tooltip
+            labelStyle={{
+              color: "oklch(0.145 0 0)",
+            }}
+          />
         </RadarChart>
       </ResponsiveContainer>
     </div>
