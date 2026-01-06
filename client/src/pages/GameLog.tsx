@@ -14,6 +14,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import type { Athlete } from "@/types/Athlete";
 
 const GameLog = () => {
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
@@ -58,6 +59,22 @@ const AthleteSelector = () => {
     queryFn: sportsDataService.getAthletes,
   });
 
+  const [selectedAthletes, setSelectedAthletes] = useState(new Set());
+
+  const handleSelectAthlete = (athlete: Athlete) => {
+    // console.log("selected", athlete._id);
+    if (selectedAthletes.has(athlete._id)) {
+      setSelectedAthletes((prev) => {
+        const newSet = new Set(prev);
+        newSet.delete(athlete._id);
+        return newSet;
+      });
+    } else {
+      setSelectedAthletes((prev) => new Set(prev).add(athlete._id));
+    }
+    console.log(selectedAthletes);
+  };
+
   if (isLoading) return <Loader className="animate-spin" />;
   if (error) return <p>... No Athletes Found</p>;
   return (
@@ -75,9 +92,19 @@ const AthleteSelector = () => {
                 stats for.
               </DialogDescription>
             </DialogHeader>
-            <ul>
+            <ul className="flex flex-col gap-2">
               {athletes && athletes.length > 0 ? (
-                athletes.map((athlete) => <li>{athlete.name}</li>)
+                athletes.map((athlete) => (
+                  <li
+                    // className="rounded px-2 hover:bg-accent cursor-pointer"
+                    className={`px-2 rounded cursor-pointer hover:border-2
+                      ${selectedAthletes.has(athlete._id) ? "bg-accent" : ""}
+                    `}
+                    onClick={() => handleSelectAthlete(athlete)}
+                  >
+                    <p>{athlete.name}</p>
+                  </li>
+                ))
               ) : (
                 <div>No Athletes Found</div>
               )}
