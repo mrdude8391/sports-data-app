@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/dialog";
 import type { Athlete } from "@/types/Athlete";
 import CreateAthleteStat from "@/components/CreateAthleteStat";
+import CreateAthlete from "@/components/CreateAthlete";
 
 const GameLog = () => {
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
@@ -59,11 +60,11 @@ const GameLog = () => {
       </div>
       <div>
         <h3>Selected Athletes List</h3>
-        <ul>
+        <ul className="flex flex-col gap-2">
           {[...selectedAthletes].map((a) => (
-            <li>
+            <li className="flex gap-2 items-center ">
               <p>{a.name}</p>
-              <CreateAthleteStat athleteId={a._id}></CreateAthleteStat>
+              <CreateAthleteStat athleteId={a._id} />
             </li>
           ))}
         </ul>
@@ -108,6 +109,7 @@ const AthleteSelector = (athleteSelectorProps: {
               stats for.
             </DialogDescription>
           </DialogHeader>
+          <CreateAthlete></CreateAthlete>
           <ul className="flex flex-col gap-2">
             {athletes && athletes.length > 0 ? (
               athletes.map((athlete) => (
