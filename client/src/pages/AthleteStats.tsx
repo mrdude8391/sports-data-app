@@ -67,7 +67,7 @@ const AthleteStats = () => {
                   }
                 />
               </div>
-              <CreateAthleteStat />
+              <CreateAthleteStat athleteId={athleteId!} />
 
               <div className="card-container w-full flex flex-col gap-4">
                 <h3>Select Date Range</h3>
@@ -146,7 +146,7 @@ const AthleteStats = () => {
                   }
                 />
               </div>
-              <CreateAthleteStat />
+              <CreateAthleteStat athleteId={athleteId!} />
               <p>No Stats</p>
             </div>
           )}

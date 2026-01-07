@@ -2,7 +2,7 @@ import { Button } from "./ui/button";
 import { Label } from "./ui/label";
 import { Input } from "./ui/input";
 import { useState } from "react";
-import { useParams } from "react-router-dom";
+// import { useParams } from "react-router-dom";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import * as sportsDataService from "@/services/sportsDataService";
 import { STAT_INDEX } from "@/constants";
@@ -36,8 +36,13 @@ import {
 //   ])
 // );
 
-const CreateAthleteStat = () => {
-  const { athleteId } = useParams<{ athleteId: string }>();
+interface createAthleteStatProps {
+  athleteId: string;
+}
+
+const CreateAthleteStat = (props: createAthleteStatProps) => {
+  const { athleteId } = props;
+  // const { athleteId } = useParams<{ athleteId: string }>();
 
   const [form, setForm] = useState<StatForm>(initialStatForm);
 

@@ -135,6 +135,7 @@ export const editStat = async (req : {statId: string, form: StatForm, date: Date
 export const getStats = async (id: string) : Promise<AthleteStatResponse> => {
     try {
         console.log("Get Stats for: ", id)
+        // Need to add a check for ID to be mongodb ObjectID
         const {data} = await api.get<AthleteStatResponse>(`/athlete/${id}/stats`)
         const stats : StatResponse[] = data.stats.map((stat: any) => ({
             ...stat,
