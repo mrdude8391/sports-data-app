@@ -1,9 +1,15 @@
 import { useState } from "react";
 import { useParams } from "react-router-dom";
 import * as sportsDataService from "@/services/sportsDataService";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { ChevronDownIcon, Loader } from "lucide-react";
-import type { AthleteStatResponse } from "@/types/Stat";
+import {
+  initialStatForm,
+  type AthleteStatResponse,
+  type StatCategory,
+  type StatFieldKey,
+  type StatForm,
+} from "@/types/Stat";
 import AthleteStatsList from "@/components/AthleteStatsList";
 import CreateAthleteStat from "@/components/CreateAthleteStat";
 import AthleteStatChart from "@/components/AthleteStatChart";
@@ -23,6 +29,9 @@ const AthleteStats = () => {
 
   const [open, setOpen] = useState(false);
   const [date, setDate] = useState<DateRange | undefined>();
+  const [form, setForm] = useState<StatForm>(initialStatForm);
+
+  const queryClient = useQueryClient();
 
   const {
     data: res,
@@ -33,6 +42,113 @@ const AthleteStats = () => {
     queryFn: () => sportsDataService.getStats(athleteId!),
     enabled: !!athleteId,
   });
+
+  const {
+    isPending,
+    error: statError,
+    mutate,
+  } = useMutation({
+    mutationFn: sportsDataService.createStat,
+    onSuccess: () => {
+      // Invalidate and refetch
+      queryClient.invalidateQueries({ queryKey: ["stats"] });
+      setForm(initialStatForm);
+    },
+  });
+
+  const handleChangeDate = (date: Date) => {
+    const now = new Date();
+    const merged = new Date(date!);
+    merged.setHours(
+      now.getHours(),
+      now.getMinutes(),
+      now.getSeconds(),
+      now.getMilliseconds()
+    );
+    setForm((prev) => ({ ...prev, recordedAt: merged }));
+  };
+
+  const handleChange = <C extends StatCategory, K extends StatFieldKey<C>>(
+    category: C,
+    key: K,
+    value: number
+  ) => {
+    setForm((prev) => {
+      const updatedCategory = {
+        ...prev[category],
+        [key]: value,
+      } as StatForm[C];
+
+      // Auto-calculate hitting percentage
+      if (
+        (category === "attack" && key == "kills") ||
+        key == "total" ||
+        key == "errors"
+      ) {
+        const attack = updatedCategory as StatForm["attack"];
+        const kills = key === "kills" ? value : attack.kills;
+        const total = key === "total" ? value : attack.total;
+        const errors = key === "errors" ? value : attack.errors;
+        const percentage = total > 0 ? (kills - errors) / total : 0;
+        attack.percentage = Math.round(percentage * 1000) / 1000;
+      }
+
+      // Auto-calculate serving percentage
+      if (
+        category === "serving" &&
+        (key === "attempts" || key === "errors" || key === "ratingTotal")
+      ) {
+        const serving = updatedCategory as StatForm["serving"];
+        const attempts = key === "attempts" ? value : serving.attempts;
+        const errors = key === "errors" ? value : serving.errors;
+        const ratingTotal = key === "ratingTotal" ? value : serving.ratingTotal;
+        const percentage = attempts > 0 ? (attempts - errors) / attempts : 0;
+        const rating = attempts > 0 ? ratingTotal / attempts : 0;
+
+        serving.rating = Math.round(rating * 10) / 10;
+        serving.percentage = Math.round(percentage * 1000) / 1000;
+      }
+
+      // Auto-calculate receiving rating
+      if (
+        category === "receiving" &&
+        (key === "ratingTotal" || key === "attempts")
+      ) {
+        const receiving = updatedCategory as StatForm["receiving"];
+        const attempts = key === "attempts" ? value : receiving.attempts;
+        const ratingTotal =
+          key === "ratingTotal" ? value : receiving.ratingTotal;
+        const rating = attempts > 0 ? ratingTotal / attempts : 0;
+
+        receiving.rating = Math.round(rating * 10) / 10;
+      }
+
+      // Auto-calculate defense rating
+      if (
+        category === "defense" &&
+        (key === "ratingTotal" || key === "attempts")
+      ) {
+        const defense = updatedCategory as StatForm["defense"];
+        const attempts = key === "attempts" ? value : defense.attempts;
+        const ratingTotal = key === "ratingTotal" ? value : defense.ratingTotal;
+        const rating = attempts > 0 ? ratingTotal / attempts : 0;
+
+        defense.rating = Math.round(rating * 10) / 10;
+      }
+
+      return {
+        ...prev,
+        [category]: updatedCategory,
+      };
+    });
+  };
+
+  const handleSubmit = async () => {
+    if (athleteId && form != initialStatForm) {
+      mutate({ athleteId, form: form, date: form.recordedAt });
+    }
+  };
+
   const filteredStats = res
     ? res.stats.filter((stat) => {
         if (date && date.from && date.to) {
@@ -67,7 +183,15 @@ const AthleteStats = () => {
                   }
                 />
               </div>
-              <CreateAthleteStat athleteId={athleteId!} />
+              <CreateAthleteStat
+                athleteId={athleteId!}
+                form={form}
+                isPending={isPending}
+                handleSubmit={handleSubmit}
+                statError={statError}
+                handleChange={handleChange}
+                handleChangeDate={handleChangeDate}
+              />
 
               <div className="card-container w-full flex flex-col gap-4">
                 <h3>Select Date Range</h3>
@@ -146,7 +270,15 @@ const AthleteStats = () => {
                   }
                 />
               </div>
-              <CreateAthleteStat athleteId={athleteId!} />
+              <CreateAthleteStat
+                athleteId={athleteId!}
+                form={form}
+                isPending={isPending}
+                handleSubmit={handleSubmit}
+                statError={statError}
+                handleChange={handleChange}
+                handleChangeDate={handleChangeDate}
+              />
               <p>No Stats</p>
             </div>
           )}

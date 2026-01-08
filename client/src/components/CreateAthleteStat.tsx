@@ -1,13 +1,8 @@
 import { Button } from "./ui/button";
 import { Label } from "./ui/label";
 import { Input } from "./ui/input";
-import { useState } from "react";
-// import { useParams } from "react-router-dom";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import * as sportsDataService from "@/services/sportsDataService";
 import { STAT_INDEX } from "@/constants";
 import type { StatCategory, StatFieldKey, StatForm } from "@/types/Stat";
-import { initialStatForm } from "@/types/Stat";
 import {
   Dialog,
   DialogClose,
@@ -20,7 +15,6 @@ import {
 } from "@/components/ui/dialog";
 import { Alert, AlertTitle } from "./ui/alert";
 import { AlertCircleIcon, Loader } from "lucide-react";
-import * as React from "react";
 import { ChevronDownIcon } from "lucide-react";
 import { Calendar } from "@/components/ui/calendar";
 import {
@@ -38,106 +32,122 @@ import {
 
 interface createAthleteStatProps {
   athleteId: string;
-}
-
-const CreateAthleteStat = (props: createAthleteStatProps) => {
-  const { athleteId } = props;
-  // const { athleteId } = useParams<{ athleteId: string }>();
-
-  const [form, setForm] = useState<StatForm>(initialStatForm);
-
-  const queryClient = useQueryClient();
-
-  const { isPending, error, mutate } = useMutation({
-    mutationFn: sportsDataService.createStat,
-    onSuccess: () => {
-      // Invalidate and refetch
-      queryClient.invalidateQueries({ queryKey: ["stats"] });
-      setForm(initialStatForm);
-    },
-  });
-
-  const handleChange = <C extends StatCategory, K extends StatFieldKey<C>>(
+  form: StatForm;
+  handleSubmit: () => void;
+  statError: Error | null;
+  isPending: boolean;
+  handleChange: <C extends StatCategory, K extends StatFieldKey<C>>(
     category: C,
     key: K,
     value: number
-  ) => {
-    setForm((prev) => {
-      const updatedCategory = {
-        ...prev[category],
-        [key]: value,
-      } as StatForm[C];
+  ) => void;
+  handleChangeDate: (date: Date) => void;
+}
 
-      // Auto-calculate hitting percentage
-      if (
-        (category === "attack" && key == "kills") ||
-        key == "total" ||
-        key == "errors"
-      ) {
-        const attack = updatedCategory as StatForm["attack"];
-        const kills = key === "kills" ? value : attack.kills;
-        const total = key === "total" ? value : attack.total;
-        const errors = key === "errors" ? value : attack.errors;
-        const percentage = total > 0 ? (kills - errors) / total : 0;
-        attack.percentage = Math.round(percentage * 1000) / 1000;
-      }
+const CreateAthleteStat = (props: createAthleteStatProps) => {
+  const {
+    form,
+    handleSubmit,
+    statError: error,
+    isPending,
+    handleChange,
+    handleChangeDate,
+  } = props;
+  // const { athleteId } = useParams<{ athleteId: string }>();
 
-      // Auto-calculate serving percentage
-      if (
-        category === "serving" &&
-        (key === "attempts" || key === "errors" || key === "ratingTotal")
-      ) {
-        const serving = updatedCategory as StatForm["serving"];
-        const attempts = key === "attempts" ? value : serving.attempts;
-        const errors = key === "errors" ? value : serving.errors;
-        const ratingTotal = key === "ratingTotal" ? value : serving.ratingTotal;
-        const percentage = attempts > 0 ? (attempts - errors) / attempts : 0;
-        const rating = attempts > 0 ? ratingTotal / attempts : 0;
+  // const [form, setForm] = useState<StatForm>(initialStatForm);
 
-        serving.rating = Math.round(rating * 10) / 10;
-        serving.percentage = Math.round(percentage * 1000) / 1000;
-      }
+  // const queryClient = useQueryClient();
 
-      // Auto-calculate receiving rating
-      if (
-        category === "receiving" &&
-        (key === "ratingTotal" || key === "attempts")
-      ) {
-        const receiving = updatedCategory as StatForm["receiving"];
-        const attempts = key === "attempts" ? value : receiving.attempts;
-        const ratingTotal =
-          key === "ratingTotal" ? value : receiving.ratingTotal;
-        const rating = attempts > 0 ? ratingTotal / attempts : 0;
+  // const { isPending, error, mutate } = useMutation({
+  //   mutationFn: sportsDataService.createStat,
+  //   onSuccess: () => {
+  //     // Invalidate and refetch
+  //     queryClient.invalidateQueries({ queryKey: ["stats"] });
+  //     setForm(initialStatForm);
+  //   },
+  // });
 
-        receiving.rating = Math.round(rating * 10) / 10;
-      }
+  // const handleChange = <C extends StatCategory, K extends StatFieldKey<C>>(
+  //   category: C,
+  //   key: K,
+  //   value: number
+  // ) => {
+  //   setForm((prev) => {
+  //     const updatedCategory = {
+  //       ...prev[category],
+  //       [key]: value,
+  //     } as StatForm[C];
 
-      // Auto-calculate defense rating
-      if (
-        category === "defense" &&
-        (key === "ratingTotal" || key === "attempts")
-      ) {
-        const defense = updatedCategory as StatForm["defense"];
-        const attempts = key === "attempts" ? value : defense.attempts;
-        const ratingTotal = key === "ratingTotal" ? value : defense.ratingTotal;
-        const rating = attempts > 0 ? ratingTotal / attempts : 0;
+  //     // Auto-calculate hitting percentage
+  //     if (
+  //       (category === "attack" && key == "kills") ||
+  //       key == "total" ||
+  //       key == "errors"
+  //     ) {
+  //       const attack = updatedCategory as StatForm["attack"];
+  //       const kills = key === "kills" ? value : attack.kills;
+  //       const total = key === "total" ? value : attack.total;
+  //       const errors = key === "errors" ? value : attack.errors;
+  //       const percentage = total > 0 ? (kills - errors) / total : 0;
+  //       attack.percentage = Math.round(percentage * 1000) / 1000;
+  //     }
 
-        defense.rating = Math.round(rating * 10) / 10;
-      }
+  //     // Auto-calculate serving percentage
+  //     if (
+  //       category === "serving" &&
+  //       (key === "attempts" || key === "errors" || key === "ratingTotal")
+  //     ) {
+  //       const serving = updatedCategory as StatForm["serving"];
+  //       const attempts = key === "attempts" ? value : serving.attempts;
+  //       const errors = key === "errors" ? value : serving.errors;
+  //       const ratingTotal = key === "ratingTotal" ? value : serving.ratingTotal;
+  //       const percentage = attempts > 0 ? (attempts - errors) / attempts : 0;
+  //       const rating = attempts > 0 ? ratingTotal / attempts : 0;
 
-      return {
-        ...prev,
-        [category]: updatedCategory,
-      };
-    });
-  };
+  //       serving.rating = Math.round(rating * 10) / 10;
+  //       serving.percentage = Math.round(percentage * 1000) / 1000;
+  //     }
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (athleteId && form != initialStatForm) {
-      mutate({ athleteId, form: form, date: form.recordedAt });
-    }
-  };
+  //     // Auto-calculate receiving rating
+  //     if (
+  //       category === "receiving" &&
+  //       (key === "ratingTotal" || key === "attempts")
+  //     ) {
+  //       const receiving = updatedCategory as StatForm["receiving"];
+  //       const attempts = key === "attempts" ? value : receiving.attempts;
+  //       const ratingTotal =
+  //         key === "ratingTotal" ? value : receiving.ratingTotal;
+  //       const rating = attempts > 0 ? ratingTotal / attempts : 0;
+
+  //       receiving.rating = Math.round(rating * 10) / 10;
+  //     }
+
+  //     // Auto-calculate defense rating
+  //     if (
+  //       category === "defense" &&
+  //       (key === "ratingTotal" || key === "attempts")
+  //     ) {
+  //       const defense = updatedCategory as StatForm["defense"];
+  //       const attempts = key === "attempts" ? value : defense.attempts;
+  //       const ratingTotal = key === "ratingTotal" ? value : defense.ratingTotal;
+  //       const rating = attempts > 0 ? ratingTotal / attempts : 0;
+
+  //       defense.rating = Math.round(rating * 10) / 10;
+  //     }
+
+  //     return {
+  //       ...prev,
+  //       [category]: updatedCategory,
+  //     };
+  //   });
+  // };
+
+  // const handleSubmit = async () => {
+  //   if (athleteId && form != initialStatForm) {
+  //     mutate({ athleteId, form: form, date: form.recordedAt });
+  //   }
+  // };
 
   if (isPending)
     return (
@@ -149,7 +159,11 @@ const CreateAthleteStat = (props: createAthleteStatProps) => {
   return (
     <div>
       <Dialog>
-        <form id="statForm" className="space-y-6" onSubmit={handleSubmit}>
+        <form
+          id="statForm"
+          className="space-y-6"
+          onSubmit={(e) => e.preventDefault()}
+        >
           <DialogTrigger asChild>
             <Button variant="default" size="lg">
               Add New Game Stats
@@ -188,17 +202,27 @@ const CreateAthleteStat = (props: createAthleteStatProps) => {
                       mode="single"
                       selected={form.recordedAt}
                       captionLayout="dropdown"
-                      onSelect={(date) => {
-                        const now = new Date();
-                        const merged = new Date(date!);
-                        merged.setHours(
-                          now.getHours(),
-                          now.getMinutes(),
-                          now.getSeconds(),
-                          now.getMilliseconds()
-                        );
-                        setForm((prev) => ({ ...prev, recordedAt: merged }));
-                      }}
+                      onSelect={
+                        (date) => {
+                          if (date) {
+                            handleChangeDate(date);
+                          } else {
+                            return;
+                          }
+                        }
+
+                        //   (date) => {
+                        //   const now = new Date();
+                        //   const merged = new Date(date!);
+                        //   merged.setHours(
+                        //     now.getHours(),
+                        //     now.getMinutes(),
+                        //     now.getSeconds(),
+                        //     now.getMilliseconds()
+                        //   );
+                        //   setForm((prev) => ({ ...prev, recordedAt: merged }));
+                        // }
+                      }
                     />
                   </PopoverContent>
                 </Popover>
@@ -249,7 +273,7 @@ const CreateAthleteStat = (props: createAthleteStatProps) => {
               <DialogClose asChild>
                 <Button variant="outline">Cancel</Button>
               </DialogClose>
-              <Button type="submit" form="statForm">
+              <Button type="submit" form="statForm" onClick={handleSubmit}>
                 Save New Stats
               </Button>
             </DialogFooter>
