@@ -32,15 +32,7 @@ export const DatePicker = (props: DatePickerProps) => {
             selected={selectedDate}
             captionLayout="dropdown"
             onSelect={(date) => {
-              const now = new Date();
-              const merged = new Date(date!);
-              merged.setHours(
-                now.getHours(),
-                now.getMinutes(),
-                now.getSeconds(),
-                now.getMilliseconds()
-              );
-              changeDate(merged);
+              changeDate(date!);
             }}
           />
         </PopoverContent>

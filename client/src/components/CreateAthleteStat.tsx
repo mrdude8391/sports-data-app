@@ -39,13 +39,15 @@ interface createAthleteStatProps {
   handleChange: <C extends StatCategory, K extends StatFieldKey<C>>(
     category: C,
     key: K,
-    value: number
+    value: number,
+    id: string
   ) => void;
   handleChangeDate: (date: Date) => void;
 }
 
 const CreateAthleteStat = (props: createAthleteStatProps) => {
   const {
+    athleteId,
     form,
     handleSubmit,
     statError: error,
@@ -53,6 +55,7 @@ const CreateAthleteStat = (props: createAthleteStatProps) => {
     handleChange,
     handleChangeDate,
   } = props;
+
   // const { athleteId } = useParams<{ athleteId: string }>();
 
   // const [form, setForm] = useState<StatForm>(initialStatForm);
@@ -204,11 +207,7 @@ const CreateAthleteStat = (props: createAthleteStatProps) => {
                       captionLayout="dropdown"
                       onSelect={
                         (date) => {
-                          if (date) {
-                            handleChangeDate(date);
-                          } else {
-                            return;
-                          }
+                          handleChangeDate(date!);
                         }
 
                         //   (date) => {
@@ -246,7 +245,8 @@ const CreateAthleteStat = (props: createAthleteStatProps) => {
                             handleChange(
                               category as StatCategory,
                               key as any,
-                              Number(e.target.value)
+                              Number(e.target.value),
+                              athleteId
                             )
                           }
                           className="border rounded p-2"
