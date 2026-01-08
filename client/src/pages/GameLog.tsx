@@ -149,8 +149,6 @@ const GameLog = () => {
         defense.rating = Math.round(rating * 10) / 10;
       }
 
-      console.log(updatedCategory);
-
       return {
         ...form,
         [category]: updatedCategory,
