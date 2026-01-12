@@ -191,12 +191,7 @@ const AthleteStats = () => {
                 statError={statError}
                 handleChange={handleChange}
                 handleChangeDate={handleChangeDate}
-              >
-                {/* Dialog trigger passed through child component */}
-                <Button variant="default" size="lg">
-                  Add New Game Stats
-                </Button>
-              </CreateAthleteStat>
+              ></CreateAthleteStat>
 
               <div className="card-container w-full flex flex-col gap-4">
                 <h3>Select Date Range</h3>
@@ -283,12 +278,7 @@ const AthleteStats = () => {
                 statError={statError}
                 handleChange={handleChange}
                 handleChangeDate={handleChangeDate}
-              >
-                {/* Dialog trigger passed through child component */}
-                <Button variant="default" size="lg">
-                  Add New Game Stats
-                </Button>
-              </CreateAthleteStat>
+              ></CreateAthleteStat>
               <p>No Stats</p>
             </div>
           )}

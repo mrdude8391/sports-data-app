@@ -44,7 +44,6 @@ interface createAthleteStatProps {
     id: string
   ) => void;
   handleChangeDate: (date: Date) => void;
-  children: ReactNode;
 }
 
 const CreateAthleteStat = (props: createAthleteStatProps) => {
@@ -56,7 +55,6 @@ const CreateAthleteStat = (props: createAthleteStatProps) => {
     isPending,
     handleChange,
     handleChangeDate,
-    children: dialogTrigger,
   } = props;
 
   // const { athleteId } = useParams<{ athleteId: string }>();
@@ -170,7 +168,11 @@ const CreateAthleteStat = (props: createAthleteStatProps) => {
           className="space-y-6"
           onSubmit={(e) => e.preventDefault()}
         >
-          <DialogTrigger asChild>{dialogTrigger}</DialogTrigger>
+          <DialogTrigger asChild>
+            <Button variant="default" size="lg">
+              Add New Game Stats
+            </Button>
+          </DialogTrigger>
           <DialogContent className="max-h-11/12 flex flex-col overflow-hidden ">
             <DialogHeader className="sticky">
               <DialogTitle>Create New Stats</DialogTitle>

@@ -3,7 +3,6 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import * as sportsDataService from "../../services/sportsDataService";
 import type { Athlete } from "@/types/Athlete";
-import CreateAthleteStat from "@/components/CreateAthleteStat";
 import {
   initialStatForm,
   type StatCategory,
@@ -11,7 +10,7 @@ import {
   type StatForm,
 } from "@/types/Stat";
 import AthleteSelector from "./components/AthleteSelector";
-import { Button } from "@/components/ui/button";
+import AthleteStatForm from "./components/AthleteStatForm";
 
 const GameLog = () => {
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
@@ -49,11 +48,11 @@ const GameLog = () => {
     }
   };
 
-  const handleChangeDate = (newDate: Date) => {
-    setSelectedDate(newDate);
+  const handleChangeDate = (selectedDate: Date) => {
+    setSelectedDate(selectedDate);
     const now = new Date();
-    const merged = new Date(newDate!);
-    merged.setHours(
+    const newDate = new Date(selectedDate!);
+    newDate.setHours(
       now.getHours(),
       now.getMinutes(),
       now.getSeconds(),
@@ -62,7 +61,7 @@ const GameLog = () => {
     setForms((prev) => {
       const newMap = new Map<string, StatForm>(prev);
       for (const [key, value] of newMap) {
-        newMap.set(key, { ...value, recordedAt: merged });
+        newMap.set(key, { ...value, recordedAt: newDate });
       }
       return newMap;
     });
@@ -187,21 +186,17 @@ const GameLog = () => {
         <div>
           <h3>Selected Athletes List</h3>
           <ul className="flex flex-col gap-2">
-            {[...selectedAthletes].map((a) => (
-              <li className="flex gap-2 items-center " key={a._id}>
-                <CreateAthleteStat
-                  athleteId={a._id!}
-                  form={forms.get(a._id)!}
+            {[...selectedAthletes].map((athlete) => (
+              <li className="flex gap-2 items-center " key={athlete._id}>
+                <AthleteStatForm
+                  athlete={athlete}
+                  form={forms.get(athlete._id)!}
                   isPending={isPending}
                   handleSubmit={handleSubmit}
                   statError={statError}
                   handleChange={handleChange}
                   handleChangeDate={handleChangeDate}
-                >
-                  <Button>
-                    <p>{a.name}</p>
-                  </Button>
-                </CreateAthleteStat>
+                ></AthleteStatForm>
               </li>
             ))}
           </ul>
