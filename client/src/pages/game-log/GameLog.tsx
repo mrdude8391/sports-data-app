@@ -11,6 +11,7 @@ import {
   type StatForm,
 } from "@/types/Stat";
 import AthleteSelector from "./components/AthleteSelector";
+import { Button } from "@/components/ui/button";
 
 const GameLog = () => {
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
@@ -188,7 +189,6 @@ const GameLog = () => {
           <ul className="flex flex-col gap-2">
             {[...selectedAthletes].map((a) => (
               <li className="flex gap-2 items-center " key={a._id}>
-                <p>{a.name}</p>
                 <CreateAthleteStat
                   athleteId={a._id!}
                   form={forms.get(a._id)!}
@@ -197,7 +197,11 @@ const GameLog = () => {
                   statError={statError}
                   handleChange={handleChange}
                   handleChangeDate={handleChangeDate}
-                />
+                >
+                  <Button>
+                    <p>{a.name}</p>
+                  </Button>
+                </CreateAthleteStat>
               </li>
             ))}
           </ul>
