@@ -2,7 +2,7 @@ import { DatePicker } from "@/components/shared/DatePicker";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import * as sportsDataService from "../services/sportsDataService";
-import { Loader } from "lucide-react";
+import { Loader, Volleyball } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -178,40 +178,42 @@ const GameLog = () => {
   const handleSubmit = async () => {};
 
   return (
-    <div className="card-container flex flex-col gap-4">
-      <h1>Game Stats Entry</h1>
-      <div>
-        <div>Selected Date: {selectedDate.toLocaleDateString("en-US")}</div>
-        <DatePicker
-          selectedDate={selectedDate}
-          changeDate={handleChangeDate}
-        ></DatePicker>
-      </div>
-      <div>
-        <h3>Athlete Selector</h3>
-        <AthleteSelector
-          selectedAthletes={selectedAthletes}
-          handleSelectAthlete={handleSelectAthlete}
-        />
-      </div>
-      <div>
-        <h3>Selected Athletes List</h3>
-        <ul className="flex flex-col gap-2">
-          {[...selectedAthletes].map((a) => (
-            <li className="flex gap-2 items-center " key={a._id}>
-              <p>{a.name}</p>
-              <CreateAthleteStat
-                athleteId={a._id!}
-                form={forms.get(a._id)!}
-                isPending={isPending}
-                handleSubmit={handleSubmit}
-                statError={statError}
-                handleChange={handleChange}
-                handleChangeDate={handleChangeDate}
-              />
-            </li>
-          ))}
-        </ul>
+    <div className="multi-stat-container card-container min-w-3xl flex flex-col gap-4 items-center">
+      <div className="multi-stat-inner">
+        <h1>Game Stats Entry</h1>
+        <div>
+          <div>Selected Date: {selectedDate.toLocaleDateString("en-US")}</div>
+          <DatePicker
+            selectedDate={selectedDate}
+            changeDate={handleChangeDate}
+          ></DatePicker>
+        </div>
+        <div>
+          <h3>Athlete Selector</h3>
+          <AthleteSelector
+            selectedAthletes={selectedAthletes}
+            handleSelectAthlete={handleSelectAthlete}
+          />
+        </div>
+        <div>
+          <h3>Selected Athletes List</h3>
+          <ul className="flex flex-col gap-2">
+            {[...selectedAthletes].map((a) => (
+              <li className="flex gap-2 items-center " key={a._id}>
+                <p>{a.name}</p>
+                <CreateAthleteStat
+                  athleteId={a._id!}
+                  form={forms.get(a._id)!}
+                  isPending={isPending}
+                  handleSubmit={handleSubmit}
+                  statError={statError}
+                  handleChange={handleChange}
+                  handleChangeDate={handleChangeDate}
+                />
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
     </div>
   );
