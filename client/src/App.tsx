@@ -8,7 +8,7 @@ import Profile from "./pages/Profile.tsx";
 import Athletes from "./pages/Athletes.tsx";
 import Register from "./pages/Register.tsx";
 import AthleteStats from "./pages/AthleteStats.tsx";
-import GameLog from "./pages/GameLog.tsx";
+import GameLog from "./pages/game-log/GameLog.tsx";
 import NotFound from "./pages/NotFound.tsx";
 
 function App() {
