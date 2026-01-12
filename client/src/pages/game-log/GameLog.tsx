@@ -41,10 +41,14 @@ const GameLog = () => {
         return newMap;
       });
     } else {
+      // athelte is not currently in map
       // add new athlete
       setSelectedAthletes((prev) => new Set<Athlete>(prev).add(athlete));
       // add form to form dictionary
-      setForms((prev) => prev.set(athlete._id, initialStatForm));
+      // need to update the selected date from the default if the selected date is not default.
+      const newForm = initialStatForm;
+      newForm.recordedAt = selectedDate;
+      setForms((prev) => prev.set(athlete._id, newForm));
     }
   };
 
