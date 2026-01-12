@@ -11,6 +11,7 @@ import {
 } from "@/types/Stat";
 import AthleteSelector from "./components/AthleteSelector";
 import AthleteStatForm from "./components/AthleteStatForm";
+import { Button } from "@/components/ui/button";
 
 const GameLog = () => {
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
@@ -159,15 +160,21 @@ const GameLog = () => {
     error: statError,
     mutate,
   } = useMutation({
-    mutationFn: sportsDataService.createStat,
+    mutationFn: sportsDataService.createStatsBatch,
     onSuccess: () => {
       // Invalidate and refetch
-      queryClient.invalidateQueries({ queryKey: ["stats"] });
+      queryClient.invalidateQueries({ queryKey: ["statsBatch"] });
       setForms(new Map<string, StatForm>());
+      setSelectedAthletes(new Set<Athlete>());
     },
   });
 
-  const handleSubmit = async () => {};
+  const handleSubmit = async () => {
+    if (forms.size != 0) {
+      console.log(forms);
+      mutate({ forms });
+    }
+  };
 
   return (
     <div className="multi-stat-container card-container min-w-3xl flex flex-col gap-4 items-center">
@@ -190,20 +197,27 @@ const GameLog = () => {
         <div>
           <h3>Selected Athletes List</h3>
           <ul className="flex flex-col gap-2">
-            {[...selectedAthletes].map((athlete) => (
-              <li className="flex gap-2 items-center " key={athlete._id}>
-                <AthleteStatForm
-                  athlete={athlete}
-                  form={forms.get(athlete._id)!}
-                  isPending={isPending}
-                  handleSubmit={handleSubmit}
-                  statError={statError}
-                  handleChange={handleChange}
-                  handleChangeDate={handleChangeDate}
-                ></AthleteStatForm>
-              </li>
-            ))}
+            {[...selectedAthletes].map((athlete) => {
+              // just to validate that the form exists for the selected athlete
+              const form = forms.get(athlete._id);
+              if (!form) return;
+              return (
+                <li className="flex gap-2 items-center " key={athlete._id}>
+                  <AthleteStatForm
+                    athlete={athlete}
+                    form={form}
+                    isPending={isPending}
+                    statError={statError}
+                    handleChange={handleChange}
+                    handleChangeDate={handleChangeDate}
+                  ></AthleteStatForm>
+                </li>
+              );
+            })}
           </ul>
+        </div>
+        <div className="submit">
+          <Button onClick={handleSubmit}>Save Stats</Button>
         </div>
       </div>
     </div>

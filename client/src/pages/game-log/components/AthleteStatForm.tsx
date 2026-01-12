@@ -27,7 +27,6 @@ import type { Athlete } from "@/types/Athlete.ts";
 interface athleteStatFormProps {
   athlete: Athlete;
   form: StatForm;
-  handleSubmit: () => void;
   statError: Error | null;
   isPending: boolean;
   handleChange: <C extends StatCategory, K extends StatFieldKey<C>>(
@@ -43,7 +42,6 @@ const AthleteStatForm = (props: athleteStatFormProps) => {
   const {
     athlete,
     form,
-    handleSubmit,
     statError: error,
     isPending,
     handleChange,

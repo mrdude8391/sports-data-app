@@ -120,6 +120,17 @@ export const createStat = async ({athleteId, form, date} : {athleteId: string, f
     }
 }
 
+export const createStatsBatch = async({forms} : {forms : Map<string, StatForm>}) => {
+    try {
+        console.log("create stats batch")
+        const payload = {...forms}
+        console.log(forms)
+        return forms
+    } catch (error: any) {
+        throw new Error(error.response.data.message)
+    }
+}
+
 export const editStat = async (req : {statId: string, form: StatForm, date: Date}) => {
     try {
         console.log("edit stat", req.form)
