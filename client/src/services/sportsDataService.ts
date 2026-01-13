@@ -125,6 +125,9 @@ export const createStatsBatch = async({forms} : {forms : Map<string, StatForm>})
     try {
         console.log("create stats batch")
         const payload = Array.from(forms.entries()).map(([id, form]) => ({athleteId: id, ...form}))
+        // Form.entries turns the map into an iterable tuple.
+        // array from turns the iterator into an array of tuples
+        // map generates an array of objects => callback function turns every tuple into an object. 
         const { data } = await api.post(`/athlete/stats`, payload)
         return data
     } catch (error: any) {
