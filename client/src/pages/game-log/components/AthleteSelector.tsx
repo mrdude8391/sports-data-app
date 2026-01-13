@@ -69,7 +69,7 @@ const AthleteSelector = (athleteSelectorProps: {
           </ul>
           <DialogFooter>
             <DialogClose asChild>
-              <Button variant="secondary">close</Button>
+              <Button variant="secondary">Close</Button>
             </DialogClose>
           </DialogFooter>
         </DialogContent>

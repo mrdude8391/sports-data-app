@@ -172,7 +172,6 @@ const GameLog = () => {
   const handleSubmit = async () => {
     if (forms.size != 0) {
       console.log("handle submit", forms);
-
       mutate({ forms });
     }
   };
