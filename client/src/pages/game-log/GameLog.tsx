@@ -176,17 +176,17 @@ const GameLog = () => {
     if (forms.size != 0) {
       console.log("handle submit", forms);
       for (const athlete of selectedAthletes) {
+        const form = forms.get(athlete._id);
         // Convert your loop to async
         // Show the dialog
         // Return a Promise
         // Resolve the Promise when the user clicks Continue or Cancel
         // await the Promise in the loop
-        changeAlertAthleteName(athlete.name);
-        const form = forms.get(athlete._id);
-        const shouldContinue = await confirm();
-        // this async await means that the method handle submit will wait for confirm() to finish
-        // go read confirm
         if (form === initialStatForm) {
+          changeAlertAthleteName(athlete.name);
+          const shouldContinue = await confirm();
+          // this async await means that the method handle submit will wait for confirm() to finish
+          // go read confirm
           if (!shouldContinue) return;
         }
       }
