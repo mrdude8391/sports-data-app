@@ -12,6 +12,7 @@ const {
   createStat,
   deleteStat,
   editStat,
+  createStatsBatch,
 } = require("../controllers/athleteController");
 
 router.post("/create", protect, createAthlete);
@@ -20,6 +21,7 @@ router.delete("/:id", protect, deleteAthlete);
 
 router.get("/:id/stats", protect, getStats);
 router.post("/:id/stats", protect, createStat);
+router.post("/stats", protect, createStatsBatch);
 router.delete("/:id/stats", protect, deleteStat);
 router.patch("/:id/stats", protect, editStat);
 

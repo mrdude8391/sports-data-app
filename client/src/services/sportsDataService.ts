@@ -2,6 +2,7 @@ import type { Athlete } from '@/types/Athlete';
 import type { AthleteStatResponse, StatForm, StatPayload, StatResponse,  } from "@/types/Stat"
 import axios from "axios";
 import type { LoginPayload, AuthResponse, RegisterPayload } from '@/types/Auth';
+import { Value } from '@radix-ui/react-select';
 
 const API_URL = import.meta.env.VITE_API_URL
 
@@ -123,9 +124,9 @@ export const createStat = async ({athleteId, form, date} : {athleteId: string, f
 export const createStatsBatch = async({forms} : {forms : Map<string, StatForm>}) => {
     try {
         console.log("create stats batch")
-        const payload = {...forms}
-        console.log(forms)
-        return forms
+        const payload = Array.from(forms.entries()).map(([id, form]) => ({athleteId: id, ...form}))
+        const { data } = await api.post(`/athlete/stats`, payload)
+        return data
     } catch (error: any) {
         throw new Error(error.response.data.message)
     }

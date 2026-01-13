@@ -68,6 +68,20 @@ const createStat = async (req, res) => {
   }
 };
 
+const createStatsBatch = async (req, res) => {
+  try {
+    console.log("create stat batch");
+    const forms = req.body;
+    const userId = req.user._id;
+    const formsBatch = forms.map((form) => ({ userId: userId, ...form }));
+    console.log(formsBatch);
+    await Stat.insertMany(formsBatch);
+    res.status(201).json({ message: "Successfully added batch" });
+  } catch (err) {
+    return res.status(500).json({ message: err.message });
+  }
+};
+
 const getStats = async (req, res) => {
   try {
     const athleteId = req.params.id;
@@ -129,6 +143,7 @@ module.exports = {
   deleteAthlete,
   getStats,
   createStat,
+  createStatsBatch,
   deleteStat,
   editStat,
 };
