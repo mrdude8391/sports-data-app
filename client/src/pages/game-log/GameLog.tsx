@@ -12,11 +12,10 @@ import {
 import AthleteSelector from "./components/AthleteSelector";
 import AthleteStatForm from "./components/AthleteStatForm";
 import { Button } from "@/components/ui/button";
-import GameLogAlert from "./components/GameLogAlert";
+import useConfirmBlank from "@/hooks/useConfirmBlank";
 
 const GameLog = () => {
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
-  const [alertIsOpen, setAlertIsOpen] = useState(false);
 
   const [selectedAthletes, setSelectedAthletes] = useState(new Set<Athlete>());
   const [forms, setForms] = useState<Map<string, StatForm>>(
@@ -25,6 +24,8 @@ const GameLog = () => {
   // if i use a dictionary, i can have the ids : form
   // add the new form whenver an athlete is added to the selection list
   // update the form by getting the form object through the dictionary
+
+  const { confirm, ConfirmDialog, changeAlertAthleteName } = useConfirmBlank();
 
   const queryClient = useQueryClient();
 
@@ -171,50 +172,17 @@ const GameLog = () => {
     },
   });
 
-  const [resolver, setResolver] = useState<((value: boolean) => void) | null>(
-    null
-  );
-
-  const confirm = () =>
-    // confirm returns a boolean promise
-    // the promise constructor allows us take the resolve function and do stuff with it
-    // so what we want to do is resolve this promise either with "true" or "false" controlled by the alert dialog
-    // to get the resolve function in a way where we can call it at will we can store it in state
-    // so what we do is store this resolve function as a state variable so that we can move it around and so that the function persists.
-    new Promise<boolean>((resolve) => {
-      setResolver(() => resolve);
-      // we store resolve function in an anon arrow bc useState set function will run any function that is passed through to update state
-      // i.e setState(prev => state(prev))
-      // so by putting the anon arrow function that returns resolve function, the setState runs the function and receives resolve
-      // thus the Resolver state variable === resolve function
-      setAlertIsOpen(true);
-      // and basically while the promise is started we want to open the alert
-      // see handle continue and cancel next
-    });
-
-  const handleContinue = () => {
-    // we want the promise to be resolved i.e. call the resolver when user clicks dialog buttons so we set up handlers
-    resolver?.(true);
-    // the handler will call the resolve function through the state variable with value "true" to continue
-    setAlertIsOpen(false);
-    // once we continue we also lose th alert
-  };
-
-  const handleCancel = () => {
-    // same same as above
-    resolver?.(false);
-    setAlertIsOpen(false);
-  };
-
   const handleSubmit = async () => {
     if (forms.size != 0) {
       console.log("handle submit", forms);
-      for (const [_, form] of forms) {
+      for (const athlete of selectedAthletes) {
         // Convert your loop to async
         // Show the dialog
         // Return a Promise
         // Resolve the Promise when the user clicks Continue or Cancel
         // await the Promise in the loop
+        changeAlertAthleteName(athlete.name);
+        const form = forms.get(athlete._id);
         const shouldContinue = await confirm();
         // this async await means that the method handle submit will wait for confirm() to finish
         // go read confirm
@@ -228,11 +196,7 @@ const GameLog = () => {
 
   return (
     <div className="team-stats w-full sm:w-lg items-center">
-      <GameLogAlert
-        alertIsOpen={alertIsOpen}
-        handleContinue={handleContinue}
-        handleCancel={handleCancel}
-      ></GameLogAlert>
+      <ConfirmDialog />
       <div className="header w-full">
         <h1>Team Stats Entry</h1>
         <p>
