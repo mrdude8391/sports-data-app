@@ -35,7 +35,7 @@ const AthleteSelector = (athleteSelectorProps: {
     <div>
       <Dialog>
         <DialogTrigger asChild>
-          <Button variant="outline">Add players</Button>
+          <Button variant="outline">Edit player list</Button>
         </DialogTrigger>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
@@ -51,7 +51,7 @@ const AthleteSelector = (athleteSelectorProps: {
               athletes.map((athlete) => (
                 <li
                   key={athlete._id}
-                  className={`px-2 rounded cursor-pointer 
+                  className={`px-4 py-2 rounded-lg cursor-pointer 
                       ${
                         selectedAthletes.has(athlete)
                           ? "bg-accent hover:bg-accent/80"
@@ -69,7 +69,7 @@ const AthleteSelector = (athleteSelectorProps: {
           </ul>
           <DialogFooter>
             <DialogClose asChild>
-              <Button>Save Changes</Button>
+              <Button variant="secondary">close</Button>
             </DialogClose>
           </DialogFooter>
         </DialogContent>

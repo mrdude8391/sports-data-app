@@ -25,7 +25,7 @@ function App() {
           <Route path="/athletes" element={<Athletes />} />
           <Route path="/register" element={<Register />} />
           <Route path="/athletes/:athleteId/stats" element={<AthleteStats />} />
-          <Route path="/gamelog" element={<GameLog />} />
+          <Route path="/teamstats" element={<GameLog />} />
           <Route path="*" element={<NotFound />} />
         </Route>
       </Routes>

@@ -172,52 +172,69 @@ const GameLog = () => {
   const handleSubmit = async () => {
     if (forms.size != 0) {
       console.log("handle submit", forms);
+
       mutate({ forms });
     }
   };
 
   return (
-    <div className="multi-stat-container card-container min-w-3xl flex flex-col gap-4 items-center">
-      <div className="multi-stat-inner">
-        <h1>Game Stats Entry</h1>
-        <div>
-          <div>Selected Date: {selectedDate.toLocaleDateString("en-US")}</div>
-          <DatePicker
-            selectedDate={selectedDate}
-            changeDate={handleChangeDate}
-          ></DatePicker>
+    <div className="team-stats w-full sm:w-lg items-center">
+      <div className="header w-full">
+        <h1>Team Stats Entry</h1>
+        <p>
+          Enter stats for multiple team memebers at once. Select the date the
+          game was played and the athletes that you would like to stat.
+        </p>
+      </div>
+
+      <div className="team-stats-inner flex flex-col gap-4 mt-4">
+        <div className="date-picker card-container ">
+          {/* <h3>Game Date: {selectedDate.toLocaleDateString("en-US")}</h3> */}
+          <h3 className="mb-2">Game Date</h3>
+          <div>
+            <DatePicker
+              selectedDate={selectedDate}
+              changeDate={handleChangeDate}
+            ></DatePicker>
+          </div>
         </div>
-        <div>
-          <h3>Athletes Selector</h3>
+        <div className="athlete-selector card-container flex flex-col gap-2">
+          <h3>Player List</h3>
           <AthleteSelector
             selectedAthletes={selectedAthletes}
             handleSelectAthlete={handleSelectAthlete}
           />
-        </div>
-        <div>
-          <h3>Selected Athletes List</h3>
-          <ul className="flex flex-col gap-2">
-            {[...selectedAthletes].map((athlete) => {
-              // just to validate that the form exists for the selected athlete
-              const form = forms.get(athlete._id);
-              if (!form) return;
-              return (
-                <li className="flex gap-2 items-center " key={athlete._id}>
-                  <AthleteStatForm
-                    athlete={athlete}
-                    form={form}
-                    isPending={isPending}
-                    statError={statError}
-                    handleChange={handleChange}
-                    handleChangeDate={handleChangeDate}
-                  ></AthleteStatForm>
-                </li>
-              );
-            })}
-          </ul>
-        </div>
-        <div className="submit">
-          <Button onClick={handleSubmit}>Save Stats</Button>
+          {selectedAthletes.size > 0 && (
+            <div className="athlete-list mt-4">
+              <ul className="flex flex-col gap-2">
+                {[...selectedAthletes].map((athlete) => {
+                  // just to validate that the form exists for the selected athlete
+                  const form = forms.get(athlete._id);
+                  if (!form) return;
+                  return (
+                    <li
+                      className="flex gap-2 items-center w-full "
+                      key={athlete._id}
+                    >
+                      <AthleteStatForm
+                        athlete={athlete}
+                        form={form}
+                        isPending={isPending}
+                        statError={statError}
+                        handleChange={handleChange}
+                        handleChangeDate={handleChangeDate}
+                      ></AthleteStatForm>
+                    </li>
+                  );
+                })}
+              </ul>
+              <div className="submit flex justify-end mt-4">
+                <Button onClick={handleSubmit} className="">
+                  Submit All
+                </Button>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>

@@ -3,7 +3,7 @@ export const NAV_LINKS_LOGGED_IN = [
     { href: '/about', key: "About", label: "About"  },
     { href: '/profile', key: "Profile", label: "Profile"  },
     { href: '/athletes', key: "Athletes", label: "Athletes"  },
-    { href: '/gamelog', key: "GameLog", label: "Game Stats Entry"  },
+    { href: '/teamstats', key: "Team Stats", label: "Team Stats Entry"  },
 ]
 
 export const NAV_LINKS_LOGGED_OUT = [
