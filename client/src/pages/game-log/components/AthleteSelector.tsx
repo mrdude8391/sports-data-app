@@ -46,7 +46,7 @@ const AthleteSelector = (athleteSelectorProps: {
             </DialogDescription>
           </DialogHeader>
           <CreateAthlete></CreateAthlete>
-          <ul className="flex flex-col gap-2">
+          <ul className="flex flex-col gap-2 max-h-60 overflow-auto ">
             {athletes && athletes.length > 0 ? (
               athletes.map((athlete) => (
                 <li
