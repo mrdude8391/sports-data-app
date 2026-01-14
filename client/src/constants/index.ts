@@ -1,7 +1,7 @@
 export const NAV_LINKS_LOGGED_IN = [
     { href: '/', key: "Home", label: "Home"  },
     { href: '/about', key: "About", label: "About"  },
-    { href: '/profile', key: "Profile", label: "Profile"  },
+    // { href: '/profile', key: "Profile", label: "Profile"  },
     { href: '/athletes', key: "Athletes", label: "Athletes"  },
     { href: '/teamstats', key: "Team Stats", label: "Team Stats Entry"  },
 ]
