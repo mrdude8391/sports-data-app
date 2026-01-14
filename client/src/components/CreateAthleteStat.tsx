@@ -22,7 +22,6 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import type { ReactNode } from "react";
 
 // const initialForm: StatForm = Object.fromEntries(
 //   STAT_INDEX.map(({ category, fields }) => [

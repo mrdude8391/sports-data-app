@@ -2,7 +2,6 @@ import type { Athlete } from '@/types/Athlete';
 import type { AthleteStatResponse, StatForm, StatPayload, StatResponse,  } from "@/types/Stat"
 import axios from "axios";
 import type { LoginPayload, AuthResponse, RegisterPayload } from '@/types/Auth';
-import { Value } from '@radix-ui/react-select';
 
 const API_URL = import.meta.env.VITE_API_URL
 
