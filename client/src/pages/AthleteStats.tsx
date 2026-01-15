@@ -23,6 +23,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import type { DateRange } from "react-day-picker";
+import useConfirmBlank from "@/hooks/useConfirmBlank";
 
 const AthleteStats = () => {
   const { athleteId } = useParams<{ athleteId: string }>();
@@ -30,6 +31,8 @@ const AthleteStats = () => {
   const [open, setOpen] = useState(false);
   const [date, setDate] = useState<DateRange | undefined>();
   const [form, setForm] = useState<StatForm>(initialStatForm);
+
+  const { confirm, ConfirmDialog, changeAlertAthleteName } = useConfirmBlank();
 
   const queryClient = useQueryClient();
 
@@ -144,7 +147,12 @@ const AthleteStats = () => {
   };
 
   const handleSubmit = async () => {
-    if (athleteId && form != initialStatForm) {
+    if (res?.athlete && athleteId && form === initialStatForm) {
+      changeAlertAthleteName(res.athlete.name);
+      const shouldContinue = await confirm();
+      // this async await means that the method handle submit will wait for confirm() to finish
+      // go read confirm
+      if (!shouldContinue) return;
       mutate({ athleteId, form: form, date: form.recordedAt });
     }
   };
@@ -165,6 +173,7 @@ const AthleteStats = () => {
     <>
       {res && (
         <div className="w-full max-w-6xl ">
+          <ConfirmDialog />
           {res.stats.length > 0 ? (
             <div className="flex flex-col gap-6 w-full max-w-6xl py-3">
               <div className="card-container w-full grid sm:grid-cols-2">
