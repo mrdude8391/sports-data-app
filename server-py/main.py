@@ -2,8 +2,23 @@ from fastapi import FastAPI, HTTPException, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import List, Annotated
+from db import SessionLocal
+from sqlalchemy.orm import Session
 
 app = FastAPI()
+
+def get_db():
+    """
+    Dependency that provides a database session per request.
+    """
+    db = SessionLocal()
+    print("Connected db")
+    try:
+        yield db
+    finally:
+        db.close()
+
+db_dependency = Annotated[Session, Depends(get_db)]
 
 origins = [
     "http://localhost:5173",
@@ -25,7 +40,6 @@ def root():
     return {"API is running..."}
 
 @app.get("/test")
-def root():
-    print("/Test")
+def test():
     return {"Test Response"}
 
