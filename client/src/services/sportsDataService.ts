@@ -15,43 +15,33 @@ export const setLogoutCallback = (cb: () => void) => {
     logoutCallback = cb
 }
 
-// api.interceptors.request.use(
-//     (config) => {
-//         const savedUser = localStorage.getItem("user")
-//         if (savedUser) {
-//             const user:AuthResponse = JSON.parse(savedUser)
-//             config.headers.Authorization = `Bearer ${user.token}`
-//         }
-//         return config
-//     }, (error) => { 
-//         console.log(error)
-//         return Promise.reject(error)}
-// )
+api.interceptors.request.use(
+    (config) => {
+        const savedUser = localStorage.getItem("user")
+        if (savedUser) {
+            const user:AuthResponse = JSON.parse(savedUser)
+            config.headers.Authorization = `Bearer ${user.token}`
+        }
+        return config
+    }, (error) => { 
+        console.log(error)
+        return Promise.reject(error)}
+)
 
-// api.interceptors.response.use((response) => {
-//     return response
-// },
-// (error) => {
-//     if (error.response && error.response.status === 401){
-//         console.log("error 401 unauthorized token, clearing token")
-//         logoutCallback()
-//     }
-//     return Promise.reject(error)
-// }
-
-// )
-
-export const test = async() => {
-    try {
-        const res = await api.get("/");
-        console.log(res)
-        return res
-        
-    } catch (error: any) {
-        console.log(error.response.data.message)
-        throw new Error(error.response?.data?.message || "Test Failed")
+api.interceptors.response.use((response) => {
+    return response
+},
+(error) => {
+    if (error.response && error.response.status === 401){
+        console.log("error 401 unauthorized token, clearing token")
+        logoutCallback()
     }
+    return Promise.reject(error)
 }
+
+)
+
+
 
 export const login = async (loginInfo: LoginPayload) => {
     try {

@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { useAuth } from "@/context/AuthContext";
 import { useTheme } from "@/context/ThemeProvider";
 import { Link } from "react-router-dom";
-import { test } from "../services/sportsDataService";
+import { test } from "../services/ApiTestService";
 
 const Home = () => {
   const { isLoggedIn } = useAuth();
