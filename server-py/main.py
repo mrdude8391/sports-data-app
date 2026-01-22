@@ -2,11 +2,12 @@ from fastapi import FastAPI, HTTPException, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import List, Annotated
-from db import Base, engine
+from database import Base, engine
 from sqlalchemy.orm import Session
 from dotenv import load_dotenv
 import os
-from models import Users
+from models import User
+from routers import auth_router
 
 load_dotenv()
 
@@ -38,6 +39,10 @@ def root():
 def test():
     return {"Test Response"}
 
-if __name__ == "__main__":
-    import uvicorn
-    uvicorn.run("main:app", host="0.0.0.0", port=os.getenv("PORT"), reload=True)
+
+app.include_router(auth_router.router)
+
+
+# if __name__ == "__main__":
+#     import uvicorn
+#     uvicorn.run(app="main:app", host="0.0.0.0", port=os.getenv("SERVER_PORT"), reload=True)
