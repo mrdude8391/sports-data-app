@@ -2,23 +2,18 @@ from fastapi import FastAPI, HTTPException, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import List, Annotated
-from db import SessionLocal
+from db import Base, engine
 from sqlalchemy.orm import Session
+from dotenv import load_dotenv
+import os
+from models import Users
+
+load_dotenv()
 
 app = FastAPI()
 
-def get_db():
-    """
-    Dependency that provides a database session per request.
-    """
-    db = SessionLocal()
-    print("Connected db")
-    try:
-        yield db
-    finally:
-        db.close()
-
-db_dependency = Annotated[Session, Depends(get_db)]
+# Create database tables
+Base.metadata.create_all(bind=engine)
 
 origins = [
     "http://localhost:5173",
@@ -37,9 +32,12 @@ app.add_middleware(
 @app.get("/")
 def root():
     print("Server Started")
-    return {"API is running..."}
+    return {"message": "API is running..."}
 
 @app.get("/test")
 def test():
     return {"Test Response"}
 
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run("main:app", host="0.0.0.0", port=os.getenv("PORT"), reload=True)

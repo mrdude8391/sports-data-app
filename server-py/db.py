@@ -1,3 +1,5 @@
+from typing import Annotated
+from fastapi import Depends
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, declarative_base, Session
 # from sqlalchemy.pool import NullPool
@@ -23,19 +25,22 @@ engine = create_engine(DATABASE_URL)
 # https://docs.sqlalchemy.org/en/20/core/pooling.html#switching-pool-implementations
 # engine = create_engine(DATABASE_URL, poolclass=NullPool)
 
-# Test the connection
-def testConnectDB():
-    try:
-        with engine.connect() as connection:
-            print("Connection successful!")
-    except Exception as e:
-        print(f"Failed to connect: {e}")
-
 SessionLocal = sessionmaker(
     autocommit=False,
     autoflush=False,
     bind=engine,
 )
 
+# Create Base class for models
 Base = declarative_base()
 
+def get_db():
+    """
+    Dependency that provides a database session per request.
+    """
+    db = SessionLocal()
+    print("Connected db")
+    try:
+        yield db
+    finally:
+        db.close()
