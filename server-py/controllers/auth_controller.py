@@ -1,8 +1,18 @@
 from sqlalchemy.orm import Session
 from models import User
-from schemas.auth_schemas import Register, UserWithToken
+from schemas.auth_schemas import RegisterPayload, UserWithToken
 
-def register_user(user_data: Register, db: Session) -> UserWithToken:
+def register_user(user_data: RegisterPayload, db: Session) -> UserWithToken:
+    """
+    Create a new user row using provided information in the database
+    
+    :param user_data: Credentials provided to create new User
+    :type user_data: RegisterPayload
+    :param db: SQLAlchemy db Session
+    :type db: Session
+    :return: Returns UserWithToken object giving client a token to work with
+    :rtype: UserWithToken
+    """
     # Check if user already exists
     existing_user = db.query(User).filter(User.email == user_data.email).first()
 

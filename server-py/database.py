@@ -39,7 +39,7 @@ def get_db():
     Dependency that provides a database session per request.
     """
     db = SessionLocal()
-    print("Connected db")
+    print("Called db Session")
     try:
         yield db
     finally:

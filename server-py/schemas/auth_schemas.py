@@ -7,7 +7,7 @@ class UserBase(BaseModel):
     username: str
     email: EmailStr
 
-class UserCreate(UserBase):
+class RegisterPayload(UserBase):
     password: str
 
 class UserResponse(UserBase):
@@ -17,20 +17,9 @@ class UserResponse(UserBase):
     class Config:
         from_attributes = True
 
-class LoginPayload(BaseModel):
-    email: EmailStr
-    password:str
-
-class Register(BaseModel):
-    username: str
-    email: EmailStr
-    password:str
-
-class RegisterResponse(BaseModel):
-    username: str
-    email: EmailStr
-    token:str
-
 class UserWithToken(UserResponse):
     token: str
 
+class LoginPayload(BaseModel):
+    email: EmailStr
+    password:str
