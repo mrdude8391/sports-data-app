@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
 from models import User
-from schemas.auth_schemas import RegisterPayload, UserWithToken
+from schemas.auth_schemas import RegisterPayload, UserWithToken, LoginPayload
 
 def register_user(user_data: RegisterPayload, db: Session) -> UserWithToken:
     """
@@ -40,4 +40,14 @@ def register_user(user_data: RegisterPayload, db: Session) -> UserWithToken:
         email= new_user.email,
         created_at=new_user.created_at,
         token=token
+    )
+
+def login_user(login_payload: LoginPayload, db: Session) -> UserWithToken:
+    print(login_payload.email)
+    return UserWithToken(
+        id="9c8f9ca4-5382-46e7-89ba-081a4939dd17",
+        username="testy",
+        email="test@gmail.com",
+        created_at="2026-01-22 21:46:39.250996",
+        token="tokey",
     )

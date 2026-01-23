@@ -39,8 +39,8 @@ def root():
 def test():
     return {"Test Response"}
 
-
-app.include_router(auth_router.router)
+# Include Routers
+app.include_router(auth_router.router, prefix="/auth", tags=["Authentication"])
 
 
 # if __name__ == "__main__":
