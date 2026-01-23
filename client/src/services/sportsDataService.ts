@@ -45,7 +45,6 @@ api.interceptors.response.use((response) => {
 
 export const login = async (loginInfo: LoginPayload) => {
     try {
-        
         const res = await api.post<AuthResponse>("/auth/login", loginInfo )
         const user : AuthResponse = res.data
         return user
