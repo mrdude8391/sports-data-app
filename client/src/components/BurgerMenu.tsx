@@ -71,7 +71,7 @@ export const BurgerMenu = ({ isOpen, setIsOpen }: BurgerMenuProps) => {
                 <Button
                   variant="secondary"
                   onClick={() => {
-                    logout;
+                    logout();
                     setIsOpen(false);
                   }}
                 >
