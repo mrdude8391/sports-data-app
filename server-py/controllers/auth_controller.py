@@ -1,6 +1,32 @@
+from datetime import datetime, timedelta, timezone
 from sqlalchemy.orm import Session
 from models import User
 from schemas.auth_schemas import RegisterPayload, UserWithToken, LoginPayload
+from pwdlib import PasswordHash
+import jwt
+from jwt.exceptions import InvalidTokenError
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
+
+password_hash = PasswordHash.recommended()
+
+def verify_password(plain_password, hashed_password):
+    return password_hash.verify(plain_password, hashed_password)
+
+def get_password_hash(password):
+    return password_hash.hash(password)
+
+def create_access_token(data: dict, expires_delta: timedelta | None = None):
+    to_encode = data.copy()
+    if expires_delta:
+        expire = datetime.now(timezone.utc) + expires_delta
+    else:
+        expire = datetime.now(timezone.utc) + timedelta(minutes=15)
+    to_encode.update({"exp": expire})
+    encoded_jwt = jwt.encode(to_encode, os.getenv("JWT_SECRET"), algorithm=os.getenv("ALGORITHM"))
+    return encoded_jwt
 
 def register_user(user_data: RegisterPayload, db: Session) -> UserWithToken:
     """
@@ -17,7 +43,7 @@ def register_user(user_data: RegisterPayload, db: Session) -> UserWithToken:
     existing_user = db.query(User).filter(User.email == user_data.email).first()
 
     # Hash the password
-    hashed_password = user_data.password + "hashed"
+    hashed_password = get_password_hash(user_data.password)
     
 
     # Create new user
@@ -30,9 +56,12 @@ def register_user(user_data: RegisterPayload, db: Session) -> UserWithToken:
     db.add(new_user)
     db.commit()
     db.refresh(new_user)
+    
 
     # Generate token
-    token = "booger"
+    access_token_expires = timedelta(minutes=int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES")))
+    token = create_access_token({"id" : str(new_user.id)}, access_token_expires)
+
     
     return UserWithToken(
         id= new_user.id,

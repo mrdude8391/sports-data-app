@@ -60,6 +60,7 @@ export const register = async (registerInfo : RegisterPayload) => {
     try {
         const res = await api.post("/auth/register", registerInfo)
         const user:AuthResponse = res.data
+        console.log("register user response" , user)
         localStorage.setItem("token", user.token)
         return user
     } catch (error: any) {

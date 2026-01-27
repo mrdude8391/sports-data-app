@@ -20,5 +20,5 @@ class User(Base):
 
     # Relationships for ORM
     # The relationship is only able to be seen when developing with the ORM, it doesn't do anything on the database side. That is handeld by the ForeignKey.
-    athletes = relationship("Athlete", back_populates="user")
+    # athletes = relationship("Athlete", back_populates="user")
     # ORM will allow you to access related objects as if they were standard Python attributes

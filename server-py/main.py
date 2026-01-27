@@ -4,12 +4,8 @@ from pydantic import BaseModel
 from typing import List, Annotated
 from database import Base, engine
 from sqlalchemy.orm import Session
-from dotenv import load_dotenv
-import os
 from models import User
 from routers import auth_router
-
-load_dotenv()
 
 app = FastAPI()
 
