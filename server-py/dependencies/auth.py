@@ -4,6 +4,5 @@ from fastapi.security import HTTPBearer
 security = HTTPBearer()
 
 def protect(request: Request):
-    token = request.headers.authorization
-    print(request)
-    return token
+    print(request.headers.get("authorization"))
+    return request.headers

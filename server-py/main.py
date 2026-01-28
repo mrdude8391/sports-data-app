@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from database import Base, engine
-from routers import auth_router
+from routers import auth_router, athlete_router
 
 app = FastAPI()
 
@@ -33,6 +33,7 @@ def test():
 
 # Include Routers
 app.include_router(auth_router.router, prefix="/auth", tags=["Authentication"])
+app.include_router(athlete_router.router, prefix="/athlete", tags=["Authentication"])
 
 
 # if __name__ == "__main__":

@@ -11,5 +11,6 @@ router = APIRouter(dependencies=[Depends(protect)])
 def create(athlete_info: AthleteCreate, db: Session = Depends(get_db)):
     """Create a new athlete            
     """
-    return create_athlete(athlete_info, db)
+    print(athlete_info)
+    return create_athlete()
 
