@@ -63,6 +63,7 @@ export const register = async (registerInfo : RegisterPayload) => {
         localStorage.setItem("token", user.token)
         return user
     } catch (error: any) {
+        console.log(error)
         throw new Error(error.response?.data?.detail || "Registration Failed")
     }
 }

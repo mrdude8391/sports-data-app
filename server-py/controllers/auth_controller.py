@@ -42,53 +42,64 @@ def register_user(user_data: RegisterPayload, db: Session) -> UserWithToken:
     """
     Create a new user row using provided information in the database
     """
-    
-    # Check if user already exists
-    existing_user = db.query(User).filter(User.email == user_data.email).first()
-    if existing_user:
-        raise HTTPException(status_code=400, detail="Email already being used", headers={"message": "Email already being used"})
+    try:
+        # Check if user already exists
+        existing_user = db.query(User).filter(User.email == user_data.email).first()
+        if existing_user:
+            raise HTTPException(status_code=400, detail="Email already being used")
+            
+        # Hash the password
+        hashed_password = get_password_hash(user_data.password)
 
-    # Hash the password
-    hashed_password = get_password_hash(user_data.password)
+        # Create new user
+        new_user = User(
+            username=user_data.username,
+            email=user_data.email,
+            password=hashed_password,
+        )
 
-    # Create new user
-    new_user = User(
-        username=user_data.username,
-        email=user_data.email,
-        password=hashed_password,
-    )
+        # Insert new User into database
+        db.add(new_user)
+        db.commit()
+        db.refresh(new_user)
 
-    # Insert new User into database
-    db.add(new_user)
-    db.commit()
-    db.refresh(new_user)
-    
-    # Generate token
-    access_token_expires = timedelta(minutes=int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES")))
-    token = create_access_token({"id" : str(new_user.id)}, access_token_expires)
+        # Generate token
+        access_token_expires = timedelta(minutes=int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES")))
+        token = create_access_token({"id" : str(new_user.id)}, access_token_expires)
 
-    return UserWithToken(
-        id= new_user.id,
-        username= new_user.username,
-        email= new_user.email,
-        created_at=new_user.created_at,
-        token=token
-    )
+        return UserWithToken(
+            id= new_user.id,
+            username= new_user.username,
+            email= new_user.email,
+            token=token
+        )
+    except ValueError as err:
+        raise HTTPException(status_code=500, detail="Registration Failed")
 
 def login_user(login_payload: LoginPayload, db: Session) -> UserWithToken:
 
-    # Check user exists
+    try:
+        # Check user exists
+        existing_user = db.query(User).filter(User.email == login_payload.email).first()
+        if not existing_user:
+            raise HTTPException(status_code=404, detail="Email provided not associated with any account")
+            
+        # Match the provided password with hashed password
+        is_match = verify_password(login_payload.password, existing_user.password)
+        if not is_match:
+            raise HTTPException(status_code=401, detail="Password incorrect")
 
-    # Match the provided password with hashed password
+        # Generate token
+        access_token_expires = timedelta(minutes=int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES")))
+        token = create_access_token({"id" : str(existing_user.id)}, access_token_expires)
 
-    # Generate access token using the userID
+        return UserWithToken(
+            id=existing_user.id,
+            username=existing_user.username,
+            email=existing_user.email,
+            token=token,
+        )
+    except ValueError as err:
+        raise HTTPException(status_code=500, detail="Login Failed")
 
-    # Return user object
-
-    return UserWithToken(
-        id="9c8f9ca4-5382-46e7-89ba-081a4939dd17",
-        username="testy",
-        email="test@gmail.com",
-        created_at="2026-01-22 21:46:39.250996",
-        token="tokey",
-    )
+    

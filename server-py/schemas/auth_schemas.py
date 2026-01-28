@@ -12,7 +12,6 @@ class RegisterPayload(UserBase):
 
 class UserResponse(UserBase):
     id: uuid.UUID
-    created_at: datetime
     
     class Config:
         from_attributes = True
