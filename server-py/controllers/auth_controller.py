@@ -77,7 +77,11 @@ def register_user(user_data: RegisterPayload, db: Session) -> UserWithToken:
         raise HTTPException(status_code=500, detail="Registration Failed")
 
 def login_user(login_payload: LoginPayload, db: Session) -> UserWithToken:
+    """
+    Login user using provided login credentials
 
+    Returns User info with token
+    """
     try:
         # Check user exists
         existing_user = db.query(User).filter(User.email == login_payload.email).first()
