@@ -11,17 +11,6 @@ import DeleteAthlete from "@/components/DeleteAthlete";
 
 const Athletes = () => {
   const [isEdit, setIsEdit] = useState(false);
-  const {
-    data: athletes,
-    isLoading,
-    error,
-  } = useQuery({
-    queryKey: ["athletes"],
-    queryFn: sportsDataService.getAthletes,
-  });
-
-  if (isLoading) return <Loader className="animate-spin" />;
-  if (error) return <p>... No Athletes Found</p>;
 
   return (
     <div className="flex flex-col gap-6 w-full sm:w-lg items-center">
@@ -36,23 +25,47 @@ const Athletes = () => {
           </Button>
         </div>
 
-        <div className="flex flex-col gap-1 w-full">
-          {athletes && athletes.length > 0 ? (
-            athletes.map((a: Athlete) => (
-              <div key={a._id} className="flex w-full flex-row items-center ">
-                <div className="w-full ">
-                  <AthleteCard imageSrc={sampleImage} athlete={a} />{" "}
-                </div>
-                {isEdit && <DeleteAthlete id={a._id} />}
-              </div>
-            ))
-          ) : (
-            <p>No Athletes</p>
-          )}
-        </div>
+        <AthleteList isEdit={isEdit} />
       </div>
     </div>
   );
 };
 
 export default Athletes;
+
+interface AthleteListProps {
+  isEdit: boolean;
+}
+
+const AthleteList = (athleteListProps: AthleteListProps) => {
+  const { isEdit } = athleteListProps;
+
+  const {
+    data: athletes,
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: ["athletes"],
+    queryFn: sportsDataService.getAthletes,
+  });
+
+  if (isLoading) return <Loader className="animate-spin" />;
+  if (error) return <p>... No Athletes Found</p>;
+
+  return (
+    <div className="flex flex-col gap-1 w-full">
+      {athletes && athletes.length > 0 ? (
+        athletes.map((a: Athlete) => (
+          <div key={a._id} className="flex w-full flex-row items-center ">
+            <div className="w-full ">
+              <AthleteCard imageSrc={sampleImage} athlete={a} />{" "}
+            </div>
+            {isEdit && <DeleteAthlete id={a._id} />}
+          </div>
+        ))
+      ) : (
+        <p>No Athletes</p>
+      )}
+    </div>
+  );
+};
