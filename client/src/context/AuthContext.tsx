@@ -26,7 +26,7 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
   const login = (user: AuthResponse) => {
     localStorage.setItem("user", JSON.stringify(user));
     setUser(user);
-    console.log("set user", user);
+    console.log("Set current user context", user);
     setIsLoggedIn(true);
   };
 
