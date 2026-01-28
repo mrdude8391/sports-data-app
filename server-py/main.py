@@ -1,10 +1,6 @@
-from fastapi import FastAPI, HTTPException, Depends
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel
-from typing import List, Annotated
 from database import Base, engine
-from sqlalchemy.orm import Session
-from models import User
 from routers import auth_router
 
 app = FastAPI()
