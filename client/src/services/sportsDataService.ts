@@ -49,8 +49,7 @@ export const login = async (loginInfo: LoginPayload) => {
         const user : AuthResponse = res.data
         return user
     } catch (error: any) {
-        console.log(error.response.data.message)
-        throw new Error(error.response?.data?.message || "Login Failed")
+        throw new Error(error.response?.data?.detail || "Login Failed")
     }
     
 
@@ -64,7 +63,7 @@ export const register = async (registerInfo : RegisterPayload) => {
         localStorage.setItem("token", user.token)
         return user
     } catch (error: any) {
-        throw new Error(error.response?.data?.message || "Registration Failed")
+        throw new Error(error.response?.data?.detail || "Registration Failed")
     }
 }
 
