@@ -3,9 +3,8 @@ from sqlalchemy.orm import Session
 from database import get_db
 from schemas.auth_schemas import LoginPayload, RegisterPayload, UserWithToken
 from controllers.auth_controller import register_user, login_user
-from dependencies.auth import protect
 
-router = APIRouter(dependencies=[Depends(protect)])
+router = APIRouter()
 
 @router.post("/register", response_model=UserWithToken)
 def register(user_data: RegisterPayload, db: Session = Depends(get_db)):
