@@ -86,7 +86,7 @@ def login_user(login_payload: LoginPayload, db: Session) -> UserWithToken:
         # Check user exists
         existing_user = db.query(User).filter(User.email == login_payload.email).first()
         if not existing_user:
-            raise HTTPException(status_code=status, detail="Email provided not associated with any account")
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Email provided not associated with any account")
             
         # Match the provided password with hashed password
         is_match = verify_password(login_payload.password, existing_user.password)
