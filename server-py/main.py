@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from database import Base, engine
 from routers import auth_router, athlete_router
+import models
 
 app = FastAPI()
 
