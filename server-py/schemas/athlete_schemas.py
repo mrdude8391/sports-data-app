@@ -1,3 +1,4 @@
+import uuid
 from pydantic import BaseModel, Field
 from typing import Optional, List
 from datetime import datetime
@@ -15,8 +16,8 @@ class AthleteCreate(AthleteBase):
 
 
 class AthleteResponse(AthleteBase):
-    id: int
-    user_id: int
+    id: uuid.UUID
+    user_id: uuid.UUID
     created_at: datetime
     updated_at: Optional[datetime] = None
     
@@ -87,7 +88,7 @@ class StatCreate(StatBase):
 
 
 class StatCreateBatch(BaseModel):
-    athleteId: int
+    athleteId: uuid.UUID
     attack: Optional[AttackStats] = AttackStats()
     setting: Optional[SettingStats] = SettingStats()
     serving: Optional[ServingStats] = ServingStats()
@@ -98,9 +99,9 @@ class StatCreateBatch(BaseModel):
 
 
 class StatResponse(BaseModel):
-    id: int
-    user_id: int
-    athlete_id: int
+    id: uuid.UUID
+    user_id: uuid.UUID
+    athlete_id: uuid.UUID
     attack: AttackStats
     setting: SettingStats
     serving: ServingStats
