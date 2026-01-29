@@ -1,5 +1,5 @@
 from datetime import datetime, timedelta, timezone
-from fastapi import HTTPException
+from fastapi import HTTPException, status
 from sqlalchemy.orm import Session
 from models import User
 from schemas.auth_schemas import RegisterPayload, UserWithToken, LoginPayload
@@ -46,7 +46,7 @@ def register_user(user_data: RegisterPayload, db: Session) -> UserWithToken:
         # Check if user already exists
         existing_user = db.query(User).filter(User.email == user_data.email).first()
         if existing_user:
-            raise HTTPException(status_code=400, detail="Email already being used")
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Email already being used")
             
         # Hash the password
         hashed_password = get_password_hash(user_data.password)
@@ -74,7 +74,7 @@ def register_user(user_data: RegisterPayload, db: Session) -> UserWithToken:
             token=token
         )
     except ValueError as err:
-        raise HTTPException(status_code=500, detail="Registration Failed")
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Registration Failed")
 
 def login_user(login_payload: LoginPayload, db: Session) -> UserWithToken:
     """
@@ -86,12 +86,12 @@ def login_user(login_payload: LoginPayload, db: Session) -> UserWithToken:
         # Check user exists
         existing_user = db.query(User).filter(User.email == login_payload.email).first()
         if not existing_user:
-            raise HTTPException(status_code=404, detail="Email provided not associated with any account")
+            raise HTTPException(status_code=status, detail="Email provided not associated with any account")
             
         # Match the provided password with hashed password
         is_match = verify_password(login_payload.password, existing_user.password)
         if not is_match:
-            raise HTTPException(status_code=401, detail="Password incorrect")
+            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Password incorrect")
 
         # Generate token
         access_token_expires = timedelta(minutes=int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES")))
@@ -104,6 +104,6 @@ def login_user(login_payload: LoginPayload, db: Session) -> UserWithToken:
             token=token,
         )
     except ValueError as err:
-        raise HTTPException(status_code=500, detail="Login Failed")
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Login Failed")
 
     
