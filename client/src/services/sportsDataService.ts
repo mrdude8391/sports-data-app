@@ -29,10 +29,12 @@ api.interceptors.request.use(
 )
 
 api.interceptors.response.use((response) => {
+    console.log(response)
     return response
 },
 (error) => {
-    if (error.response && error.response.status === 401){
+    console.error("Axios Interceptor Response", error)
+    if (error.response && error.status === 401){
         console.log("error 401 unauthorized token, clearing token")
         logoutCallback()
     }
@@ -41,7 +43,17 @@ api.interceptors.response.use((response) => {
 
 )
 
-
+export const test = async() => {
+    try {
+        const res = await api.get("/test");
+        console.log("API Test Service", res)
+        return res
+        
+    } catch (error: any) {
+        console.log("API Test Service", error)
+        throw new Error(error.response?.data?.detail || "Test Failed")
+    }
+}
 
 export const login = async (loginInfo: LoginPayload) => {
     try {
@@ -117,7 +129,6 @@ export const createStat = async ({athleteId, form, date} : {athleteId: string, f
         const { data } = await api.post(`/athlete/${athleteId}/stats`, payload) 
         return data
     } catch (error: any) {
-        
         throw new Error(error.response.data.message)
     }
 }

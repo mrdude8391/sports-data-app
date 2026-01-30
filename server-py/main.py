@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException, status
 from fastapi.middleware.cors import CORSMiddleware
 from database import Base, engine
 from routers import auth_router, athlete_router
@@ -30,6 +30,8 @@ def root():
 
 @app.get("/test")
 def test():
+    raise HTTPException(status.HTTP_401_UNAUTHORIZED, "Invalid token payload")
+
     return {"Test Response"}
 
 # Include Routers

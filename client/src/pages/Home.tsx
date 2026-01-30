@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { useAuth } from "@/context/AuthContext";
 import { useTheme } from "@/context/ThemeProvider";
 import { Link } from "react-router-dom";
-import { test } from "../services/ApiTestService";
+import { test } from "../services/sportsDataService";
 import { useState } from "react";
 
 const Home = () => {
@@ -18,9 +18,13 @@ const Home = () => {
         <Button
           variant={theme == "dark" ? "secondary" : "default"}
           onClick={async () => {
-            const res = await test();
-            console.log(res);
-            setStatus(res.status);
+            try {
+              const res = await test();
+              console.log("Home test button response", res);
+              setStatus(res.status);
+            } catch (error: any) {
+              console.log(error);
+            }
           }}
         >
           Test
