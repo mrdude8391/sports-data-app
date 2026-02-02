@@ -19,4 +19,5 @@ def create(athlete_info: AthleteCreate, db: Session = Depends(get_db), current_u
 @router.get("/", response_model=List[AthleteResponse])
 def get(db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     """Get all athletes"""
+    
     return get_athletes(db, current_user)
