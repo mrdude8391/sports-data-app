@@ -50,7 +50,7 @@ const CreateAthlete = () => {
   };
   return (
     <div>
-      <Dialog open={isDialogOpen}>
+      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogTrigger asChild>
           <Button variant="default" onClick={() => setIsDialogOpen(true)}>
             Add New Athlete
