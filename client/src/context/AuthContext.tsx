@@ -31,7 +31,7 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const logout = () => {
-    console.log("Logout Called");
+    console.log("Client Logout");
     localStorage.clear();
     setUser(null);
     setIsLoggedIn(false);
