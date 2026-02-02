@@ -50,7 +50,7 @@ const AthleteSelector = (athleteSelectorProps: {
             {athletes && athletes.length > 0 ? (
               athletes.map((athlete) => (
                 <li
-                  key={athlete._id}
+                  key={athlete.id}
                   className={`px-4 py-2 rounded-lg cursor-pointer 
                       ${
                         selectedAthletes.has(athlete)

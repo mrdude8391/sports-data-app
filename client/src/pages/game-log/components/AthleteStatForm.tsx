@@ -33,7 +33,7 @@ interface athleteStatFormProps {
     category: C,
     key: K,
     value: number,
-    id: string
+    id: string,
   ) => void;
   handleChangeDate: (date: Date) => void;
 }
@@ -126,7 +126,7 @@ const AthleteStatForm = (props: athleteStatFormProps) => {
                             category as StatCategory,
                             key as any,
                             Number(e.target.value),
-                            athlete._id
+                            athlete.id,
                           )
                         }
                         className="border rounded p-2"

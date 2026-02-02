@@ -19,7 +19,7 @@ const GameLog = () => {
 
   const [selectedAthletes, setSelectedAthletes] = useState(new Set<Athlete>());
   const [forms, setForms] = useState<Map<string, StatForm>>(
-    new Map<string, StatForm>()
+    new Map<string, StatForm>(),
   );
   // if i use a dictionary, i can have the ids : form
   // add the new form whenver an athlete is added to the selection list
@@ -41,7 +41,7 @@ const GameLog = () => {
       // delete from from dictionary
       setForms((prev) => {
         const newMap = new Map<string, StatForm>(prev);
-        newMap.delete(athlete._id);
+        newMap.delete(athlete.id);
         return newMap;
       });
     } else {
@@ -52,7 +52,7 @@ const GameLog = () => {
       // need to update the selected date from the default if the selected date is not default.
       const newForm = initialStatForm;
       newForm.recordedAt = selectedDate;
-      setForms((prev) => prev.set(athlete._id, newForm));
+      setForms((prev) => prev.set(athlete.id, newForm));
     }
   };
 
@@ -64,7 +64,7 @@ const GameLog = () => {
       now.getHours(),
       now.getMinutes(),
       now.getSeconds(),
-      now.getMilliseconds()
+      now.getMilliseconds(),
     );
     setForms((prev) => {
       const newMap = new Map<string, StatForm>(prev);
@@ -79,7 +79,7 @@ const GameLog = () => {
     category: C,
     key: K,
     value: number,
-    id: string
+    id: string,
   ) => {
     const createUpdatedCategory = () => {
       const form = forms.get(id)!;
@@ -176,7 +176,7 @@ const GameLog = () => {
     if (forms.size != 0) {
       console.log("handle submit", forms);
       for (const athlete of selectedAthletes) {
-        const form = forms.get(athlete._id);
+        const form = forms.get(athlete.id);
         // Convert your loop to async
         // Show the dialog
         // Return a Promise
@@ -227,12 +227,12 @@ const GameLog = () => {
               <ul className="flex flex-col gap-2">
                 {[...selectedAthletes].map((athlete) => {
                   // just to validate that the form exists for the selected athlete
-                  const form = forms.get(athlete._id);
+                  const form = forms.get(athlete.id);
                   if (!form) return;
                   return (
                     <li
                       className="flex gap-2 items-center w-full "
-                      key={athlete._id}
+                      key={athlete.id}
                     >
                       <AthleteStatForm
                         athlete={athlete}
