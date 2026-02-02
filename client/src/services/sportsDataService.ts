@@ -111,8 +111,9 @@ export const createAthlete = async (athlete : {name:string, age: number, height:
 
 export const deleteAthlete = async (id: string) => {
     try {
-        console.log("delete athlete", id)
-        await api.delete(`/athlete/${id}`)
+        console.log("Delete athlete", {id})
+        const response = await api.delete(`/athlete/${id}`)
+        return response
     } catch (error:any) {
         throw new Error(error.response.data.detail)
     }
