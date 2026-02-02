@@ -6,8 +6,8 @@ import models
 
 app = FastAPI()
 
-# Create database tables
-Base.metadata.create_all(bind=engine)
+# Sync Create database tables
+# Base.metadata.create_all(bind=engine)
 
 origins = [
     "http://localhost:5173",

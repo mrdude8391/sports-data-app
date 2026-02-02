@@ -1,7 +1,8 @@
 from typing import Annotated
 from fastapi import Depends
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker, declarative_base, Session
+from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker, AsyncSession
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import DeclarativeBase
 # from sqlalchemy.pool import NullPool
 from dotenv import load_dotenv
 import os
@@ -17,30 +18,34 @@ PORT = os.getenv("port")
 DBNAME = os.getenv("dbname")
 
 # Construct the SQLAlchemy connection string
-DATABASE_URL = f"postgresql+psycopg2://{USER}:{PASSWORD}@{HOST}:{PORT}/{DBNAME}?sslmode=require"
+DATABASE_URL = f"postgresql+asyncpg://{USER}:{PASSWORD}@{HOST}:{PORT}/{DBNAME}"
 
 # Create the SQLAlchemy engine
-engine = create_engine(DATABASE_URL)
+engine = create_async_engine(DATABASE_URL)
 # If using Transaction Pooler or Session Pooler, we want to ensure we disable SQLAlchemy client side pooling -
 # https://docs.sqlalchemy.org/en/20/core/pooling.html#switching-pool-implementations
 # engine = create_engine(DATABASE_URL, poolclass=NullPool)
 
-SessionLocal = sessionmaker(
-    autocommit=False,
-    autoflush=False,
-    bind=engine,
+SessionLocal = async_sessionmaker(
+    engine,
+    class_=AsyncSession,
+    expire_on_commit=False, # Recommended for async ORM usage to prevent implicit I/O
+    autoflush=False
 )
 
 # Create Base class for models
-Base = declarative_base()
+class Base(DeclarativeBase):
+    pass
 
-def get_db():
+async def get_db():
     """
     Dependency that provides a database session per request.
     """
+    async with engine.begin() as conn:
+        await conn.run_sync(Base.metadata.create_all)
     db = SessionLocal()
-    print("Called db Session")
+    print("\nLog:\tget_db() => SqlAlchemy db Session Dependency")
     try:
         yield db
     finally:
-        db.close()
+       await db.close()
