@@ -16,12 +16,13 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Alert, AlertTitle } from "./ui/alert";
-import { AlertCircleIcon } from "lucide-react";
+import { AlertCircleIcon, Loader } from "lucide-react";
 
 const CreateAthlete = () => {
   const [name, setName] = useState("");
   const [age, setAge] = useState("");
   const [height, setHeight] = useState("");
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const queryClient = useQueryClient();
 
@@ -33,11 +34,10 @@ const CreateAthlete = () => {
       setName("");
       setAge("");
       setHeight("");
+      setIsDialogOpen(false);
+      console.log("New athlete submit success");
     },
   });
-
-  // after creating the athlete the pending div is shown instead for a split second which closes the dialog.
-  if (isPending) return <div>...pending</div>;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -50,9 +50,11 @@ const CreateAthlete = () => {
   };
   return (
     <div>
-      <Dialog>
+      <Dialog open={isDialogOpen}>
         <DialogTrigger asChild>
-          <Button variant="default">Add New Athlete</Button>
+          <Button variant="default" onClick={() => setIsDialogOpen(true)}>
+            Add New Athlete
+          </Button>
         </DialogTrigger>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
@@ -106,20 +108,23 @@ const CreateAthlete = () => {
             </div>
           </form>
           {error && (
-            <Alert
-              variant="destructive"
-              className="flex justify-between items-center"
-            >
+            <Alert variant="destructive" className="flex justify-start ">
               <AlertCircleIcon />
-              <AlertTitle className="text-center ">{error.message}</AlertTitle>
+              <AlertTitle className="px-1">{error.message}</AlertTitle>
             </Alert>
           )}
           <DialogFooter>
             <DialogClose asChild>
-              <Button variant="outline">Cancel</Button>
+              <Button variant="outline" onClick={() => setIsDialogOpen(false)}>
+                Cancel
+              </Button>
             </DialogClose>
-            <Button type="submit" form="athleteForm">
-              Save New Athlete
+            <Button type="submit" form="athleteForm" disabled={isPending}>
+              {isPending ? (
+                <Loader className="animate-spin" />
+              ) : (
+                <p>Save New Athlete</p>
+              )}
             </Button>
           </DialogFooter>
         </DialogContent>
