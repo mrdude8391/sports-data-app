@@ -6,6 +6,8 @@ from schemas.athlete_schemas import AthleteCreate, AthleteResponse
 from controllers.athlete_controller import create_athlete, get_athletes, delete_athlete
 from dependencies.auth import get_current_user
 from models import User
+from uuid import UUID
+
 
 # Athlete Router
 # Prefix prefix="/athlete"
@@ -22,6 +24,6 @@ async def get(db: Session = Depends(get_db), current_user: User = Depends(get_cu
     return await get_athletes(db, current_user)
 
 @router.delete("/{id}")
-async def get(id, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+async def get(id: UUID, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     """Delete athlete of id provided in path parameter"""
-    return await delete_athlete(db, current_user, id)
+    return await delete_athlete(id, db, current_user)
