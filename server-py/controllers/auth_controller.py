@@ -1,6 +1,7 @@
 from datetime import datetime, timedelta, timezone
 from fastapi import HTTPException, status
-from sqlalchemy.orm import Session
+from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncSession
 from models import User
 from schemas.auth_schemas import RegisterPayload, UserWithToken, LoginPayload
 from pwdlib import PasswordHash
@@ -38,13 +39,13 @@ def create_access_token(data: dict, expires_delta: timedelta | None = None):
     encoded_jwt = jwt.encode(to_encode, os.getenv("JWT_SECRET"), algorithm=os.getenv("ALGORITHM"))
     return encoded_jwt
 
-def register_user(user_data: RegisterPayload, db: Session) -> UserWithToken:
+async def register_user(user_data: RegisterPayload, db: AsyncSession) -> UserWithToken:
     """
     Create a new user row using provided information in the database
     """
     try:
         # Check if user already exists
-        existing_user = db.query(User).filter(User.email == user_data.email).first()
+        existing_user = await db.query(User).filter(User.email == user_data.email).first()
         if existing_user:
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Email already being used")
             
@@ -60,8 +61,8 @@ def register_user(user_data: RegisterPayload, db: Session) -> UserWithToken:
 
         # Insert new User into database
         db.add(new_user)
-        db.commit()
-        db.refresh(new_user)
+        await db.commit()
+        await db.refresh(new_user)
 
         # Generate token
         access_token_expires = timedelta(minutes=int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES")))
@@ -76,15 +77,16 @@ def register_user(user_data: RegisterPayload, db: Session) -> UserWithToken:
     except ValueError as err:
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Registration Failed")
 
-def login_user(login_payload: LoginPayload, db: Session) -> UserWithToken:
+async def login_user(login_payload: LoginPayload, db: AsyncSession) -> UserWithToken:
     """
     Login user using provided login credentials
 
     Returns User info with token
     """
     try:
+        results = await db.execute(select(User).filter(User.email == login_payload.email))
         # Check user exists
-        existing_user = db.query(User).filter(User.email == login_payload.email).first()
+        existing_user = results.scalars().first()
         if not existing_user:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Email provided not associated with any account")
             
