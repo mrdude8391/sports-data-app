@@ -1,6 +1,6 @@
 import type { Athlete } from '@/types/Athlete';
 import type { AthleteStatResponse, StatForm, StatPayload, StatResponse,  } from "@/types/Stat"
-import axios, { Axios, AxiosError } from "axios";
+import axios, { AxiosError } from "axios";
 import type { LoginPayload, AuthResponse, RegisterPayload } from '@/types/Auth';
 
 const API_URL = import.meta.env.VITE_API_URL
@@ -29,16 +29,14 @@ api.interceptors.request.use(
 )
 
 api.interceptors.response.use((response) => {
-    console.log(response)
     return response
 },
 (error: AxiosError) => {
     console.error("Axios Interceptor Response", error)
     if (error.response && error.status === 401){
-        console.log("error 401 unauthorized token, clearing token")
+        console.log("Error 401: Unauthorized token. Clearing local storage token")
         logoutCallback()
     }
-    
     return Promise.reject(error)
 }
 
@@ -49,7 +47,6 @@ export const test = async() => {
         const res = await api.get("/test");
         console.log("API Test Service", res)
         return res
-        
     } catch (error: any) {
         console.log("API Test Service", error)
         throw new Error(error.response?.data?.detail || "Test Failed")
@@ -64,8 +61,6 @@ export const login = async (loginInfo: LoginPayload) => {
     } catch (error: any) {
         throw new Error(error.response?.data?.detail || "Login Failed")
     }
-    
-
 }
 
 export const register = async (registerInfo : RegisterPayload) => {
@@ -89,8 +84,8 @@ export const profile = async () => {
         const user : AuthResponse = res.data
         return user
     } catch (error : any) {
-        throw new Error(error.response.data.message)
-        console.log(error.response.data.message)
+        throw new Error(error.response.data.detail)
+        console.log(error.response.data.detail)
     }
 }
 
@@ -100,7 +95,7 @@ export const getAthletes = async () : Promise<Athlete[]> => {
         const {data} = await api.get<Athlete[]>("/athlete/")
         return data
     } catch (error:any) {
-        throw new Error(error.response.data.message)
+        throw new Error(error.response.data.detail)
     }
 }
 
@@ -110,7 +105,7 @@ export const createAthlete = async (athlete : {name:string, age: number, height:
         const {data} = await api.post<Athlete>("/athlete/create", athlete)
         return data
     } catch (error:any) {
-        throw new Error(error.response.data.message)
+        throw new Error(error.status + ": " + error.response.data.detail)
     }
 }
 
@@ -119,7 +114,7 @@ export const deleteAthlete = async (id: string) => {
         console.log("delete athlete", id)
         await api.delete(`/athlete/${id}`)
     } catch (error:any) {
-        throw new Error(error.response.data.message)
+        throw new Error(error.response.data.detail)
     }
 }
 
@@ -130,7 +125,7 @@ export const createStat = async ({athleteId, form, date} : {athleteId: string, f
         const { data } = await api.post(`/athlete/${athleteId}/stats`, payload) 
         return data
     } catch (error: any) {
-        throw new Error(error.response.data.message)
+        throw new Error(error.response.data.detail)
     }
 }
 
@@ -144,7 +139,7 @@ export const createStatsBatch = async({forms} : {forms : Map<string, StatForm>})
         const { data } = await api.post(`/athlete/stats`, payload)
         return data
     } catch (error: any) {
-        throw new Error(error.response.data.message)
+        throw new Error(error.response.data.detail)
     }
 }
 
@@ -156,7 +151,7 @@ export const editStat = async (req : {statId: string, form: StatForm, date: Date
         return data
     } catch (error: any) {
         
-        throw new Error(error.response.data.message)
+        throw new Error(error.response.data.detail)
     }
 }
 
@@ -177,7 +172,7 @@ export const getStats = async (id: string) : Promise<AthleteStatResponse> => {
         if(error.status === 500) {
             throw new Error("There was an error retreiving the data")
         }
-        throw new Error(error.response.data.message)
+        throw new Error(error.response.data.detail)
     }
 }
 
@@ -186,6 +181,6 @@ export const deleteStat = async (statId : string) => {
         console.log("delete stat", statId)
         await api.delete(`/athlete/${statId}/stats`)
     } catch (error:any) {
-        throw new Error(error.response.data.message)
+        throw new Error(error.response.data.detail)
     }
 }
