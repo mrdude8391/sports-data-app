@@ -66,7 +66,7 @@ const AthleteStats = () => {
       now.getHours(),
       now.getMinutes(),
       now.getSeconds(),
-      now.getMilliseconds()
+      now.getMilliseconds(),
     );
     setForm((prev) => ({ ...prev, recordedAt: merged }));
   };
@@ -74,7 +74,7 @@ const AthleteStats = () => {
   const handleChange = <C extends StatCategory, K extends StatFieldKey<C>>(
     category: C,
     key: K,
-    value: number
+    value: number,
   ) => {
     setForm((prev) => {
       const updatedCategory = {
@@ -167,7 +167,7 @@ const AthleteStats = () => {
     : undefined;
 
   if (isLoading) return <Loader className="animate-spin" />;
-  if (error) return <p>{error.message}</p>;
+  if (error) return <p>Error: {error.message}</p>;
 
   return (
     <>

@@ -1,6 +1,6 @@
 import type { Athlete } from '@/types/Athlete';
 import type { AthleteStatResponse, StatForm, StatPayload, StatResponse,  } from "@/types/Stat"
-import axios from "axios";
+import axios, { Axios, AxiosError } from "axios";
 import type { LoginPayload, AuthResponse, RegisterPayload } from '@/types/Auth';
 
 const API_URL = import.meta.env.VITE_API_URL
@@ -23,7 +23,7 @@ api.interceptors.request.use(
             config.headers.Authorization = `Bearer ${user.token}`
         }
         return config
-    }, (error) => { 
+    }, (error: AxiosError) => { 
         console.log(error)
         return Promise.reject(error)}
 )
@@ -32,12 +32,13 @@ api.interceptors.response.use((response) => {
     console.log(response)
     return response
 },
-(error) => {
+(error: AxiosError) => {
     console.error("Axios Interceptor Response", error)
     if (error.response && error.status === 401){
         console.log("error 401 unauthorized token, clearing token")
         logoutCallback()
     }
+    
     return Promise.reject(error)
 }
 

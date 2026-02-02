@@ -55,14 +55,14 @@ const AthleteList = (athleteListProps: AthleteListProps) => {
   return (
     <div className="flex flex-col gap-1 w-full">
       {athletes && athletes.length > 0 ? (
-        athletes.map((a: Athlete) => (
-          <div key={a._id} className="flex w-full flex-row items-center ">
-            <div className="w-full ">
-              <AthleteCard imageSrc={sampleImage} athlete={a} />{" "}
-            </div>
-            {isEdit && <DeleteAthlete id={a._id} />}
-          </div>
-        ))
+        <ul className="flex w-full flex-col items-center ">
+          {athletes.map((athlete: Athlete) => (
+            <li key={athlete.id} className="w-full flex flex-row items-center ">
+              <AthleteCard imageSrc={sampleImage} athlete={athlete} />
+              {isEdit && <DeleteAthlete id={athlete.id} />}
+            </li>
+          ))}
+        </ul>
       ) : (
         <p>No Athletes</p>
       )}

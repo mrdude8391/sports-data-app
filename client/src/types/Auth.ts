@@ -10,7 +10,7 @@ export type RegisterPayload = {
 }
 
 export type AuthResponse = {
-    _id: string,
+    id: string,
     username: string,
     email: string,
     token: string

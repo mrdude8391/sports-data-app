@@ -1,5 +1,5 @@
 export type Athlete = {
-    _id:string,
+    id:string,
     name: string,
     age: number,
     height: number,
