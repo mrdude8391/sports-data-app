@@ -1,11 +1,19 @@
 import uuid
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
+from pydantic.alias_generators import to_camel
 from typing import Optional, List
 from datetime import datetime
 
+class BaseSchema(BaseModel):
+    model_config = ConfigDict(
+        alias_generator=to_camel,
+        populate_by_name=True,
+        from_attributes=True,
+    )
+
 
 # Athlete Schemas
-class AthleteBase(BaseModel):
+class AthleteBase(BaseSchema):
     name: str
     age: int = Field(gt=0, description="Age must be greater than 0")
     height: int = Field(gt=0, description="Height must be greater than 0")
@@ -21,25 +29,22 @@ class AthleteResponse(AthleteBase):
     created_at: datetime
     updated_at: Optional[datetime] = None
     
-    class Config:
-        from_attributes = True
-
 
 # Nested stat structures
-class AttackStats(BaseModel):
+class AttackStats(BaseSchema):
     kills: int = 0
     errors: int = 0
     total: int = 0
     percentage: float = 0.0
 
 
-class SettingStats(BaseModel):
+class SettingStats(BaseSchema):
     assists: int = 0
     errors: int = 0
     attempts: int = 0
 
 
-class ServingStats(BaseModel):
+class ServingStats(BaseSchema):
     rating: float = 0.0
     ratingTotal: float = 0.0
     aces: int = 0
@@ -48,14 +53,14 @@ class ServingStats(BaseModel):
     percentage: float = 0.0
 
 
-class ReceivingStats(BaseModel):
+class ReceivingStats(BaseSchema):
     rating: float = 0.0
     ratingTotal: float = 0.0
     errors: int = 0
     attempts: int = 0
 
 
-class DefenseStats(BaseModel):
+class DefenseStats(BaseSchema):
     digs: int = 0
     rating: float = 0.0
     ratingTotal: float = 0.0
@@ -63,7 +68,7 @@ class DefenseStats(BaseModel):
     attempts: int = 0
 
 
-class BlockingStats(BaseModel):
+class BlockingStats(BaseSchema):
     total: int = 0
     kills: int = 0
     solos: int = 0
@@ -73,7 +78,7 @@ class BlockingStats(BaseModel):
 
 
 # Stat Schemas
-class StatBase(BaseModel):
+class StatBase(BaseSchema):
     attack: Optional[AttackStats] = AttackStats()
     setting: Optional[SettingStats] = SettingStats()
     serving: Optional[ServingStats] = ServingStats()
@@ -87,7 +92,7 @@ class StatCreate(StatBase):
     pass
 
 
-class StatCreateBatch(BaseModel):
+class StatCreateBatch(BaseSchema):
     athleteId: uuid.UUID
     attack: Optional[AttackStats] = AttackStats()
     setting: Optional[SettingStats] = SettingStats()
@@ -98,7 +103,7 @@ class StatCreateBatch(BaseModel):
     recordedAt: Optional[datetime] = None
 
 
-class StatResponse(BaseModel):
+class StatResponse(BaseSchema):
     id: uuid.UUID
     user_id: uuid.UUID
     athlete_id: uuid.UUID
@@ -112,11 +117,8 @@ class StatResponse(BaseModel):
     created_at: datetime
     updated_at: Optional[datetime] = None
     
-    class Config:
-        from_attributes = True
-
-
-class StatUpdate(BaseModel):
+    
+class StatUpdate(BaseSchema):
     attack: Optional[AttackStats] = None
     setting: Optional[SettingStats] = None
     serving: Optional[ServingStats] = None
@@ -126,9 +128,7 @@ class StatUpdate(BaseModel):
     recordedAt: Optional[datetime] = None
 
 
-class AthleteWithStats(BaseModel):
+class AthleteWithStats(BaseSchema):
     athlete: AthleteResponse
     stats: List[StatResponse]
     
-    class Config:
-        from_attributes = True
