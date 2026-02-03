@@ -46,7 +46,7 @@ async def get_athletes(db: AsyncSession, current_user: User) -> List[AthleteResp
     except ValueError:
         raise HTTPException(status_code=500, detail=f"Get all athletes Failed")
 
-async def delete_athlete(id:UUID, db: AsyncSession, current_user: User):
+async def delete_athlete(id:UUID, db: AsyncSession):
     try:
         print("\nLog:\tdelete_athlete() => Delete athlete with ID provided from path parameter")
         # Retrieve the object
@@ -63,6 +63,7 @@ async def delete_athlete(id:UUID, db: AsyncSession, current_user: User):
 async def create_stat(id:UUID, stat: StatCreate, db: AsyncSession, current_user: User):
     try:
         print("\nLog:\tcreate_stat() => Create new Stat for athlete ID provided from path parameter, and stat body passed in request body.")
+        
 
     except ValueError as err:
         raise HTTPException(status_code=500, detail="Failed to create new stat")

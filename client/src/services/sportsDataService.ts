@@ -123,8 +123,8 @@ export const createStat = async ({athleteId, form, date} : {athleteId: string, f
     try {
         console.log("create stat", form)
         const payload: StatPayload = { ...form, recordedAt: date}
-        const { data } = await api.post(`/athlete/${athleteId}/stats`, payload) 
-        return data
+        const response = await api.post(`/athlete/${athleteId}/stats`, payload) 
+        return response
     } catch (error: any) {
         throw new Error(error.response.data.detail)
     }

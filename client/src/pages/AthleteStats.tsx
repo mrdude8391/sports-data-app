@@ -147,13 +147,22 @@ const AthleteStats = () => {
   };
 
   const handleSubmit = async () => {
-    if (res?.athlete && athleteId && form === initialStatForm) {
-      changeAlertAthleteName(res.athlete.name);
-      const shouldContinue = await confirm();
-      // this async await means that the method handle submit will wait for confirm() to finish
-      // go read confirm
-      if (!shouldContinue) return;
-      mutate({ athleteId, form: form, date: form.recordedAt });
+    try {
+      if (res?.athlete && athleteId) {
+        if (form === initialStatForm) {
+          changeAlertAthleteName(res.athlete.name);
+          const shouldContinue = await confirm();
+          // this async await means that the method handle submit will wait for confirm() to finish
+          // go read confirm
+          if (!shouldContinue) return;
+          mutate({ athleteId, form: form, date: form.recordedAt });
+        } else {
+          // form != initial form (user changed the form)
+          mutate({ athleteId, form: form, date: form.recordedAt });
+        }
+      }
+    } catch (error) {
+      console.log("Athlete Stats", error);
     }
   };
 

@@ -28,7 +28,9 @@ async def get_all_athletes(db: Session = Depends(get_db), current_user: User = D
 @router.delete("/{id}")
 async def delete_one_athlete(id: UUID, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     """Delete athlete of id provided in path parameter"""
-    return await delete_athlete(id, db, current_user)
+    return await delete_athlete(id, db)
+
+###############################################################################################
 
 # Athlete Stat Routes
 @router.post("/{id}/stats")
