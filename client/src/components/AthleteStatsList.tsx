@@ -71,7 +71,7 @@ const AthleteStatsList = (props: AthleteStatsListProps) => {
                 <div className="flex justify-between w-full">
                   <span>
                     Game {Number(row.id) + 1} —{" "}
-                    {new Date(stat.recordedAt).toLocaleDateString()}
+                    {new Date(stat.recordedAt).toLocaleDateString("en-US")}
                   </span>
                   <div className="flex gap-2 "></div>
                 </div>
