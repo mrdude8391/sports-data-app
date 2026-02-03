@@ -44,7 +44,7 @@ type BaseStatData = {
 }
 
 export type Stat= {
-    _id?:string,
+    id?:string,
     userId: string,
     athleteId: string,
     attack: {

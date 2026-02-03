@@ -66,7 +66,7 @@ const AthleteStatsList = (props: AthleteStatsListProps) => {
         {table.getRowModel().rows.map((row) => {
           const stat = row.original;
           return (
-            <AccordionItem key={stat._id} value={`game-${row.id + 1}`}>
+            <AccordionItem key={stat.id} value={`game-${row.id + 1}`}>
               <AccordionTrigger>
                 <div className="flex justify-between w-full">
                   <span>
@@ -100,7 +100,7 @@ const AthleteStatsList = (props: AthleteStatsListProps) => {
                 </div>
                 <div className="flex justify-end pt-3 gap-3">
                   <EditAthleteStat stat={stat} />
-                  <DeleteAthleteStat statId={stat._id} />
+                  <DeleteAthleteStat statId={stat.id} />
                 </div>
               </AccordionContent>
             </AccordionItem>
