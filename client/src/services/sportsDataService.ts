@@ -161,6 +161,7 @@ export const getStats = async (id: string) : Promise<AthleteStatResponse> => {
         console.log("Get Stats for: ", id)
         // Need to add a check for ID to be mongodb ObjectID
         const {data} = await api.get<AthleteStatResponse>(`/athlete/${id}/stats`)
+        console.log(data)
         const stats : StatResponse[] = data.stats.map((stat: any) => ({
             ...stat,
             recordedAt: new Date(stat.recordedAt),

@@ -167,7 +167,7 @@ const AthleteStats = () => {
     : undefined;
 
   if (isLoading) return <Loader className="animate-spin" />;
-  if (error) return <p>Error: No athlete exists</p>;
+  if (error) return <p>Error: No athlete exists {error.message}</p>;
 
   return (
     <>
