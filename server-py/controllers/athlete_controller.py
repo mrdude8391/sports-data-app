@@ -2,8 +2,8 @@ from typing import List
 from fastapi import HTTPException
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession 
-from schemas.athlete_schemas import AthleteCreate, AthleteResponse
-from models import Athlete, User
+from schemas.athlete_schemas import AthleteCreate, AthleteResponse, AthleteWithStats, StatCreate, StatResponse
+from models import Athlete, User, Stat
 from uuid import UUID
 
 
@@ -58,5 +58,28 @@ async def delete_athlete(id:UUID, db: AsyncSession, current_user: User):
             await db.commit()
         
     except ValueError as err:
-        raise HTTPException(status_code=500, detail="Create Athlete Failed")
+        raise HTTPException(status_code=500, detail="Delete Athlete Failed")
  
+async def create_stat(id:UUID, stat: StatCreate, db: AsyncSession, current_user: User):
+    try:
+        print("\nLog:\tcreate_stat() => Create new Stat for athlete ID provided from path parameter, and stat body passed in request body.")
+
+    except ValueError as err:
+        raise HTTPException(status_code=500, detail="Failed to create new stat")
+
+async def get_stats(id:UUID, db: AsyncSession, current_user: User) -> AthleteWithStats:
+    try:
+        print("\nLog:\tGet_stats() => Get all stats of Athlete Id")
+        # Retrieve the Athlete
+        result = await db.execute(select(Athlete).where(Athlete.id == id))
+        athlete = result.scalar_one_or_none()
+
+        # Retrieve the Stats
+        result = await db.execute(select(Stat).where(Stat.athlete_id == id))
+        stats = result.all()
+
+        return {"athlete" : athlete ,
+                "stats": stats}
+    except ValueError as err:
+        print(err)
+        raise HTTPException(status_code=500, detail="Failed to get all stats")
