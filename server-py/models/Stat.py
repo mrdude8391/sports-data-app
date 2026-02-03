@@ -10,7 +10,7 @@ from sqlalchemy.dialects.postgresql import UUID
 class Stat(Base):
     __tablename__ = "stats"
     
-    id = Column(Integer, primary_key=True, index=True)
+    id = Column(UUID(as_uuid=True), primary_key=True, index=True, default=uuid.uuid4) 
     user_id = Column(UUID(as_uuid=True), ForeignKey("users.id"), nullable=False, index=True)
     athlete_id = Column(UUID(as_uuid=True), ForeignKey("athletes.id"), nullable=False, index=True)
     
