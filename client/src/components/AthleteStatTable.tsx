@@ -72,7 +72,7 @@ const AthleteStatTable = (props: AthleteStatTableProps) => {
     data: stats,
     columns,
     getCoreRowModel: getCoreRowModel(),
-    getRowId: (originalRow) => originalRow._id!,
+    getRowId: (originalRow) => originalRow.id!,
     getPaginationRowModel: getPaginationRowModel(),
   });
 
@@ -134,7 +134,7 @@ const AthleteStatTable = (props: AthleteStatTableProps) => {
                         ? null
                         : flexRender(
                             header.column.columnDef.header,
-                            header.getContext()
+                            header.getContext(),
                           )}
                     </TableHead>
                   );
@@ -153,7 +153,7 @@ const AthleteStatTable = (props: AthleteStatTableProps) => {
                     <TableCell key={cell.id}>
                       {flexRender(
                         cell.column.columnDef.cell,
-                        cell.getContext()
+                        cell.getContext(),
                       )}
                     </TableCell>
                   ))}
