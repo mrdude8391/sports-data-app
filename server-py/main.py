@@ -27,7 +27,7 @@ app.add_middleware(
 @app.get("/")
 def root():
     print("Server Started")
-    return {"message": "API is running..."}
+    return {"message": "Fast API is running..."}
 
 @app.get("/test")
 def test():
