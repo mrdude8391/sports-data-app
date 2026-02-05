@@ -10,15 +10,16 @@ import os
 # Load environment variables from .env
 load_dotenv()
 
-# Fetch variables
-USER = os.getenv("user")
-PASSWORD = os.getenv("password")
-HOST = os.getenv("host")
-PORT = os.getenv("port")
-DBNAME = os.getenv("dbname")
+# # Fetch variables
+# USER = os.getenv("user")
+# PASSWORD = os.getenv("password")
+# HOST = os.getenv("host")
+# PORT = os.getenv("port")
+# DBNAME = os.getenv("dbname")
 
-# Construct the SQLAlchemy connection string
-DATABASE_URL = f"postgresql+asyncpg://{USER}:{PASSWORD}@{HOST}:{PORT}/{DBNAME}"
+# # Construct the SQLAlchemy connection string
+# DATABASE_URL = f"postgresql+asyncpg://{USER}:{PASSWORD}@{HOST}:{PORT}/{DBNAME}"
+DATABASE_URL = os.getenv("SUPABASE_URI")
 
 # Create the SQLAlchemy engine
 engine = create_async_engine(DATABASE_URL)
