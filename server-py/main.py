@@ -31,7 +31,7 @@ def root():
 
 @app.get("/test")
 def test():
-    raise HTTPException(status.HTTP_401_UNAUTHORIZED, "Invalid token payload")
+    # raise HTTPException(status.HTTP_401_UNAUTHORIZED, "Invalid token payload")
 
     return {"Test Response"}
 
