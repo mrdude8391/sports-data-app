@@ -33,7 +33,7 @@ interface athleteStatFormProps {
     category: C,
     key: K,
     value: number,
-    id: string
+    id: string,
   ) => void;
   handleChangeDate: (date: Date) => void;
 }
@@ -126,7 +126,7 @@ const AthleteStatForm = (props: athleteStatFormProps) => {
                             category as StatCategory,
                             key as any,
                             Number(e.target.value),
-                            athlete._id
+                            athlete._id,
                           )
                         }
                         className="border rounded p-2"
@@ -140,12 +140,9 @@ const AthleteStatForm = (props: athleteStatFormProps) => {
         </div>
 
         {error && (
-          <Alert
-            variant="destructive"
-            className="flex justify-between items-center"
-          >
+          <Alert variant="destructive" className="flex justify-start ">
             <AlertCircleIcon />
-            <AlertTitle className="text-center">{error.message}</AlertTitle>
+            <AlertTitle className="px-1">{error.message}</AlertTitle>
           </Alert>
         )}
         <DialogFooter>

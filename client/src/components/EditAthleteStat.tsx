@@ -60,9 +60,9 @@ const EditAthleteStat = (props: EditAthleteStatProps) => {
         STAT_INDEX.map(({ category, fields }) => [
           category,
           Object.fromEntries(
-            fields.map((f) => [f.key, (stat as any)[category][f.key]])
+            fields.map((f) => [f.key, (stat as any)[category][f.key]]),
           ),
-        ])
+        ]),
       );
 
       console.log({ ...prevStats, recordedAt: stat.recordedAt });
@@ -73,7 +73,7 @@ const EditAthleteStat = (props: EditAthleteStatProps) => {
   const handleChange = <C extends StatCategory>(
     category: C,
     key: StatFieldKey<C>,
-    value: number
+    value: number,
   ) => {
     setForm((prev) => {
       const updatedCategory = {
@@ -200,7 +200,7 @@ const EditAthleteStat = (props: EditAthleteStatProps) => {
                           now.getHours(),
                           now.getMinutes(),
                           now.getSeconds(),
-                          now.getMilliseconds()
+                          now.getMilliseconds(),
                         );
 
                         setForm((prev) => ({ ...prev, recordedAt: merged }));
@@ -229,7 +229,7 @@ const EditAthleteStat = (props: EditAthleteStatProps) => {
                             handleChange(
                               category as StatCategory,
                               key as any,
-                              Number(e.target.value)
+                              Number(e.target.value),
                             )
                           }
                           className="border rounded p-2"
@@ -244,12 +244,9 @@ const EditAthleteStat = (props: EditAthleteStatProps) => {
             </div>
 
             {error && (
-              <Alert
-                variant="destructive"
-                className="flex justify-between items-center"
-              >
+              <Alert variant="destructive" className="flex justify-start ">
                 <AlertCircleIcon />
-                <AlertTitle className="text-center">{error.message}</AlertTitle>
+                <AlertTitle className="px-1">{error.message}</AlertTitle>
               </Alert>
             )}
             <DialogFooter>
