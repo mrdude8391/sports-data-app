@@ -51,7 +51,7 @@ const AthleteSelector = (athleteSelectorProps: {
               athletes.map((athlete) => (
                 <li
                   key={athlete.id}
-                  className={`px-4 py-2 rounded-lg cursor-pointer 
+                  className={`px-4 py-2 rounded-lg cursor-pointer transition-all
                       ${
                         selectedAthletes.has(athlete)
                           ? "bg-accent hover:bg-accent/80"

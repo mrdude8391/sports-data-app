@@ -58,8 +58,12 @@ const AthleteStatForm = (props: athleteStatFormProps) => {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="secondary" size="lg" className="w-full justify-start ">
-          <p>{athlete.name}</p>
+        <Button
+          variant="secondary"
+          size="lg"
+          className="w-full justify-start rounded-lg "
+        >
+          <p className="text-wrap">{athlete.name}</p>
         </Button>
       </DialogTrigger>
       <DialogContent className="max-h-11/12 flex flex-col overflow-hidden ">
@@ -126,7 +130,7 @@ const AthleteStatForm = (props: athleteStatFormProps) => {
                             category as StatCategory,
                             key as any,
                             Number(e.target.value),
-                            athlete.id,
+                            athlete._id,
                           )
                         }
                         className="border rounded p-2"
@@ -140,12 +144,9 @@ const AthleteStatForm = (props: athleteStatFormProps) => {
         </div>
 
         {error && (
-          <Alert
-            variant="destructive"
-            className="flex justify-between items-center"
-          >
+          <Alert variant="destructive" className="flex justify-start ">
             <AlertCircleIcon />
-            <AlertTitle className="text-center">{error.message}</AlertTitle>
+            <AlertTitle className="px-1">{error.message}</AlertTitle>
           </Alert>
         )}
         <DialogFooter>
