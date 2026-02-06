@@ -26,7 +26,7 @@ DATABASE_URL = os.getenv("SUPABASE_URI")
 engine = create_async_engine(DATABASE_URL,  
                             poolclass=NullPool, # 🔴 Required for pgBouncer transaction pooling
                             connect_args={
-                            "prepared_statement_cache_size": 0
+                                "statement_cache_size": 0,
                             },
 )
 # If using Transaction Pooler or Session Pooler, we want to ensure we disable SQLAlchemy client side pooling -
