@@ -1,5 +1,6 @@
 from typing import Annotated
 from fastapi import Depends
+from sqlalchemy import NullPool
 from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker, AsyncSession
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import DeclarativeBase
@@ -22,7 +23,12 @@ load_dotenv()
 DATABASE_URL = os.getenv("SUPABASE_URI")
 
 # Create the SQLAlchemy engine
-engine = create_async_engine(DATABASE_URL)
+engine = create_async_engine(DATABASE_URL,  
+                            poolclass=NullPool, # 🔴 Required for pgBouncer transaction pooling
+                            connect_args={
+                            "prepared_statement_cache_size": 0
+                            },
+)
 # If using Transaction Pooler or Session Pooler, we want to ensure we disable SQLAlchemy client side pooling -
 # https://docs.sqlalchemy.org/en/20/core/pooling.html#switching-pool-implementations
 # engine = create_engine(DATABASE_URL, poolclass=NullPool)
