@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { test } from "../services/sportsDataService";
-import React, { useState } from "react";
+import { useState } from "react";
 
 const Test = () => {
   const [status, setStatus] = useState<number | null>(null);
