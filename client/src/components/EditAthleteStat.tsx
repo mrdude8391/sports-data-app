@@ -55,17 +55,17 @@ const EditAthleteStat = (props: EditAthleteStatProps) => {
 
   useEffect(() => {
     if (stat) {
-      console.log(stat);
-      const prevStats = Object.fromEntries(
-        STAT_INDEX.map(({ category, fields }) => [
-          category,
-          Object.fromEntries(
-            fields.map((f) => [f.key, (stat as any)[category][f.key]]),
-          ),
-        ]),
-      );
+      // console.log(stat);
+      // const prevStats = Object.fromEntries(
+      //   STAT_INDEX.map(({ category, fields }) => [
+      //     category,
+      //     Object.fromEntries(
+      //       fields.map((f) => [f.key, (stat as any)[category][f.key]]),
+      //     ),
+      //   ]),
+      // );
 
-      console.log({ ...prevStats, recordedAt: stat.recordedAt });
+      // console.log({ ...prevStats, recordedAt: stat.recordedAt });
       setForm(stat);
     }
   }, []);

@@ -24,7 +24,7 @@ api.interceptors.request.use(
         }
         return config
     }, (error: AxiosError) => { 
-        console.log(error)
+        // console.log(error)
         return Promise.reject(error)}
 )
 
@@ -34,7 +34,7 @@ api.interceptors.response.use((response) => {
 (error: AxiosError) => {
     console.error("Axios Interceptor Response", error)
     if (error.response && error.status === 401){
-        console.log("Error 401: Unauthorized token. Clearing local storage token")
+        // console.log("Error 401: Unauthorized token. Clearing local storage token")
         logoutCallback()
     }
     return Promise.reject(error)
@@ -45,7 +45,7 @@ api.interceptors.response.use((response) => {
 export const test = async() => {
     try {
         const res = await api.get("/test");
-        console.log("API Test Service", res)
+        // console.log("API Test Service", res)
         return res
     } catch (error: any) {
         console.log("API Test Service", error)
@@ -67,31 +67,31 @@ export const register = async (registerInfo : RegisterPayload) => {
     try {
         const res = await api.post("/auth/register", registerInfo)
         const user:AuthResponse = res.data
-        console.log("register user response" , user)
+        // console.log("register user response" , user)
         localStorage.setItem("token", user.token)
         return user
     } catch (error: any) {
-        console.log(error)
+        // console.log(error)
         throw new Error(error.response?.data?.detail || "Registration Failed")
     }
 }
 
 export const profile = async () => {
     try {
-        console.log("profile call")
+        // console.log("profile call")
         const res = await api.get("/auth/profile")
-        console.log("profile response")
+        // console.log("profile response")
         const user : AuthResponse = res.data
         return user
     } catch (error : any) {
+        // console.log(error.response.data.detail)
         throw new Error(error.response.data.detail)
-        console.log(error.response.data.detail)
     }
 }
 
 export const getAthletes = async () : Promise<Athlete[]> => {
     try {
-        console.log("Get Athletes")
+        // console.log("Get Athletes")
         const {data} = await api.get<Athlete[]>("/athlete/")
         return data
     } catch (error:any) {
@@ -101,7 +101,7 @@ export const getAthletes = async () : Promise<Athlete[]> => {
 
 export const createAthlete = async (athlete : {name:string, age: number, height: number}) : Promise<Athlete> => {
     try {
-        console.log("Create athlete", athlete)
+        // console.log("Create athlete", athlete)
         const {data} = await api.post<Athlete>("/athlete/create", athlete)
         return data
     } catch (error:any) {
@@ -111,7 +111,7 @@ export const createAthlete = async (athlete : {name:string, age: number, height:
 
 export const deleteAthlete = async (id: string) => {
     try {
-        console.log("Delete athlete", {id})
+        // console.log("Delete athlete", {id})
         const response = await api.delete(`/athlete/${id}`)
         return response
     } catch (error:any) {
@@ -121,7 +121,7 @@ export const deleteAthlete = async (id: string) => {
 
 export const createStat = async ({athleteId, form, date} : {athleteId: string, form: StatForm, date: Date}) => {
     try {
-        console.log("create stat", form)
+        // console.log("create stat", form)
         const payload: StatPayload = { ...form, recordedAt: date}
         const response = await api.post(`/athlete/${athleteId}/stats`, payload) 
         return response
@@ -132,7 +132,7 @@ export const createStat = async ({athleteId, form, date} : {athleteId: string, f
 
 export const createStatsBatch = async({forms} : {forms : Map<string, StatForm>}) => {
     try {
-        console.log("create stats batch")
+        // console.log("create stats batch")
         const payload = Array.from(forms.entries()).map(([id, form]) => ({athleteId: id, ...form}))
         // Form.entries turns the map into an iterable tuple.
         // array from turns the iterator into an array of tuples
@@ -146,7 +146,7 @@ export const createStatsBatch = async({forms} : {forms : Map<string, StatForm>})
 
 export const editStat = async (req : {statId: string, form: StatForm, date: Date}) => {
     try {
-        console.log("edit stat", req.form)
+        // console.log("edit stat", req.form)
         const payload = { ...req.form, recordedAt: req.date}
         const { data } = await api.patch(`/athlete/${req.statId}/stats`, payload) 
         return data
@@ -158,10 +158,10 @@ export const editStat = async (req : {statId: string, form: StatForm, date: Date
 
 export const getStats = async (id: string) : Promise<AthleteStatResponse> => {
     try {
-        console.log("Get Stats for: ", id)
+        // console.log("Get Stats for: ", id)
         // Need to add a check for ID to be mongodb ObjectID
         const {data} = await api.get<AthleteStatResponse>(`/athlete/${id}/stats`)
-        console.log(data)
+        // console.log(data)
         const stats : StatResponse[] = data.stats.map((stat: any) => ({
             ...stat,
             recordedAt: new Date(stat.recordedAt),
@@ -180,7 +180,7 @@ export const getStats = async (id: string) : Promise<AthleteStatResponse> => {
 
 export const deleteStat = async (statId : string) => {
     try {
-        console.log("delete stat", statId)
+        // console.log("delete stat", statId)
         await api.delete(`/athlete/${statId}/stats`)
     } catch (error:any) {
         throw new Error(error.response.data.detail)
