@@ -1,6 +1,7 @@
 from typing import List
 from fastapi import HTTPException, status
 from sqlalchemy import delete, select
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession 
 from schemas.athlete_schemas import AthleteCreate, AthleteResponse, AthleteWithStats, StatCreate, StatCreateBatch, StatResponse, StatUpdate
 from models import Athlete, User, Stat
@@ -46,13 +47,18 @@ async def get_athletes(db: AsyncSession, current_user: User) -> List[AthleteResp
     except ValueError:
         raise HTTPException(status_code=500, detail=f"Get all athletes Failed")
 
-async def delete_athlete(id:UUID, db: AsyncSession, current_user: User):
+async def delete_athlete(athlete_id :UUID, db: AsyncSession, current_user: User):
     """Deletes an athlete"""
     try:
         print("\nLog:\tdelete_athlete() => Delete athlete with ID provided from path parameter")
+        # Delete all stats
+        deletedStats = await db.execute(delete(Stat).where(
+            Stat.athlete_id == athlete_id,
+            Stat.user_id == current_user.id
+            ))
         # Delete the object
         result = await db.execute(delete(Athlete).where(
-            Athlete.id == id, 
+            Athlete.id == athlete_id, 
             Athlete.user_id == current_user.id
             ))
         # Commit to database
@@ -62,6 +68,9 @@ async def delete_athlete(id:UUID, db: AsyncSession, current_user: User):
             raise HTTPException(status_code=404, detail="Not found")
             
         return {"message": "Successfully deleted athlete"}
+    except IntegrityError as err:
+        print("\nERROR\n", err)
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="Athlete still contains stats")
     except ValueError as err:
         raise HTTPException(status_code=500, detail="Delete Athlete Failed")
  
