@@ -6,3 +6,5 @@
 # Virtual environment
 env/
 venv/
+
+.rest
