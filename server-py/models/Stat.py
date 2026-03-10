@@ -64,5 +64,5 @@ class Stat(Base):
     
     # Index for efficient querying
     __table_args__ = (
-        Index('idx_user_id_athlete_id', 'user_id', 'athlete_id')
+        Index('idx_user_id_athlete_id', 'user_id', 'athlete_id'),
     )
