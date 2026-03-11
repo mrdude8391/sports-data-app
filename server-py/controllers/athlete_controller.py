@@ -13,7 +13,8 @@ async def create_athlete(athlete_info: AthleteCreate, db: AsyncSession, current_
     try:
         print("\nLog:\tcreate_athlete() => Create new athlete")
         # Check database for existing athlete name
-        results = await db.execute(select(Athlete).filter(Athlete.name == athlete_info.name))
+        results = await db.execute(select(Athlete).filter(Athlete.name == athlete_info.name,
+                                                          Athlete.user_id == current_user.id))
         existing_user = results.scalars().first()
         if existing_user:
             raise HTTPException(status_code=400, detail="Athlete name already exists")
