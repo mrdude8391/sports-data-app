@@ -45,7 +45,9 @@ async def register_user(user_data: RegisterPayload, db: AsyncSession) -> UserWit
     """
     try:
         # Check if user already exists
-        existing_user = await db.query(User).filter(User.email == user_data.email).first()
+        results = await db.execute(select(User).filter(User.email == user_data.email))
+        existing_user = results.scalars().first()
+        
         if existing_user:
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Email already being used")
             
@@ -84,6 +86,7 @@ async def login_user(login_payload: LoginPayload, db: AsyncSession) -> UserWithT
     Returns User info with token
     """
     try:
+        print('Login User')
         results = await db.execute(select(User).filter(User.email == login_payload.email))
         # Check user exists
         existing_user = results.scalars().first()
