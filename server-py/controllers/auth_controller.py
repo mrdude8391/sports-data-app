@@ -13,7 +13,7 @@ import os
 load_dotenv()
 
 password_hash = PasswordHash.recommended()
-TOKEN_EXPIRE_TIME = os.getenv("ACCESS_TOKEN_EXPIRE_HOURS")
+TOKEN_EXPIRE_TIME = int(os.getenv("ACCESS_TOKEN_EXPIRE_HOURS"))
 
 def verify_password(plain_password, hashed_password):
     """
