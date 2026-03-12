@@ -100,7 +100,7 @@ async def login_user(login_payload: LoginPayload, db: AsyncSession) -> UserWithT
             raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Password incorrect")
 
         # Generate token
-        access_token_expires = timedelta(minutes=int(os.getenv("ACCESS_TOKEN_EXPIRE_HOURS")))
+        access_token_expires = timedelta(hours=TOKEN_EXPIRE_TIME)
         token = create_access_token({"id" : str(existing_user.id)}, access_token_expires)
 
         return UserWithToken(
