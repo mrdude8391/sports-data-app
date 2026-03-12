@@ -13,6 +13,7 @@ import os
 load_dotenv()
 
 password_hash = PasswordHash.recommended()
+TOKEN_EXPIRE_TIME = int(os.getenv("ACCESS_TOKEN_EXPIRE_HOURS"))
 
 def verify_password(plain_password, hashed_password):
     """
@@ -34,7 +35,7 @@ def create_access_token(data: dict, expires_delta: timedelta | None = None):
     if expires_delta:
         expire = datetime.now(timezone.utc) + expires_delta
     else:
-        expire = datetime.now(timezone.utc) + timedelta(hours=int(os.getenv("ACCESS_TOKEN_EXPIRE_HOURS")))
+        expire = datetime.now(timezone.utc) + timedelta(hours=TOKEN_EXPIRE_TIME)
     to_encode.update({"exp": expire})
     encoded_jwt = jwt.encode(to_encode, os.getenv("JWT_SECRET"), algorithm=os.getenv("ALGORITHM"))
     return encoded_jwt
@@ -67,7 +68,7 @@ async def register_user(user_data: RegisterPayload, db: AsyncSession) -> UserWit
         await db.refresh(new_user)
 
         # Generate token
-        access_token_expires = timedelta(hours=int(os.getenv("ACCESS_TOKEN_EXPIRE_HOURS")))
+        access_token_expires = timedelta(hours=TOKEN_EXPIRE_TIME)
         token = create_access_token({"id" : str(new_user.id)}, access_token_expires)
 
         return UserWithToken(
@@ -99,7 +100,7 @@ async def login_user(login_payload: LoginPayload, db: AsyncSession) -> UserWithT
             raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Password incorrect")
 
         # Generate token
-        access_token_expires = timedelta(hours=int(os.getenv("ACCESS_TOKEN_EXPIRE_HOURS")))
+        access_token_expires = timedelta(minutes=int(os.getenv("ACCESS_TOKEN_EXPIRE_HOURS")))
         token = create_access_token({"id" : str(existing_user.id)}, access_token_expires)
 
         return UserWithToken(
