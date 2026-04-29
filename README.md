@@ -9,7 +9,7 @@ The user can also specify the date range to view to narrow down the results.
 
 ## 🖼️ Demo
 
-👉 **Live:** https://sports-data-app-py.vercel.app/<br><br/>
+👉 **Live:** https://sports-data-app-py.vercel.app/<br>
 
 ## 🚀 Features
 * **Responsive UI** for desktop and mobile
