@@ -34,8 +34,8 @@ const Login = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     try {
-      setIsLoading(true);
       e.preventDefault();
+      setIsLoading(true);
       const user = await sportsDataservice.login(form);
       console.log("Login Successful");
       login(user);

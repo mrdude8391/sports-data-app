@@ -1,17 +1,17 @@
 export type LoginPayload = {
-    email: string;
-    password: string;
-}
+  email: string;
+  password: string;
+};
 
 export type RegisterPayload = {
-    username: string,
-    email: string,
-    password: string
-}
+  username: string;
+  email: string;
+  password: string;
+};
 
-export type AuthResponse = {
-    id: string,
-    username: string,
-    email: string,
-    token: string
-}
+export type User = {
+  id: string;
+  username: string;
+  email: string;
+  token: string;
+};

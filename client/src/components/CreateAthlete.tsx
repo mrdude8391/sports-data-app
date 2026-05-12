@@ -4,7 +4,7 @@ import { Button } from "./ui/button";
 import { useState } from "react";
 import * as sportsDataService from "@/services/sportsDataService";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import type { AthletePayload } from "@/types/Athlete";
+import type { NewAthlete } from "@/types/Athlete";
 import {
   Dialog,
   DialogClose,
@@ -41,7 +41,7 @@ const CreateAthlete = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const athlete: AthletePayload = {
+    const athlete: NewAthlete = {
       name: name,
       age: Number(age),
       height: Number(height),
