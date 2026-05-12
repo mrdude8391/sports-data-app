@@ -12,7 +12,7 @@ from dotenv import load_dotenv
 import os
 import logging
 from repositories import user_repository
-from exceptions.errors import InvalidCredentialsError
+from exceptions.errors import DuplicateUserError, InvalidCredentialsError
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.DEBUG)
@@ -53,11 +53,9 @@ async def register_user(user_data: RegisterPayload, db: AsyncSession) -> UserWit
     """
     try:
         # Check if user already exists
-        results = await db.execute(select(User).filter(User.email == user_data.email))
-        existing_user = results.scalars().first()
-        
+        existing_user = await user_repository.get_by_email(db, user_data.email)
         if existing_user:
-            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Email already being used")
+            raise DuplicateUserError
             
         # Hash the password
         hashed_password = get_password_hash(user_data.password)

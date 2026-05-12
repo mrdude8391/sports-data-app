@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.responses import JSONResponse
 
-from exceptions.errors import InvalidCredentialsError
+from exceptions.errors import DuplicateUserError, InvalidCredentialsError
 
 def register_exception_handlers(app: FastAPI):
 
@@ -13,6 +13,17 @@ def register_exception_handlers(app: FastAPI):
                 content={
                     "error": "INVALID_CREDENTIALS",
                     "message": "Invalid email or password"
+                }
+            )
+    
+    @app.exception_handler(DuplicateUserError)
+    async def duplicate_user_handler(_, exc: DuplicateUserError):
+
+            return JSONResponse(
+                status_code=409,
+                content={
+                    "error": "DUPLICATE_USER",
+                    "message": "Email already being used"
                 }
             )
     

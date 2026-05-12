@@ -44,6 +44,7 @@ api.interceptors.response.use(
       // console.log("Error 401: Unauthorized token. Clearing local storage token")
       logoutCallback();
     }
+    console.log(error);
     const normalizedError = {
       message: error.response?.data?.message ?? "Unknown error",
       error: error.response?.data?.error ?? "UNKNOWN_ERROR",
@@ -74,16 +75,10 @@ export const login = async (loginInfo: LoginPayload): Promise<User> => {
 export const register = async (
   registerInfo: RegisterPayload,
 ): Promise<User> => {
-  try {
-    const response = await api.post<User>("/auth/register", registerInfo);
-    const user = response.data;
-    // console.log("register user response" , user)
-    localStorage.setItem("token", user.token);
-    return user;
-  } catch (error: any) {
-    // console.log(error)
-    throw new Error(error.response?.data?.detail || "Registration Failed");
-  }
+  const response = await api.post<User>("/auth/register", registerInfo);
+  const user = response.data;
+  localStorage.setItem("token", user.token);
+  return user;
 };
 
 export const profile = async () => {
