@@ -2,6 +2,7 @@ from fastapi import FastAPI, HTTPException, status
 from fastapi.middleware.cors import CORSMiddleware
 from database import Base, engine
 from routers import auth_router, athlete_router
+from exceptions.exception_handlers import register_exception_handlers
 import models
 
 app = FastAPI()
@@ -26,6 +27,8 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+register_exception_handlers(app)
+
 @app.get("/")
 def root():
     print("Server Started")
@@ -40,7 +43,6 @@ def test():
 # Include Routers
 app.include_router(auth_router.router, prefix="/auth", tags=["Authentication"])
 app.include_router(athlete_router.router, prefix="/athlete", tags=["Authentication"])
-
 
 # if __name__ == "__main__":
 #     import uvicorn

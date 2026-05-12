@@ -29,14 +29,14 @@ const Login = () => {
 
   const { isPending, mutate } = useMutation({
     mutationFn: sportsDataService.login,
-    onSuccess: (userData: User) => {
+    onSuccess: (userData) => {
       console.log("Login Successful");
       login(userData);
       navigate("/athletes");
     },
     onError: (error) => {
       setError(error.message);
-      console.log(error.message);
+      console.log(error);
     },
   });
 

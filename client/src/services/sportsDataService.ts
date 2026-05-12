@@ -8,6 +8,12 @@ import type {
 import axios, { AxiosError } from "axios";
 import type { LoginPayload, User, RegisterPayload } from "@/types/Auth";
 
+export interface ApiError {
+  message: string;
+  error: string;
+  status: number;
+}
+
 const API_URL = import.meta.env.VITE_API_URL;
 
 const api = axios.create({
@@ -20,32 +26,31 @@ export const setLogoutCallback = (cb: () => void) => {
   logoutCallback = cb;
 };
 
-api.interceptors.request.use(
-  (config) => {
-    const savedUser = localStorage.getItem("user");
-    if (savedUser) {
-      const user: User = JSON.parse(savedUser);
-      config.headers.Authorization = `Bearer ${user.token}`;
-    }
-    return config;
-  },
-  (error: AxiosError) => {
-    // console.log(error)
-    return Promise.reject(error);
-  },
-);
+api.interceptors.request.use((config) => {
+  const savedUser = localStorage.getItem("user");
+  if (savedUser) {
+    const user: User = JSON.parse(savedUser);
+    config.headers.Authorization = `Bearer ${user.token}`;
+  }
+  return config;
+});
 
 api.interceptors.response.use(
   (response) => {
     return response;
   },
-  (error: AxiosError) => {
-    console.error("Axios Interceptor Response", error);
+  (error: AxiosError<ApiError>) => {
     if (error.response && error.status === 401) {
       // console.log("Error 401: Unauthorized token. Clearing local storage token")
       logoutCallback();
     }
-    return Promise.reject(error);
+    const normalizedError = {
+      message: error.response?.data?.message ?? "Unknown error",
+      error: error.response?.data?.error ?? "UNKNOWN_ERROR",
+      status: error.response?.status,
+    };
+
+    return Promise.reject(normalizedError);
   },
 );
 
@@ -61,20 +66,17 @@ export const test = async () => {
   }
 };
 
-export const login = async (loginInfo: LoginPayload) => {
-  try {
-    const res = await api.post<User>("/auth/login", loginInfo);
-    const user: User = res.data;
-    return user;
-  } catch (error: any) {
-    throw new Error(error.response?.data?.detail || "Login Failed");
-  }
+export const login = async (loginInfo: LoginPayload): Promise<User> => {
+  const response = await api.post<User>("/auth/login", loginInfo);
+  return response.data;
 };
 
-export const register = async (registerInfo: RegisterPayload) => {
+export const register = async (
+  registerInfo: RegisterPayload,
+): Promise<User> => {
   try {
-    const res = await api.post("/auth/register", registerInfo);
-    const user: User = res.data;
+    const response = await api.post<User>("/auth/register", registerInfo);
+    const user = response.data;
     // console.log("register user response" , user)
     localStorage.setItem("token", user.token);
     return user;

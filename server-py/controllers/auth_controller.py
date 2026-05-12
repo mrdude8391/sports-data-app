@@ -2,6 +2,7 @@ from datetime import datetime, timedelta, timezone
 from fastapi import HTTPException, status
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.exc import SQLAlchemyError
 from models import User
 from schemas.auth_schemas import RegisterPayload, UserWithToken, LoginPayload
 from pwdlib import PasswordHash
@@ -9,11 +10,17 @@ import jwt
 from jwt.exceptions import InvalidTokenError
 from dotenv import load_dotenv
 import os
+import logging
+from repositories import user_repository
+from exceptions.errors import InvalidCredentialsError
+
+logger = logging.getLogger(__name__)
+logging.basicConfig(level=logging.DEBUG)
 
 load_dotenv()
 
 password_hash = PasswordHash.recommended()
-TOKEN_EXPIRE_TIME = int(os.getenv("ACCESS_TOKEN_EXPIRE_HOURS"))
+TOKEN_EXPIRE_TIME = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES"))
 
 def verify_password(plain_password, hashed_password):
     """
@@ -86,30 +93,24 @@ async def login_user(login_payload: LoginPayload, db: AsyncSession) -> UserWithT
 
     Returns User info with token
     """
-    try:
-        print('Login User')
-        results = await db.execute(select(User).filter(User.email == login_payload.email))
-        # Check user exists
-        existing_user = results.scalars().first()
-        if not existing_user:
-            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Email provided not associated with any account")
-            
-        # Match the provided password with hashed password
-        is_match = verify_password(login_payload.password, existing_user.password)
-        if not is_match:
-            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Password incorrect")
+    
+    logger.info("Login attempt for email=%s", login_payload.email)
+    existing_user = await user_repository.get_by_email(db, login_payload.email)
+    if not existing_user:
+        raise InvalidCredentialsError
+    # Match the provided password with hashed password
+    is_match = verify_password(login_payload.password, existing_user.password)
+    if not is_match:
+        raise InvalidCredentialsError
+    
+    # Generate token
+    access_token_expires = timedelta(hours=TOKEN_EXPIRE_TIME)
+    token = create_access_token({"id" : str(existing_user.id)}, access_token_expires)
 
-        # Generate token
-        access_token_expires = timedelta(hours=TOKEN_EXPIRE_TIME)
-        token = create_access_token({"id" : str(existing_user.id)}, access_token_expires)
-
-        return UserWithToken(
-            id=existing_user.id,
-            username=existing_user.username,
-            email=existing_user.email,
-            token=token,
-        )
-    except ValueError as err:
-        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Login Failed")
-
+    return UserWithToken(
+        id=existing_user.id,
+        username=existing_user.username,
+        email=existing_user.email,
+        token=token,
+    )
     
