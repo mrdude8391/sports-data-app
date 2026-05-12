@@ -36,7 +36,6 @@ const Register = () => {
       if (user) {
         setError("");
         setShowAlert(true);
-        localStorage.setItem("token", user.token);
         login(user);
         navigate("/profile");
       }
