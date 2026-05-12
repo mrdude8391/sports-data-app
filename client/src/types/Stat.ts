@@ -77,6 +77,9 @@ export type AthleteStatResponse = {
 export type StatCategory = keyof BaseStatData;
 export type StatFieldKey<C extends StatCategory> = keyof BaseStatData[C];
 
+/**
+ * A blank stat form with all stats set to 0.
+ */
 export const defaultStatForm: StatForm = {
   attack: {
     kills: 0,
