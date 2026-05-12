@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import React, { useState } from "react";
-import * as sportsDataservice from "../services/sportsDataService";
+import * as sportsDataService from "../services/sportsDataService";
 import { Link, useNavigate } from "react-router-dom";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
@@ -15,7 +15,8 @@ import {
 import { Alert, AlertTitle } from "@/components/ui/alert";
 import { AlertCircleIcon, Loader, Volleyball, X } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
-import type { LoginPayload } from "@/types/Auth";
+import type { LoginPayload, User } from "@/types/Auth";
+import { useMutation } from "@tanstack/react-query";
 
 const Login = () => {
   const [form, setForm] = useState<LoginPayload>({
@@ -25,27 +26,28 @@ const Login = () => {
   const [error, setError] = useState("");
   const navigate = useNavigate();
   const { login } = useAuth();
-  const [isLoading, setIsLoading] = useState(false);
+
+  const { isPending, mutate } = useMutation({
+    mutationFn: sportsDataService.login,
+    onSuccess: (userData: User) => {
+      console.log("Login Successful");
+      login(userData);
+      navigate("/athletes");
+    },
+    onError: (error) => {
+      setError(error.message);
+      console.log(error.message);
+    },
+  });
 
   const handleChange = (e: any) => {
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    try {
-      e.preventDefault();
-      setIsLoading(true);
-      const user = await sportsDataservice.login(form);
-      console.log("Login Successful");
-      login(user);
-      navigate("/athletes");
-    } catch (err: any) {
-      setError(err.message);
-      console.log(err.message);
-    } finally {
-      setIsLoading(false);
-    }
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    mutate(form);
   };
 
   return (
@@ -97,12 +99,12 @@ const Login = () => {
               </form>
             </CardContent>
             <CardFooter className="flex-col gap-2 justify-between">
-              {isLoading && <Loader className="animate-spin" />}
+              {isPending && <Loader className="animate-spin" />}
               <Button
                 className="w-full"
                 type="submit"
                 form="loginForm"
-                disabled={isLoading}
+                disabled={isPending}
               >
                 Login
               </Button>
