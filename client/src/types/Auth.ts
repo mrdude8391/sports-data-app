@@ -3,10 +3,8 @@ export type LoginPayload = {
   password: string;
 };
 
-export type RegisterPayload = {
+export type RegisterPayload = LoginPayload & {
   username: string;
-  email: string;
-  password: string;
 };
 
 export type User = {

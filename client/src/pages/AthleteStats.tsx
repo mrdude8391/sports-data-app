@@ -4,7 +4,7 @@ import * as sportsDataService from "@/services/sportsDataService";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { ChevronDownIcon, Loader } from "lucide-react";
 import {
-  initialStatForm,
+  defaultStatForm,
   type AthleteStatResponse,
   type StatCategory,
   type StatFieldKey,
@@ -30,7 +30,7 @@ const AthleteStats = () => {
 
   const [open, setOpen] = useState(false);
   const [date, setDate] = useState<DateRange | undefined>();
-  const [form, setForm] = useState<StatForm>(initialStatForm);
+  const [form, setForm] = useState<StatForm>(defaultStatForm);
 
   const { confirm, ConfirmDialog, changeAlertAthleteName } = useConfirmBlank();
 
@@ -55,7 +55,7 @@ const AthleteStats = () => {
     onSuccess: () => {
       // Invalidate and refetch
       queryClient.invalidateQueries({ queryKey: ["stats"] });
-      setForm(initialStatForm);
+      setForm(defaultStatForm);
     },
   });
 
@@ -149,7 +149,7 @@ const AthleteStats = () => {
   const handleSubmit = async () => {
     try {
       if (res?.athlete && athleteId) {
-        if (form === initialStatForm) {
+        if (form === defaultStatForm) {
           changeAlertAthleteName(res.athlete.name);
           const shouldContinue = await confirm();
           // this async await means that the method handle submit will wait for confirm() to finish

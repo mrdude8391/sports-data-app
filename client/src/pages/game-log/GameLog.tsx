@@ -4,7 +4,7 @@ import { useState } from "react";
 import * as sportsDataService from "../../services/sportsDataService";
 import type { Athlete } from "@/types/Athlete";
 import {
-  initialStatForm,
+  defaultStatForm,
   type StatCategory,
   type StatFieldKey,
   type StatForm,
@@ -50,7 +50,7 @@ const GameLog = () => {
       setSelectedAthletes((prev) => new Set<Athlete>(prev).add(athlete));
       // add form to form dictionary
       // need to update the selected date from the default if the selected date is not default.
-      const newForm = initialStatForm;
+      const newForm = defaultStatForm;
       newForm.recordedAt = selectedDate;
       setForms((prev) => prev.set(athlete.id, newForm));
     }
@@ -182,7 +182,7 @@ const GameLog = () => {
         // Return a Promise
         // Resolve the Promise when the user clicks Continue or Cancel
         // await the Promise in the loop
-        if (form === initialStatForm) {
+        if (form === defaultStatForm) {
           changeAlertAthleteName(athlete.name);
           const shouldContinue = await confirm();
           // this async await means that the method handle submit will wait for confirm() to finish
