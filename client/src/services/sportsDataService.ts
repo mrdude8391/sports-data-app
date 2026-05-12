@@ -76,9 +76,7 @@ export const register = async (
   registerInfo: RegisterPayload,
 ): Promise<User> => {
   const response = await api.post<User>("/auth/register", registerInfo);
-  const user = response.data;
-  localStorage.setItem("token", user.token);
-  return user;
+  return response.data;
 };
 
 export const profile = async () => {
