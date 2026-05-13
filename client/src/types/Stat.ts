@@ -1,46 +1,58 @@
 import type { Athlete } from "./Athlete";
 
+type AttackStats = {
+  kills: number;
+  errors: number;
+  total: number;
+  percentage: number;
+};
+
+type SettingStats = {
+  assists: number;
+  errors: number;
+  attempts: number;
+};
+
+type ServingStats = {
+  rating: number;
+  ratingTotal: number;
+  aces: number;
+  errors: number;
+  attempts: number;
+  percentage: number;
+};
+
+type ReceivingStats = {
+  rating: number;
+  ratingTotal: number;
+  errors: number;
+  attempts: number;
+};
+
+type DefenseStats = {
+  digs: number;
+  rating: number;
+  ratingTotal: number;
+  errors: number;
+  attempts: number;
+};
+
+type BlockingStats = {
+  total: number;
+  kills: number;
+  solos: number;
+  goodTouches: number;
+  attempts: number;
+  errors: number;
+};
+
 type BaseStatData = {
-  attack: {
-    kills: number;
-    errors: number;
-    total: number;
-    percentage: number;
-  };
-  setting: {
-    assists: number;
-    errors: number;
-    attempts: number;
-  };
-  serving: {
-    rating: number;
-    ratingTotal: number;
-    aces: number;
-    errors: number;
-    attempts: number;
-    percentage: number;
-  };
-  receiving: {
-    rating: number;
-    ratingTotal: number;
-    errors: number;
-    attempts: number;
-  };
-  defense: {
-    digs: number;
-    rating: number;
-    ratingTotal: number;
-    errors: number;
-    attempts: number;
-  };
-  blocking: {
-    total: number;
-    kills: number;
-    solos: number;
-    goodTouches: number;
-    attempts: number;
-    errors: number;
-  };
+  attack: AttackStats;
+  setting: SettingStats;
+  serving: ServingStats;
+  receiving: ReceivingStats;
+  defense: DefenseStats;
+  blocking: BlockingStats;
 };
 
 export type Stat = BaseStatData & {
@@ -79,8 +91,14 @@ export type AthleteStatResponse = {
   stats: StatResponse[];
 };
 
-export type StatCategory = keyof BaseStatData;
-export type StatFieldKey<C extends StatCategory> = keyof BaseStatData[C];
+export type StatCategory =
+  | AttackStats
+  | SettingStats
+  | ServingStats
+  | DefenseStats
+  | ReceivingStats
+  | BlockingStats;
+export type StatCategoryKey = keyof StatCategory;
 
 /**
  * A blank stat form with all stats set to 0.

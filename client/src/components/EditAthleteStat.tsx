@@ -9,7 +9,7 @@ import {
   defaultStatForm,
   type Stat,
   type StatCategory,
-  type StatFieldKey,
+  type StatCategoryKey,
   type StatForm,
 } from "@/types/Stat";
 import {
@@ -72,7 +72,7 @@ const EditAthleteStat = (props: EditAthleteStatProps) => {
 
   const handleChange = <C extends StatCategory>(
     category: C,
-    key: StatFieldKey<C>,
+    key: StatCategoryKey<C>,
     value: number,
   ) => {
     setForm((prev) => {
@@ -222,7 +222,7 @@ const EditAthleteStat = (props: EditAthleteStatProps) => {
                           type="number"
                           value={
                             form[category as StatCategory][
-                              key as StatFieldKey<StatCategory>
+                              key as StatCategoryKey<StatCategory>
                             ]
                           }
                           onChange={(e) =>

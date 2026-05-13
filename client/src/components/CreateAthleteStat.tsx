@@ -2,7 +2,7 @@ import { Button } from "./ui/button";
 import { Label } from "./ui/label";
 import { Input } from "./ui/input";
 import { STAT_INDEX } from "@/constants";
-import type { StatCategory, StatFieldKey, StatForm } from "@/types/Stat";
+import type { StatCategory, StatCategoryKey, StatForm } from "@/types/Stat";
 import {
   Dialog,
   DialogClose,
@@ -36,7 +36,7 @@ interface createAthleteStatProps {
   handleSubmit: () => void;
   statError: Error | null;
   isPending: boolean;
-  handleChange: <C extends StatCategory, K extends StatFieldKey<C>>(
+  handleChange: <C extends StatCategory, K extends StatCategoryKey<C>>(
     category: C,
     key: K,
     value: number,
@@ -71,7 +71,7 @@ const CreateAthleteStat = (props: createAthleteStatProps) => {
   //   },
   // });
 
-  // const handleChange = <C extends StatCategory, K extends StatFieldKey<C>>(
+  // const handleChange = <C extends StatCategory, K extends StatCategoryKey<C>>(
   //   category: C,
   //   key: K,
   //   value: number
@@ -238,7 +238,7 @@ const CreateAthleteStat = (props: createAthleteStatProps) => {
                           type="number"
                           value={
                             form[category as StatCategory][
-                              key as StatFieldKey<StatCategory>
+                              key as StatCategoryKey<StatCategory>
                             ]
                           }
                           onChange={(e) =>

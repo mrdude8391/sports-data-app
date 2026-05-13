@@ -8,7 +8,7 @@ import {
   type AthleteStatResponse,
   type NewStat,
   type StatCategory,
-  type StatFieldKey,
+  type StatCategoryKey,
   type StatForm,
 } from "@/types/Stat";
 import AthleteStatsList from "@/components/AthleteStatsList";
@@ -72,7 +72,7 @@ const AthleteStats = () => {
     setForm((prev) => ({ ...prev, recordedAt: merged }));
   };
 
-  const handleChange = <C extends StatCategory, K extends StatFieldKey<C>>(
+  const handleChange = <C extends StatCategory, K extends StatCategoryKey<C>>(
     category: C,
     key: K,
     value: number,

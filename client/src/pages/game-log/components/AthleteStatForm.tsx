@@ -2,7 +2,7 @@ import { Button } from "../../../components/ui/button";
 import { Label } from "../../../components/ui/label";
 import { Input } from "../../../components/ui/input";
 import { STAT_INDEX } from "@/constants";
-import type { StatCategory, StatFieldKey, StatForm } from "@/types/Stat";
+import type { StatCategory, StatCategoryKey, StatForm } from "@/types/Stat";
 import {
   Dialog,
   DialogClose,
@@ -29,7 +29,7 @@ interface athleteStatFormProps {
   form: StatForm;
   statError: Error | null;
   isPending: boolean;
-  handleChange: <C extends StatCategory, K extends StatFieldKey<C>>(
+  handleChange: <C extends StatCategory, K extends StatCategoryKey<C>>(
     category: C,
     key: K,
     value: number,
@@ -122,7 +122,7 @@ const AthleteStatForm = (props: athleteStatFormProps) => {
                         type="number"
                         value={
                           form[category as StatCategory][
-                            key as StatFieldKey<StatCategory>
+                            key as StatCategoryKey<StatCategory>
                           ]
                         }
                         onChange={(e) =>
