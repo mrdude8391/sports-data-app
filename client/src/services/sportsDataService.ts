@@ -124,8 +124,7 @@ export const createStat = async (newStat: NewStat) => {
   try {
     // console.log("create stat", form)
     const { athleteId, statForm } = newStat;
-    const response = await api.post(`/athlete/${athleteId}/stats`, statForm);
-    return response;
+    await api.post(`/athlete/${athleteId}/stats`, statForm);
   } catch (error: any) {
     throw new Error(error.response.data.detail);
   }
@@ -145,8 +144,7 @@ export const createStatsBatch = async ({
     // Form.entries turns the map into an iterable tuple.
     // array from turns the iterator into an array of tuples
     // map generates an array of objects => callback function turns every tuple into an object.
-    const { data } = await api.post(`/athlete/stats`, payload);
-    return data;
+    await api.post(`/athlete/stats`, payload);
   } catch (error: any) {
     throw new Error(error.response.data.detail);
   }

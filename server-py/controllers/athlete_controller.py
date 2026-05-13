@@ -138,7 +138,7 @@ async def create_stat(athlete_id:UUID, stat_data: StatCreate, db: AsyncSession, 
         await db.commit()
         await db.refresh(new_stat)
 
-        return _convert_stat_to_response(new_stat)
+        # return _convert_stat_to_response(new_stat)
     except ValueError as err:
         print(err)
         raise HTTPException(status_code=500, detail="Failed to create stat")
@@ -154,7 +154,7 @@ async def get_stats(athlete_id:UUID, db: AsyncSession, current_user: User) -> At
         result = await db.execute(select(Stat).filter(
             Stat.user_id == current_user.id,
             Stat.athlete_id == athlete_id
-        ))
+        ).order_by(Stat.recorded_at))
         stats = result.scalars().all()
 
         # Convert to response format
@@ -325,7 +325,7 @@ async def edit_stat(stat_id: int, stat_data: StatUpdate, db: AsyncSession, curre
         await db.commit()
         await db.refresh(stat)
 
-        return {"message": "Successfully edited stat"}
+        
     except ValueError as err:
         print(err)
         raise HTTPException(status_code=500, detail="Failed to edit stat")
