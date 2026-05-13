@@ -41,8 +41,8 @@ def test():
     return {"Test Response Local"}
 
 # Include Routers
-app.include_router(auth_router.router, prefix="/auth", tags=["Authentication"])
-app.include_router(athlete_router.router, prefix="/athlete", tags=["Authentication"])
+app.include_router(auth_router.router)
+app.include_router(athlete_router.router)
 
 # if __name__ == "__main__":
 #     import uvicorn

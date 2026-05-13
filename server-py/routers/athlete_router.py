@@ -11,7 +11,7 @@ from uuid import UUID
 
 # Athlete Router
 # Prefix prefix="/athlete"
-router = APIRouter()
+router = APIRouter(prefix="/athlete", tags=["Authentication"])
 
 
 # Athlete Routes

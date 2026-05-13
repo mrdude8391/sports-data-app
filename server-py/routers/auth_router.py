@@ -6,7 +6,7 @@ from controllers.auth_controller import register_user, login_user
 
 # Auth Router
 # Prefix prefix="/auth"
-router = APIRouter()
+router = APIRouter(prefix="/auth", tags=["Authentication"])
 
 @router.post("/register", response_model=UserWithToken)
 async def register(user_data: RegisterPayload, db: Session = Depends(get_db)):
