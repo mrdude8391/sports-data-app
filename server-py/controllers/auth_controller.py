@@ -1,18 +1,15 @@
 from datetime import datetime, timedelta, timezone
-from fastapi import HTTPException, status
-from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.exc import SQLAlchemyError
 from models import User
 from schemas.auth_schemas import RegisterPayload, UserWithToken, LoginPayload
 from pwdlib import PasswordHash
 import jwt
-from jwt.exceptions import InvalidTokenError
 from dotenv import load_dotenv
 import os
 import logging
 from repositories.user_repository import UserRepository
 from exceptions.errors import DuplicateUserError, InvalidCredentialsError
+from sqlalchemy.exc import IntegrityError
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.DEBUG)
@@ -57,11 +54,6 @@ async def register_user(user_data: RegisterPayload, db: AsyncSession) -> UserWit
     """
     Create a new user row using provided information in the database
     """
-    # Check if user already exists
-    existing_user = await UserRepository.get_by_email(db, user_data.email)
-    if existing_user:
-        raise DuplicateUserError
-
     # Hash the password
     hashed_password = get_password_hash(user_data.password)
     # Create new user
@@ -70,13 +62,16 @@ async def register_user(user_data: RegisterPayload, db: AsyncSession) -> UserWit
         email=user_data.email,
         password=hashed_password,
     )
-    # Insert new User into database
-    db.add(new_user)
-    await db.commit()
-    await db.refresh(new_user)
+
+    try:
+        await UserRepository.create_user(db, new_user)
+    except IntegrityError:
+        raise DuplicateUserError
+
     # Generate token
     access_token_expires = timedelta(hours=TOKEN_EXPIRE_TIME)
     token = create_access_token({"id": str(new_user.id)}, access_token_expires)
+
     return UserWithToken(
         id=new_user.id, username=new_user.username, email=new_user.email, token=token
     )
