@@ -15,15 +15,15 @@ import {
 import { Alert, AlertTitle } from "@/components/ui/alert";
 import { AlertCircleIcon, Loader, Volleyball, X } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
-import type { LoginPayload, User } from "@/types/Auth";
+import type { LoginPayload } from "@/types/Auth";
 import { useMutation } from "@tanstack/react-query";
 
 const Login = () => {
-  const [form, setForm] = useState<LoginPayload>({
+  const [loginForm, setLoginForm] = useState<LoginPayload>({
     email: "",
     password: "",
   });
-  const [error, setError] = useState("");
+  const [d, setError] = useState("");
   const navigate = useNavigate();
   const { login } = useAuth();
 
@@ -34,20 +34,20 @@ const Login = () => {
       login(userData);
       navigate("/athletes");
     },
-    onError: (error) => {
-      setError(error.message);
+    onError: (d) => {
+      setError(d.message);
       console.log(error);
     },
   });
 
   const handleChange = (e: any) => {
     const { name, value } = e.target;
-    setForm((prev) => ({ ...prev, [name]: value }));
+    setLoginForm((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    mutate(form);
+    mutate(loginForm);
   };
 
   return (
