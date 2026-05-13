@@ -73,10 +73,6 @@ export type NewStat = {
   statForm: StatForm;
 };
 
-export type StatPayload = BaseStatData & {
-  recordedAt: Date;
-};
-
 export type StatResponse = BaseStatData & {
   _id: string;
   userId: string;
@@ -98,6 +94,7 @@ export type StatCategory =
   | DefenseStats
   | ReceivingStats
   | BlockingStats;
+
 export type StatCategoryKey = keyof StatCategory;
 
 /**
