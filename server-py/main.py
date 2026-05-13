@@ -11,7 +11,6 @@ import models
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # Startup: engine already created globally
-
     await init_db()
     yield
     # Shutdown: dispose engine to close pool connections
