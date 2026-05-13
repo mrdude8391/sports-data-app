@@ -11,7 +11,7 @@ from jwt.exceptions import InvalidTokenError
 from dotenv import load_dotenv
 import os
 import logging
-from repositories import user_repository
+from repositories.user_repository import UserRepository
 from exceptions.errors import DuplicateUserError, InvalidCredentialsError
 
 logger = logging.getLogger(__name__)
@@ -53,7 +53,7 @@ async def register_user(user_data: RegisterPayload, db: AsyncSession) -> UserWit
     """
     try:
         # Check if user already exists
-        existing_user = await user_repository.get_by_email(db, user_data.email)
+        existing_user = await UserRepository.get_by_email(db, user_data.email)
         if existing_user:
             raise DuplicateUserError
             
@@ -93,7 +93,7 @@ async def login_user(login_payload: LoginPayload, db: AsyncSession) -> UserWithT
     """
     
     logger.info("Login attempt for email=%s", login_payload.email)
-    existing_user = await user_repository.get_by_email(db, login_payload.email)
+    existing_user = await UserRepository.get_by_email(db, login_payload.email)
     if not existing_user:
         raise InvalidCredentialsError
     # Match the provided password with hashed password
