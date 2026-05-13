@@ -1,8 +1,8 @@
 import type { Athlete } from "@/types/Athlete";
 import type {
   AthleteStatResponse,
+  NewStat,
   StatForm,
-  StatPayload,
   StatResponse,
 } from "@/types/Stat";
 import axios, { AxiosError } from "axios";
@@ -79,24 +79,19 @@ export const register = async (
   return response.data;
 };
 
-export const profile = async () => {
+export const profile = async (): Promise<User> => {
   try {
-    // console.log("profile call")
-    const res = await api.get("/auth/profile");
-    // console.log("profile response")
-    const user: User = res.data;
-    return user;
+    const response = await api.get<User>("/auth/profile");
+    return response.data;
   } catch (error: any) {
-    // console.log(error.response.data.detail)
     throw new Error(error.response.data.detail);
   }
 };
 
 export const getAthletes = async (): Promise<Athlete[]> => {
   try {
-    // console.log("Get Athletes")
-    const { data } = await api.get<Athlete[]>("/athlete/");
-    return data;
+    const response = await api.get<Athlete[]>("/athlete/");
+    return response.data;
   } catch (error: any) {
     throw new Error(error.response.data.detail);
   }
@@ -109,8 +104,8 @@ export const createAthlete = async (athlete: {
 }): Promise<Athlete> => {
   try {
     // console.log("Create athlete", athlete)
-    const { data } = await api.post<Athlete>("/athlete/create", athlete);
-    return data;
+    const response = await api.post<Athlete>("/athlete/create", athlete);
+    return response.data;
   } catch (error: any) {
     throw new Error(error.status + ": " + error.response.data.detail);
   }
@@ -119,26 +114,17 @@ export const createAthlete = async (athlete: {
 export const deleteAthlete = async (id: string) => {
   try {
     // console.log("Delete athlete", {id})
-    const response = await api.delete(`/athlete/${id}`);
-    return response;
+    await api.delete(`/athlete/${id}`);
   } catch (error: any) {
     throw new Error(error.response.data.detail);
   }
 };
 
-export const createStat = async ({
-  athleteId,
-  form,
-  date,
-}: {
-  athleteId: string;
-  form: StatForm;
-  date: Date;
-}) => {
+export const createStat = async (newStat: NewStat) => {
   try {
     // console.log("create stat", form)
-    const payload: StatPayload = { ...form, recordedAt: date };
-    const response = await api.post(`/athlete/${athleteId}/stats`, payload);
+    const { athleteId, statForm } = newStat;
+    const response = await api.post(`/athlete/${athleteId}/stats`, statForm);
     return response;
   } catch (error: any) {
     throw new Error(error.response.data.detail);

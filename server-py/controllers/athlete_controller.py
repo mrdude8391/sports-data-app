@@ -68,7 +68,6 @@ async def delete_athlete(athlete_id :UUID, db: AsyncSession, current_user: User)
         if result.rowcount == 0:
             raise HTTPException(status_code=404, detail="Not found")
             
-        return {"message": "Successfully deleted athlete"}
     except IntegrityError as err:
         print("\nERROR\n", err)
         raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="Athlete still contains stats")

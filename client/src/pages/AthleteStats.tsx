@@ -6,6 +6,7 @@ import { ChevronDownIcon, Loader } from "lucide-react";
 import {
   defaultStatForm,
   type AthleteStatResponse,
+  type NewStat,
   type StatCategory,
   type StatFieldKey,
   type StatForm,
@@ -155,10 +156,12 @@ const AthleteStats = () => {
           // this async await means that the method handle submit will wait for confirm() to finish
           // go read confirm
           if (!shouldContinue) return;
-          mutate({ athleteId, form: form, date: form.recordedAt });
+          const newStat: NewStat = { athleteId, statForm: form };
+          mutate(newStat);
         } else {
           // form != initial form (user changed the form)
-          mutate({ athleteId, form: form, date: form.recordedAt });
+          const newStat: NewStat = { athleteId, statForm: form };
+          mutate(newStat);
         }
       }
     } catch (error) {

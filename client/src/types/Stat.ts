@@ -56,6 +56,11 @@ export type StatForm = BaseStatData & {
   recordedAt: Date;
 };
 
+export type NewStat = {
+  athleteId: string;
+  statForm: StatForm;
+};
+
 export type StatPayload = BaseStatData & {
   recordedAt: Date;
 };
