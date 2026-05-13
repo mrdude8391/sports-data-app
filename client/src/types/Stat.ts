@@ -103,7 +103,7 @@ export type StatCategoryKey = keyof StatCategory;
 /**
  * A blank stat form with all stats set to 0.
  */
-export const defaultStatForm: StatForm = {
+export const DEFAULT_STAT_FORM: StatForm = {
   attack: {
     kills: 0,
     errors: 0,

@@ -58,7 +58,7 @@ const CreateAthleteStat = (props: createAthleteStatProps) => {
 
   // const { athleteId } = useParams<{ athleteId: string }>();
 
-  // const [form, setForm] = useState<StatForm>(defaultStatForm);
+  // const [form, setForm] = useState<StatForm>(DEFAULT_STAT_FORM);
 
   // const queryClient = useQueryClient();
 
@@ -67,7 +67,7 @@ const CreateAthleteStat = (props: createAthleteStatProps) => {
   //   onSuccess: () => {
   //     // Invalidate and refetch
   //     queryClient.invalidateQueries({ queryKey: ["stats"] });
-  //     setForm(defaultStatForm);
+  //     setForm(DEFAULT_STAT_FORM);
   //   },
   // });
 
@@ -147,7 +147,7 @@ const CreateAthleteStat = (props: createAthleteStatProps) => {
   // };
 
   // const handleSubmit = async () => {
-  //   if (athleteId && form != defaultStatForm) {
+  //   if (athleteId && form != DEFAULT_STAT_FORM) {
   //     mutate({ athleteId, form: form, date: form.recordedAt });
   //   }
   // };

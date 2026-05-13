@@ -6,7 +6,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import * as sportsDataService from "@/services/sportsDataService";
 import { STAT_INDEX } from "@/constants";
 import {
-  defaultStatForm,
+  DEFAULT_STAT_FORM,
   type Stat,
   type StatCategory,
   type StatCategoryKey,
@@ -40,7 +40,7 @@ interface EditAthleteStatProps {
 const EditAthleteStat = (props: EditAthleteStatProps) => {
   const { stat } = props;
 
-  const [form, setForm] = useState<StatForm>(defaultStatForm);
+  const [form, setForm] = useState<StatForm>(DEFAULT_STAT_FORM);
   const [open, setOpen] = React.useState(false);
 
   const queryClient = useQueryClient();
@@ -144,7 +144,7 @@ const EditAthleteStat = (props: EditAthleteStatProps) => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (stat.id && form != defaultStatForm) {
+    if (stat.id && form != DEFAULT_STAT_FORM) {
       console.log(form);
       mutate({ statId: stat.id, form: form, date: form.recordedAt });
     }
