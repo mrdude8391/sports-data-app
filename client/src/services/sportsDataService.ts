@@ -158,8 +158,7 @@ export const editStat = async (req: {
   try {
     // console.log("edit stat", req.form)
     const payload = { ...req.form, recordedAt: req.date };
-    const { data } = await api.patch(`/athlete/${req.statId}/stats`, payload);
-    return data;
+    await api.patch(`/athlete/${req.statId}/stats`, payload);
   } catch (error: any) {
     throw new Error(error.response.data.detail);
   }
