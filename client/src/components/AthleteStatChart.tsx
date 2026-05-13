@@ -75,7 +75,6 @@ const AthleteStatChart = (props: AthleteStatChartProps) => {
             }}
           >
             <XAxis
-              reversed
               dataKey="recordedAt"
               tickFormatter={(date) =>
                 new Date(date).toLocaleDateString("en-US", {
