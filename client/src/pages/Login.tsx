@@ -23,7 +23,7 @@ const Login = () => {
     email: "",
     password: "",
   });
-  const [d, setError] = useState("");
+  const [error, setError] = useState("");
   const navigate = useNavigate();
   const { login } = useAuth();
 
@@ -34,8 +34,8 @@ const Login = () => {
       login(userData);
       navigate("/athletes");
     },
-    onError: (d) => {
-      setError(d.message);
+    onError: (error) => {
+      setError(error.message);
       console.log(error);
     },
   });
@@ -121,7 +121,7 @@ const Login = () => {
                   className="flex flex-row justify-between items-center"
                 >
                   <AlertCircleIcon className="mb-1" />
-                  <AlertTitle className="text-center">{error}</AlertTitle>
+                  <AlertTitle className="text-center flex">{error}</AlertTitle>
                   <Button
                     variant="destructive"
                     size="icon"

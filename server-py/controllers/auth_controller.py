@@ -91,7 +91,6 @@ async def login_user(login_payload: LoginPayload, db: AsyncSession) -> UserWithT
 
     Returns User info with token
     """
-    
     logger.info("Login attempt for email=%s", login_payload.email)
     existing_user = await UserRepository.get_by_email(db, login_payload.email)
     if not existing_user:
@@ -100,11 +99,9 @@ async def login_user(login_payload: LoginPayload, db: AsyncSession) -> UserWithT
     is_match = verify_password(login_payload.password, existing_user.password)
     if not is_match:
         raise InvalidCredentialsError
-    
     # Generate token
     access_token_expires = timedelta(hours=TOKEN_EXPIRE_TIME)
     token = create_access_token({"id" : str(existing_user.id)}, access_token_expires)
-
     return UserWithToken(
         id=existing_user.id,
         username=existing_user.username,
