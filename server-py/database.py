@@ -1,9 +1,15 @@
 from typing import Annotated
 from fastapi import Depends
 from sqlalchemy import NullPool
-from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker, AsyncSession
+from sqlalchemy.ext.asyncio import (
+    async_session,
+    create_async_engine,
+    async_sessionmaker,
+    AsyncSession,
+)
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import DeclarativeBase
+
 # from sqlalchemy.pool import NullPool
 from dotenv import load_dotenv
 import os
@@ -23,36 +29,43 @@ load_dotenv()
 DATABASE_URL = os.getenv("SUPABASE_URI")
 
 # Create the SQLAlchemy engine
-engine = create_async_engine(DATABASE_URL,  
-                            poolclass=NullPool, # 🔴 Required for pgBouncer transaction pooling
-                            connect_args={
-                                "statement_cache_size": 0,
-                            },
+engine = create_async_engine(
+    DATABASE_URL,
+    poolclass=NullPool,  # 🔴 Required for pgBouncer transaction pooling
+    connect_args={
+        "statement_cache_size": 0,
+    },
 )
 # If using Transaction Pooler or Session Pooler, we want to ensure we disable SQLAlchemy client side pooling -
 # https://docs.sqlalchemy.org/en/20/core/pooling.html#switching-pool-implementations
 # engine = create_engine(DATABASE_URL, poolclass=NullPool)
 
-SessionLocal = async_sessionmaker(
+async_session = async_sessionmaker(
     engine,
     class_=AsyncSession,
-    expire_on_commit=False, # Recommended for async ORM usage to prevent implicit I/O
-    autoflush=False
+    expire_on_commit=False,  # Recommended for async ORM usage to prevent implicit I/O
+    autoflush=False,
 )
+
 
 # Create Base class for models
 class Base(DeclarativeBase):
     pass
 
+
+async def init_db():
+    """
+    Sync and Create database tables
+    """
+    async with engine.begin() as conn:
+        await conn.run_sync(Base.metadata.create_all)
+
+
 async def get_db():
     """
     Dependency that provides a database session per request.
     """
-    async with engine.begin() as conn:
-        await conn.run_sync(Base.metadata.create_all)
-    db = SessionLocal()
+
     print("\nLog:\tget_db() => SqlAlchemy db Session Dependency")
-    try:
-        yield db
-    finally:
-       await db.close()
+    async with async_session.begin() as session:
+        yield session
