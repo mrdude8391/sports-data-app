@@ -3,6 +3,8 @@ from sqlalchemy import select
 from pydantic import EmailStr
 from models import User
 
-async def get_by_email(db: AsyncSession, email: EmailStr) -> User | None:
-        results = await db.execute(select(User).filter(User.email == email))
-        return results.scalars().first()
+class UserRepository:
+
+        async def get_by_email(db: AsyncSession, email: EmailStr) -> User | None:
+                results = await db.execute(select(User).filter(User.email == email))
+                return results.scalars().first()
