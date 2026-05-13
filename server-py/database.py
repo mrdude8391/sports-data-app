@@ -66,5 +66,11 @@ async def get_db():
     Dependency that provides a database session per request.
     """
     print("\nLog:\tget_db() => SqlAlchemy db Session Dependency")
-    async with async_session.begin() as session:
-        yield session
+    async with async_session() as session:
+        try:
+            yield session
+        except Exception:
+            await session.rollback()
+            raise
+        finally:
+            await session.close()
