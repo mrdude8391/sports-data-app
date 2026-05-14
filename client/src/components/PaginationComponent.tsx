@@ -55,12 +55,13 @@ const PaginationComponent = (props: PaginationComponentProps) => {
                 const page = e.target.value ? Number(e.target.value) - 1 : 0;
                 table.setPageIndex(page);
               }}
-              onKeyDown={(e: any) => {
+              onKeyDown={(e) => {
                 if (e.key === "Backspace") {
-                  if (e.target.value.length === 1) {
-                    e.target.value = "";
+                  const inputElement = e.target as HTMLInputElement;
+                  if (inputElement.value.length === 1) {
+                    inputElement.value = "";
                   }
-                  e.target.value.slice(0, -1);
+                  inputElement.value.slice(0, -1);
                 }
               }}
               className="border p-1 rounded w-16"
