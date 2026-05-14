@@ -23,8 +23,11 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { useState } from "react";
-import { STAT_INDEX } from "@/constants";
-import type { Stat } from "@/types/Stat";
+import {
+  STAT_LABELS_INDEX,
+  type Stat,
+  type StatCategoryName,
+} from "@/types/Stat";
 
 import PaginationComponent from "./PaginationComponent";
 
@@ -34,39 +37,8 @@ interface AthleteStatTableProps {
 
 const AthleteStatTable = (props: AthleteStatTableProps) => {
   const { stats } = props;
-  // const [selectedStatCategory, setSelectedStatCategory] = useState([]);
-  // const [select, setSelect] = useState("");
 
   const [columns, setColumns] = useState<any>([]);
-
-  // const [page, setPage] = useState(0);
-  // const [itemsPerPage, setItemsPerPage] = useState(10);
-
-  // const firstStatIdx = page * itemsPerPage;
-  // const lastStatIdx = firstStatIdx + itemsPerPage;
-  // const currentStats = stats.slice(firstStatIdx, lastStatIdx);
-
-  // const totalPages = Math.ceil(stats.length / itemsPerPage);
-
-  // const handlePageChange = (e: ChangeEvent<HTMLInputElement>) => {
-  //   const { value } = e.target;
-  //   const num = Number(value);
-  //   if (!num) return;
-  //   if (num > totalPages) {
-  //     setPage(totalPages - 1);
-  //     return;
-  //   }
-  //   if (num < 0) {
-  //     setPage(1);
-  //     return;
-  //   }
-  //   setPage(num - 1);
-  // };
-
-  const capitalize = (str: string) => {
-    if (str == undefined || str.length === 0) return "";
-    return str.charAt(0).toUpperCase() + str.slice(1);
-  };
 
   const table = useReactTable({
     data: stats,
@@ -76,12 +48,9 @@ const AthleteStatTable = (props: AthleteStatTableProps) => {
     getPaginationRowModel: getPaginationRowModel(),
   });
 
-  const handleStatCategorySelectChange = (category: string) => {
+  const handleStatCategorySelectChange = (category: StatCategoryName) => {
     // Get fields of selected stat category
-    const fields: any = STAT_INDEX.find((s) => s.category === category)!.fields;
-    // setSelectedStatCategory(fields);
-    // setSelect(statCategory);
-
+    const labels = STAT_LABELS_INDEX[category];
     // Set the columns of the tanstack table
     setColumns(() => {
       const dateCol = {
@@ -92,11 +61,11 @@ const AthleteStatTable = (props: AthleteStatTableProps) => {
           return date.toLocaleDateString("en-UB");
         },
       };
-      const fieldCols = fields.map((field: any) => ({
-        accessorKey: category + "." + field.key,
-        header: field.label,
+      const statCols = Object.entries(labels).map(([stat, label]: any) => ({
+        accessorKey: category + "." + stat,
+        header: label,
       }));
-      return [dateCol, ...fieldCols];
+      return [dateCol, ...statCols];
     });
     // Perform any other actions with the selected statCategory here
   };
@@ -109,13 +78,13 @@ const AthleteStatTable = (props: AthleteStatTableProps) => {
         </SelectTrigger>
         <SelectContent>
           <SelectGroup>
-            {STAT_INDEX.map(({ category }) => (
+            {Object.entries(STAT_LABELS_INDEX).map(([category, _]) => (
               <SelectItem
                 key={category}
                 value={category}
                 className="capitalize"
               >
-                {capitalize(category)}
+                <p className="capitalize">{category}</p>
               </SelectItem>
             ))}
           </SelectGroup>
@@ -172,139 +141,7 @@ const AthleteStatTable = (props: AthleteStatTableProps) => {
           </TableBody>
         </Table>
       </div>
-
       <PaginationComponent table={table}></PaginationComponent>
-
-      {/* <Table className="min-w-full divide-y divide-gray-200 text-sm">
-        {select == "" ? (
-          <TableCaption>Select a category to display table</TableCaption>
-        ) : (
-          <TableCaption>Stat table by category</TableCaption>
-        )}
-
-        {select !== "" && (
-          <TableHeader>
-            <TableRow>
-              <TableHead>Date</TableHead>
-              {selectedStatCategory.map(({ key, label }) => (
-                <TableHead key={key}>{label}</TableHead>
-              ))}
-            </TableRow>
-          </TableHeader>
-        )}
-        {select !== "" && (
-          <TableBody>
-            {currentStats?.map((stat) => (
-              <TableRow key={stat._id}>
-                <TableCell>
-                  {stat.recordedAt.toLocaleDateString("en-UB")}
-                </TableCell>
-                {selectedStatCategory.map(({ key, label }) => (
-                  <TableCell key={key}>{(stat as any)[select][key]}</TableCell>
-                ))}
-              </TableRow>
-            ))}
-          </TableBody>
-        )}
-      </Table> */}
-
-      {/* <Pagination>
-        <PaginationContent>
-          <PaginationItem>
-            <PaginationPrevious
-              className={
-                page === 0 ? "cursor-not-allowed opacity-20" : "cursor-pointer"
-              }
-              onClick={() =>
-                setPage((prev) => {
-                  if (prev > 0) {
-                    return prev - 1;
-                  }
-                  return 0;
-                })
-              }
-            />
-          </PaginationItem>
-          <PaginationItem hidden={page < 2}>
-            <PaginationEllipsis />
-          </PaginationItem>
-          <PaginationItem
-            hidden={firstStatIdx < stats.length || page !== totalPages - 1}
-          >
-            <PaginationLink
-              className="cursor-pointer"
-              onClick={() => setPage((prev) => prev - 2)}
-            >
-              {page - 1}
-            </PaginationLink>
-          </PaginationItem>
-          <PaginationItem hidden={page === 0}>
-            <PaginationLink
-              className="cursor-pointer"
-              onClick={() => setPage((prev) => prev - 1)}
-            >
-              {page}
-            </PaginationLink>
-          </PaginationItem>
-          <PaginationItem>
-            <PaginationLink isActive={true}>
-              <Input
-                type="tel"
-                inputMode="numeric"
-                placeholder={`${page + 1}`}
-                onChange={handlePageChange}
-                value={page + 1}
-                onClick={(e: any) => (e.target.value = "")}
-                onKeyDown={(e: any) => {
-                  if (e.key === "Backspace") {
-                    e.target.value = "";
-                  }
-                }}
-              ></Input>
-            </PaginationLink>
-          </PaginationItem>
-          <PaginationItem
-            hidden={firstStatIdx + 1 * itemsPerPage > stats.length}
-          >
-            <PaginationLink
-              className="cursor-pointer"
-              onClick={() => setPage((prev) => prev + 1)}
-            >
-              {page + 2}
-            </PaginationLink>
-          </PaginationItem>
-          <PaginationItem
-            hidden={
-              page !== 0 || firstStatIdx + 2 * itemsPerPage > stats.length
-            }
-          >
-            <PaginationLink
-              className="cursor-pointer"
-              onClick={() => setPage((prev) => prev + 2)}
-            >
-              {page + 3}
-            </PaginationLink>
-          </PaginationItem>
-          <PaginationItem hidden={page > totalPages - 3}>
-            <PaginationEllipsis />
-          </PaginationItem>
-          <PaginationItem>
-            <PaginationNext
-              className={
-                lastStatIdx > stats.length
-                  ? "cursor-not-allowed opacity-20"
-                  : "cursor-pointer"
-              }
-              onClick={() =>
-                setPage((prev) => {
-                  if (lastStatIdx < stats.length) return prev + 1;
-                  return prev;
-                })
-              }
-            />
-          </PaginationItem>
-        </PaginationContent>
-      </Pagination> */}
     </div>
   );
 };
