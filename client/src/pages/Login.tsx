@@ -40,7 +40,7 @@ const Login = () => {
     },
   });
 
-  const handleChange = (e: any) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setLoginForm((prev) => ({ ...prev, [name]: value }));
   };
@@ -101,9 +101,9 @@ const Login = () => {
             <CardFooter className="flex-col gap-2 justify-between">
               {isPending && <Loader className="animate-spin" />}
               <Button
-                className="w-full"
                 type="submit"
                 form="loginForm"
+                className="w-full"
                 disabled={isPending}
               >
                 Login
