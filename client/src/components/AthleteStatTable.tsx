@@ -61,7 +61,7 @@ const AthleteStatTable = (props: AthleteStatTableProps) => {
           return date.toLocaleDateString("en-UB");
         },
       };
-      const statCols = Object.entries(labels).map(([stat, label]: any) => ({
+      const statCols = Object.entries(labels).map(([stat, label]) => ({
         accessorKey: category + "." + stat,
         header: label,
       }));
