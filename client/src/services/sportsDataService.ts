@@ -1,4 +1,4 @@
-import type { Athlete } from "@/types/Athlete";
+import type { Athlete, NewAthlete } from "@/types/Athlete";
 import type {
   AthleteStatResponse,
   NewStat,
@@ -80,35 +80,19 @@ export const register = async (
 };
 
 export const profile = async (): Promise<User> => {
-  try {
-    const response = await api.get<User>("/auth/profile");
-    return response.data;
-  } catch (error: any) {
-    throw new Error(error.response.data.detail);
-  }
+  const response = await api.get<User>("/auth/profile");
+  return response.data;
 };
 
 export const getAthletes = async (): Promise<Athlete[]> => {
-  try {
-    const response = await api.get<Athlete[]>("/athlete/");
-    return response.data;
-  } catch (error: any) {
-    throw new Error(error.response.data.detail);
-  }
+  const response = await api.get<Athlete[]>("/athlete/");
+  return response.data;
 };
 
-export const createAthlete = async (athlete: {
-  name: string;
-  age: number;
-  height: number;
-}): Promise<Athlete> => {
-  try {
-    // console.log("Create athlete", athlete)
-    const response = await api.post<Athlete>("/athlete/create", athlete);
-    return response.data;
-  } catch (error: any) {
-    throw new Error(error.status + ": " + error.response.data.detail);
-  }
+export const createAthlete = async (athlete: NewAthlete): Promise<Athlete> => {
+  // console.log("Create athlete", athlete)
+  const response = await api.post<Athlete>("/athlete/create", athlete);
+  return response.data;
 };
 
 export const deleteAthlete = async (id: string) => {
@@ -170,7 +154,7 @@ export const getStats = async (id: string): Promise<AthleteStatResponse> => {
     // Need to add a check for ID to be mongodb ObjectID
     const { data } = await api.get<AthleteStatResponse>(`/athlete/${id}/stats`);
     // console.log(data)
-    const stats: StatResponse[] = data.stats.map((stat: any) => ({
+    const stats: StatResponse[] = data.stats.map((stat) => ({
       ...stat,
       recordedAt: new Date(stat.recordedAt),
       createdAt: new Date(stat.createdAt),
