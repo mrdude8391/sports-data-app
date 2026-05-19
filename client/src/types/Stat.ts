@@ -73,15 +73,6 @@ export type NewStatPayload = {
   statForm: StatForm;
 };
 
-export type StatResponse = BaseStatData & {
-  _id: string;
-  userId: string;
-  athleteId: string;
-  recordedAt: Date;
-  createdAt: Date;
-  updatedAt: Date;
-};
-
 export type AthleteStatResponse = {
   athlete: Athlete;
   stats: Stat[];
