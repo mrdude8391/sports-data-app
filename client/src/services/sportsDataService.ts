@@ -1,7 +1,7 @@
 import type { Athlete, NewAthlete } from "@/types/Athlete";
 import type {
   AthleteStatResponse,
-  NewStat,
+  NewStatPayload,
   StatForm,
   StatResponse,
 } from "@/types/Stat";
@@ -104,7 +104,7 @@ export const deleteAthlete = async (id: string) => {
   }
 };
 
-export const createStat = async (newStat: NewStat) => {
+export const createStat = async (newStat: NewStatPayload) => {
   try {
     // console.log("create stat", form)
     const { athleteId, statForm } = newStat;
