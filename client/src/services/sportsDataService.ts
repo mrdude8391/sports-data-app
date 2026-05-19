@@ -2,8 +2,8 @@ import type { Athlete, NewAthlete } from "@/types/Athlete";
 import type {
   AthleteStatResponse,
   NewStatPayload,
+  Stat,
   StatForm,
-  StatResponse,
 } from "@/types/Stat";
 import axios, { AxiosError } from "axios";
 import type { LoginPayload, User, RegisterPayload } from "@/types/Auth";
@@ -153,14 +153,14 @@ export const getStats = async (id: string): Promise<AthleteStatResponse> => {
     // console.log("Get Stats for: ", id)
     // Need to add a check for ID to be mongodb ObjectID
     const { data } = await api.get<AthleteStatResponse>(`/athlete/${id}/stats`);
-    // console.log(data)
-    const stats: StatResponse[] = data.stats.map((stat) => ({
+    const stats: Stat[] = data.stats.map((stat) => ({
       ...stat,
       recordedAt: new Date(stat.recordedAt),
       createdAt: new Date(stat.createdAt),
       updatedAt: new Date(stat.updatedAt),
     }));
     const athlete = data.athlete;
+
     return { athlete, stats };
   } catch (error: any) {
     if (error.status === 500) {
