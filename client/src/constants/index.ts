@@ -1,3 +1,5 @@
+import type { Label, Stat, StatCategory } from "@/types/Stat";
+
 export const NAV_LINKS_LOGGED_IN = [
   { href: "/", key: "Home", label: "Home" },
   { href: "/about", key: "About", label: "About" },
@@ -14,7 +16,7 @@ export const NAV_LINKS_LOGGED_OUT = [
 export const STAT_INDEX = [
   {
     category: "attack",
-    fields: [
+    labels: [
       { key: "kills", label: "Kills" },
       { key: "errors", label: "Attack Errors" },
       { key: "total", label: "Total Attacks" },
@@ -23,7 +25,7 @@ export const STAT_INDEX = [
   },
   {
     category: "setting",
-    fields: [
+    labels: [
       { key: "assists", label: "Assists" },
       { key: "errors", label: "Setting Errors" },
       { key: "attempts", label: "Setting Attempts" },
@@ -31,7 +33,7 @@ export const STAT_INDEX = [
   },
   {
     category: "serving",
-    fields: [
+    labels: [
       { key: "rating", label: "Serve Rating" },
       { key: "ratingTotal", label: "Serve Rating Total" },
       { key: "aces", label: "Aces" },
@@ -42,7 +44,7 @@ export const STAT_INDEX = [
   },
   {
     category: "receiving",
-    fields: [
+    labels: [
       { key: "rating", label: "Receive Rating" },
       { key: "ratingTotal", label: "Receive Rating Total" },
       { key: "errors", label: "Receive Errors" },
@@ -51,7 +53,7 @@ export const STAT_INDEX = [
   },
   {
     category: "defense",
-    fields: [
+    labels: [
       { key: "digs", label: "Digs" },
       { key: "rating", label: "Passing Rating" },
       { key: "ratingTotal", label: "Passing Rating Total" },
@@ -61,7 +63,7 @@ export const STAT_INDEX = [
   },
   {
     category: "blocking",
-    fields: [
+    labels: [
       { key: "total", label: "Total Blocks" },
       { key: "kills", label: "Block Kills" },
       { key: "solos", label: "Solo Blocks" },
@@ -71,3 +73,46 @@ export const STAT_INDEX = [
     ],
   },
 ];
+
+export const STAT_LABEL_INDEX: Record<StatCategory, Label[]> = {
+  attack: [
+    { key: "kills", label: "Kills" },
+    { key: "errors", label: "Attack Errors" },
+    { key: "total", label: "Total Attacks" },
+    { key: "percentage", label: "Hitting %" },
+  ],
+  setting: [
+    { key: "assists", label: "Assists" },
+    { key: "errors", label: "Setting Errors" },
+    { key: "attempts", label: "Setting Attempts" },
+  ],
+  serving: [
+    { key: "rating", label: "Serve Rating" },
+    { key: "ratingTotal", label: "Serve Rating Total" },
+    { key: "aces", label: "Aces" },
+    { key: "errors", label: "Serve Errors" },
+    { key: "attempts", label: "Serve Attempts" },
+    { key: "percentage", label: "Serving %" },
+  ],
+  receiving: [
+    { key: "rating", label: "Receive Rating" },
+    { key: "ratingTotal", label: "Receive Rating Total" },
+    { key: "errors", label: "Receive Errors" },
+    { key: "attempts", label: "Receive Attempts" },
+  ],
+  defense: [
+    { key: "digs", label: "Digs" },
+    { key: "rating", label: "Passing Rating" },
+    { key: "ratingTotal", label: "Passing Rating Total" },
+    { key: "errors", label: "Passing Errors" },
+    { key: "attempts", label: "Passing Attempts" },
+  ],
+  blocking: [
+    { key: "total", label: "Total Blocks" },
+    { key: "kills", label: "Block Kills" },
+    { key: "solos", label: "Solo Blocks" },
+    { key: "goodTouches", label: "Good Block Touches" },
+    { key: "attempts", label: "Block Attempts" },
+    { key: "errors", label: "Block Errors (+ tools)" },
+  ],
+};
