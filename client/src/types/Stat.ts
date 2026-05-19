@@ -68,7 +68,7 @@ export type StatForm = BaseStatData & {
   recordedAt: Date;
 };
 
-export type NewStat = {
+export type NewStatPayload = {
   athleteId: string;
   statForm: StatForm;
 };
@@ -86,8 +86,6 @@ export type AthleteStatResponse = {
   athlete: Athlete;
   stats: StatResponse[];
 };
-
-export type StatCategoryKey = keyof StatCategory;
 
 /**
  * A blank stat form with all stats set to 0.
@@ -137,82 +135,14 @@ export const DEFAULT_STAT_FORM: StatForm = {
 };
 
 export type StatCategory =
-  | AttackStats
-  | SettingStats
-  | ServingStats
-  | DefenseStats
-  | ReceivingStats
-  | BlockingStats;
+  | "attack"
+  | "setting"
+  | "serving"
+  | "defense"
+  | "receiving"
+  | "blocking";
 
-// // Type: "kills" | "errors" | "total" | "percentage"
-// type AttackKeys = keyof typeof Attack;
-
-// // Type: "Kills" | "Attack Errors" | "Total Attacks" | "Hitting %"
-// // (Requires 'as const' on the original object to work)
-// type AttackValues = typeof Attack[keyof typeof Attack];
-
-const AttackLabels = {
-  kills: "Kills",
-  errors: "Attack Errors",
-  total: "Total Attacks",
-  percentage: "Hitting %",
-} as const;
-
-const SettingLabels = {
-  assists: "Assists",
-  errors: "Setting Errors",
-  attempts: "Setting Attempts",
-} as const;
-
-const ServingLabels = {
-  rating: "Serve Rating",
-  ratingTotal: "Serve Rating Total",
-  aces: "Aces",
-  errors: "Serve Errors",
-  attempts: "Serve Attempts",
-  percentage: "Serving %",
-} as const;
-
-const ReceivingLabels = {
-  rating: "Receive Rating",
-  ratingTotal: "Receive Rating Total",
-  errors: "Receive Errors",
-  attempts: "Receive Attempts",
-} as const;
-
-const DefenseLabels = {
-  digs: "Digs",
-  rating: "Passing Rating",
-  ratingTotal: "Passing Rating Total",
-  errors: "Passing Errors",
-  attempts: "Passing Attempts",
-} as const;
-
-const BlockingLabels = {
-  total: "Total Blocks",
-  kills: "Block Kills",
-  solos: "Solo Blocks",
-  goodTouches: "Good Block Touches",
-  attempts: "Block Attempts",
-  errors: "Block Errors (+ tools)",
-} as const;
-
-type AttackLabels = typeof AttackLabels;
-type SettingLabels = typeof SettingLabels;
-type ServingLabels = typeof ServingLabels;
-type ReceivingLabels = typeof ReceivingLabels;
-type DefenseLabels = typeof DefenseLabels;
-type BlockingLabels = typeof BlockingLabels;
-
-export const STAT_LABELS_INDEX = {
-  attack: AttackLabels,
-  setting: SettingLabels,
-  serving: ServingLabels,
-  receiving: ReceivingLabels,
-  defense: DefenseLabels,
-  blocking: BlockingLabels,
-} as const;
-
-export type StatCategoryName = keyof typeof STAT_LABELS_INDEX;
-export type StatLabels<C extends StatCategoryName> =
-  (typeof STAT_LABELS_INDEX)[C];
+export type Label = {
+  key: string;
+  label: string;
+};
