@@ -46,10 +46,12 @@ const AthleteStatTable = (props: AthleteStatTableProps) => {
       return date.toLocaleDateString("en-UB");
     },
   };
+
   const columns = useMemo<ColumnDef<Stat>[]>(() => {
     const statCols: ColumnDef<Stat>[] = STAT_LABEL_INDEX[category].map(
       ({ key, label }) => ({
         accessorKey: category + "." + key,
+        // accessorFn: (row) => row[category][key as keyof Stat[keyof Stat]],
         header: label,
       }),
     );
