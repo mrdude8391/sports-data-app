@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 import * as sportsDataService from "@/services/sportsDataService";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -6,9 +6,10 @@ import { ChevronDownIcon, Loader } from "lucide-react";
 import {
   DEFAULT_STAT_FORM,
   type AthleteStatResponse,
-  type NewStat,
+  type Label,
+  type NewStatPayload,
+  type Stat,
   type StatCategory,
-  type StatCategoryKey,
   type StatForm,
 } from "@/types/Stat";
 import AthleteStatsList from "@/components/AthleteStatsList";
@@ -26,8 +27,12 @@ import { Calendar } from "@/components/ui/calendar";
 import type { DateRange } from "react-day-picker";
 import useConfirmBlank from "@/hooks/useConfirmBlank";
 
+type AthleteStatsParams = {
+  athleteId: string;
+};
+
 const AthleteStats = () => {
-  const { athleteId } = useParams<{ athleteId: string }>();
+  const { athleteId } = useParams<AthleteStatsParams>();
 
   const [open, setOpen] = useState(false);
   const [date, setDate] = useState<DateRange | undefined>();
@@ -38,13 +43,22 @@ const AthleteStats = () => {
   const queryClient = useQueryClient();
 
   const {
-    data: res,
+    data: { athlete, stats },
     isLoading,
     error,
   } = useQuery<AthleteStatResponse>({
     queryKey: ["stats", athleteId],
     queryFn: () => sportsDataService.getStats(athleteId!),
     enabled: !!athleteId,
+    initialData: {
+      athlete: {
+        id: "",
+        name: "",
+        age: 0,
+        height: 0,
+      },
+      stats: [],
+    },
   });
 
   const {
@@ -55,10 +69,23 @@ const AthleteStats = () => {
     mutationFn: sportsDataService.createStat,
     onSuccess: () => {
       // Invalidate and refetch
-      queryClient.invalidateQueries({ queryKey: ["stats"] });
+      queryClient.invalidateQueries({ queryKey: ["stats", athleteId] });
       setForm(DEFAULT_STAT_FORM);
     },
   });
+
+  const filteredStats = useMemo<Stat[]>(() => {
+    if (stats && !date) {
+      return stats;
+    } else {
+      return stats.filter((stat) => {
+        if (date && date.from && date.to) {
+          const recordedAt = new Date(stat.recordedAt);
+          return recordedAt >= date.from && recordedAt <= date.to;
+        }
+      });
+    }
+  }, [date, stats]);
 
   const handleChangeDate = (date: Date) => {
     const now = new Date();
@@ -72,7 +99,7 @@ const AthleteStats = () => {
     setForm((prev) => ({ ...prev, recordedAt: merged }));
   };
 
-  const handleChange = <C extends StatCategory, K extends StatCategoryKey<C>>(
+  const handleChange = <C extends StatCategory, K extends Label["key"]>(
     category: C,
     key: K,
     value: number,
@@ -149,18 +176,18 @@ const AthleteStats = () => {
 
   const handleSubmit = async () => {
     try {
-      if (res?.athlete && athleteId) {
+      if (athlete && athleteId) {
         if (form === DEFAULT_STAT_FORM) {
-          changeAlertAthleteName(res.athlete.name);
+          changeAlertAthleteName(athlete.name);
           const shouldContinue = await confirm();
           // this async await means that the method handle submit will wait for confirm() to finish
           // go read confirm
           if (!shouldContinue) return;
-          const newStat: NewStat = { athleteId, statForm: form };
+          const newStat: NewStatPayload = { athleteId, statForm: form };
           mutate(newStat);
         } else {
           // form != initial form (user changed the form)
-          const newStat: NewStat = { athleteId, statForm: form };
+          const newStat: NewStatPayload = { athleteId, statForm: form };
           mutate(newStat);
         }
       }
@@ -169,142 +196,91 @@ const AthleteStats = () => {
     }
   };
 
-  const filteredStats = res
-    ? res.stats.filter((stat) => {
-        if (date && date.from && date.to) {
-          const recordedAt = new Date(stat.recordedAt);
-          return recordedAt >= date?.from && recordedAt <= date?.to;
-        }
-      })
-    : undefined;
-
   if (isLoading) return <Loader className="animate-spin" />;
   if (error) return <p>Error: No athlete exists {error.message}</p>;
+  if (stats.length == 0)
+    return (
+      <div className="flex flex-col gap-6 w-full max-w-6xl py-3">
+        <div className="card-container w-full grid sm:grid-cols-2">
+          <div className="px-2 flex flex-col">
+            <h1>{athlete.name}</h1>
+            <p className="text-foreground/80">Age: {athlete.age}</p>
+            <p className="text-foreground/80">Height: {athlete.height} cm</p>
+          </div>
+          <AthleteStatRadial stats={filteredStats} />
+        </div>
+        <CreateAthleteStat
+          athleteId={athleteId!}
+          form={form}
+          isPending={isPending}
+          handleSubmit={handleSubmit}
+          statError={statError}
+          handleChange={handleChange}
+          handleChangeDate={handleChangeDate}
+        ></CreateAthleteStat>
+        <p>No Stats</p>
+      </div>
+    );
 
   return (
     <>
-      {res && (
-        <div className="w-full max-w-6xl ">
-          <ConfirmDialog />
-          {res.stats.length > 0 ? (
-            <div className="flex flex-col gap-6 w-full max-w-6xl py-3">
-              <div className="card-container w-full grid sm:grid-cols-2">
-                <div className="px-2 flex flex-col">
-                  <h1>{res.athlete.name}</h1>
-                  <p className="text-foreground/80">Age: {res.athlete.age}</p>
-                  <p className="text-foreground/80">
-                    Height: {res.athlete.height} cm
-                  </p>
-                </div>
-                <AthleteStatRadial
-                  stats={
-                    filteredStats && filteredStats.length > 0
-                      ? filteredStats
-                      : res?.stats!
-                  }
-                />
-              </div>
-              <CreateAthleteStat
-                athleteId={athleteId!}
-                form={form}
-                isPending={isPending}
-                handleSubmit={handleSubmit}
-                statError={statError}
-                handleChange={handleChange}
-                handleChangeDate={handleChangeDate}
-              ></CreateAthleteStat>
+      <div className="w-full max-w-6xl ">
+        <ConfirmDialog />
+        <div className="flex flex-col gap-6 w-full max-w-6xl py-3">
+          <div className="card-container w-full grid sm:grid-cols-2">
+            <div className="px-2 flex flex-col">
+              <h1>{athlete.name}</h1>
+              <p className="text-foreground/80">Age: {athlete.age}</p>
+              <p className="text-foreground/80">Height: {athlete.height} cm</p>
+            </div>
+            <AthleteStatRadial stats={filteredStats} />
+          </div>
+          <CreateAthleteStat
+            athleteId={athleteId!}
+            form={form}
+            isPending={isPending}
+            handleSubmit={handleSubmit}
+            statError={statError}
+            handleChange={handleChange}
+            handleChangeDate={handleChangeDate}
+          ></CreateAthleteStat>
 
-              <div className="card-container w-full flex flex-col gap-4">
-                <h3>Select Date Range</h3>
-                {/* <p>
-                  Selected Date{" "}
+          <div className="card-container w-full flex flex-col gap-4">
+            <h3>Select Date Range</h3>
+            <Popover open={open} onOpenChange={setOpen}>
+              <PopoverTrigger asChild>
+                <Button
+                  variant="outline"
+                  id="date"
+                  className="w-56 justify-between font-normal"
+                >
                   {date && date.from && date.to
-                    ? `${date.from.toLocaleDateString()}  ${date.to.toLocaleDateString()}`
-                    : ""}
-                      </p> */}
-                <Popover open={open} onOpenChange={setOpen}>
-                  <PopoverTrigger asChild>
-                    <Button
-                      variant="outline"
-                      id="date"
-                      className="w-56 justify-between font-normal"
-                    >
-                      {date && date.from && date.to
-                        ? `${date.from.toLocaleDateString()}  ${date.to.toLocaleDateString()}`
-                        : "Select date"}
-                      <ChevronDownIcon />
-                    </Button>
-                  </PopoverTrigger>
-                  <PopoverContent
-                    className="w-auto overflow-hidden p-0"
-                    align="start"
-                  >
-                    <Calendar
-                      mode="range"
-                      selected={date}
-                      captionLayout="dropdown"
-                      onSelect={(date) => {
-                        setDate(date);
-                      }}
-                    />
-                  </PopoverContent>
-                </Popover>
-              </div>
-
-              <AthleteStatChart
-                stats={
-                  filteredStats && filteredStats.length > 0
-                    ? filteredStats
-                    : res?.stats!
-                }
-              />
-              <AthleteStatTable
-                stats={
-                  filteredStats && filteredStats.length > 0
-                    ? filteredStats
-                    : res?.stats!
-                }
-              />
-              <AthleteStatsList
-                stats={
-                  filteredStats && filteredStats.length > 0
-                    ? filteredStats
-                    : res?.stats!
-                }
-              />
-            </div>
-          ) : (
-            <div className="flex flex-col gap-6 w-full max-w-6xl py-3">
-              <div className="card-container w-full grid sm:grid-cols-2">
-                <div className="px-2 flex flex-col">
-                  <h1>{res.athlete.name}</h1>
-                  <p className="text-foreground/80">Age: {res.athlete.age}</p>
-                  <p className="text-foreground/80">
-                    Height: {res.athlete.height} cm
-                  </p>
-                </div>
-                <AthleteStatRadial
-                  stats={
-                    filteredStats && filteredStats.length > 0
-                      ? filteredStats
-                      : res?.stats!
-                  }
+                    ? `${date.from.toLocaleDateString()} - ${date.to.toLocaleDateString()}`
+                    : "Select date"}
+                  <ChevronDownIcon />
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent
+                className="w-auto overflow-hidden p-0"
+                align="start"
+              >
+                <Calendar
+                  mode="range"
+                  selected={date}
+                  captionLayout="dropdown"
+                  onSelect={(date) => {
+                    setDate(date);
+                  }}
                 />
-              </div>
-              <CreateAthleteStat
-                athleteId={athleteId!}
-                form={form}
-                isPending={isPending}
-                handleSubmit={handleSubmit}
-                statError={statError}
-                handleChange={handleChange}
-                handleChangeDate={handleChangeDate}
-              ></CreateAthleteStat>
-              <p>No Stats</p>
-            </div>
-          )}
+              </PopoverContent>
+            </Popover>
+          </div>
+
+          <AthleteStatChart stats={filteredStats} />
+          <AthleteStatTable stats={filteredStats} />
+          <AthleteStatsList stats={filteredStats} />
         </div>
-      )}
+      </div>
     </>
   );
 };
