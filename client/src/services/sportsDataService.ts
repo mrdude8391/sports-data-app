@@ -101,13 +101,8 @@ export const deleteAthlete = async (id: string) => {
 };
 
 export const createStat = async (newStat: NewStatPayload) => {
-  try {
-    // console.log("create stat", form)
-    const { athleteId, statForm } = newStat;
-    await api.post(`/athlete/${athleteId}/stats`, statForm);
-  } catch (error: any) {
-    throw new Error(error.response.data.detail);
-  }
+  const { athleteId, statForm } = newStat;
+  await api.post(`/athlete/${athleteId}/stats`, statForm);
 };
 
 export const createStatsBatch = async ({
@@ -115,19 +110,15 @@ export const createStatsBatch = async ({
 }: {
   forms: Map<string, StatForm>;
 }) => {
-  try {
-    // console.log("create stats batch")
-    const payload = Array.from(forms.entries()).map(([id, form]) => ({
-      athleteId: id,
-      ...form,
-    }));
-    // Form.entries turns the map into an iterable tuple.
-    // array from turns the iterator into an array of tuples
-    // map generates an array of objects => callback function turns every tuple into an object.
-    await api.post(`/athlete/stats`, payload);
-  } catch (error: any) {
-    throw new Error(error.response.data.detail);
-  }
+  // console.log("create stats batch")
+  const payload = Array.from(forms.entries()).map(([id, form]) => ({
+    athleteId: id,
+    ...form,
+  }));
+  // Form.entries turns the map into an iterable tuple.
+  // array from turns the iterator into an array of tuples
+  // map generates an array of objects => callback function turns every tuple into an object.
+  await api.post(`/athlete/stats`, payload);
 };
 
 export const editStat = async (req: {
@@ -135,44 +126,28 @@ export const editStat = async (req: {
   form: StatForm;
   date: Date;
 }) => {
-  try {
-    // console.log("edit stat", req.form)
-    const payload = { ...req.form, recordedAt: req.date };
-    await api.patch(`/athlete/${req.statId}/stats`, payload);
-  } catch (error: any) {
-    throw new Error(error.response.data.detail);
-  }
+  const payload = { ...req.form, recordedAt: req.date };
+  await api.patch(`/athlete/${req.statId}/stats`, payload);
 };
 
 export const getAthleteWithStats = async (
   id: string,
 ): Promise<AthleteStatResponse> => {
-  try {
-    // console.log("Get Stats for: ", id)
-    // Need to add a check for ID to be mongodb ObjectID
-    const { data } = await api.get<AthleteStatResponse>(`/athlete/${id}/stats`);
-    const stats: Stat[] = data.stats.map((stat) => ({
-      ...stat,
-      recordedAt: new Date(stat.recordedAt),
-      createdAt: new Date(stat.createdAt),
-      updatedAt: new Date(stat.updatedAt),
-    }));
-    const athlete = data.athlete;
+  // console.log("Get Stats for: ", id)
+  // Need to add a check for ID to be mongodb ObjectID
+  const { data } = await api.get<AthleteStatResponse>(`/athlete/${id}/stats`);
+  const stats: Stat[] = data.stats.map((stat) => ({
+    ...stat,
+    recordedAt: new Date(stat.recordedAt),
+    createdAt: new Date(stat.createdAt),
+    updatedAt: new Date(stat.updatedAt),
+  }));
+  const athlete = data.athlete;
 
-    return { athlete, stats };
-  } catch (error: any) {
-    if (error.status === 500) {
-      throw new Error("There was an error retreiving the data");
-    }
-    throw new Error(error.response.data.detail);
-  }
+  return { athlete, stats };
 };
 
 export const deleteStat = async (statId: string) => {
-  try {
-    // console.log("delete stat", statId)
-    await api.delete(`/athlete/${statId}/stats`);
-  } catch (error: any) {
-    throw new Error(error.response.data.detail);
-  }
+  // console.log("delete stat", statId)
+  await api.delete(`/athlete/${statId}/stats`);
 };
