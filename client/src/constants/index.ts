@@ -1,4 +1,4 @@
-import type { Label, Stat, StatCategory } from "@/types/Stat";
+import type { StatLabel, StatCategory } from "@/types/Stat";
 
 export const NAV_LINKS_LOGGED_IN = [
   { href: "/", key: "Home", label: "Home" },
@@ -74,7 +74,7 @@ export const STAT_INDEX = [
   },
 ];
 
-export const STAT_LABEL_INDEX: Record<StatCategory, Label[]> = {
+export const STAT_LABEL_INDEX: Record<StatCategory, StatLabel[]> = {
   attack: [
     { key: "kills", label: "Kills" },
     { key: "errors", label: "Attack Errors" },

@@ -6,7 +6,7 @@ import { ChevronDownIcon, Loader } from "lucide-react";
 import {
   DEFAULT_STAT_FORM,
   type AthleteStatResponse,
-  type Label,
+  type StatLabel,
   type NewStatPayload,
   type Stat,
   type StatCategory,
@@ -99,7 +99,7 @@ const AthleteStats = () => {
     setForm((prev) => ({ ...prev, recordedAt: merged }));
   };
 
-  const handleChange = <C extends StatCategory, K extends Label["key"]>(
+  const handleChange = <C extends StatCategory, K extends StatLabel["key"]>(
     category: C,
     key: K,
     value: number,
