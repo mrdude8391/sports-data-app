@@ -1,8 +1,8 @@
 import { Button } from "./ui/button";
 import { Label } from "./ui/label";
 import { Input } from "./ui/input";
-import { STAT_INDEX } from "@/constants";
-import type { StatCategory, StatForm, StatLabel } from "@/types/Stat";
+import { STAT_LABEL_INDEX } from "@/constants";
+import { type StatCategory, type StatForm, type StatLabel } from "@/types/Stat";
 import {
   Dialog,
   DialogClose,
@@ -49,101 +49,7 @@ const CreateAthleteStat = (props: createAthleteStatProps) => {
     handleChangeDate,
   } = props;
 
-  // const { athleteId } = useParams<{ athleteId: string }>();
-
-  // const [form, setForm] = useState<StatForm>(DEFAULT_STAT_FORM);
-
-  // const queryClient = useQueryClient();
-
-  // const { isPending, error, mutate } = useMutation({
-  //   mutationFn: sportsDataService.createStat,
-  //   onSuccess: () => {
-  //     // Invalidate and refetch
-  //     queryClient.invalidateQueries({ queryKey: ["stats"] });
-  //     setForm(DEFAULT_STAT_FORM);
-  //   },
-  // });
-
-  // const handleChange = <C extends StatCategory, K extends StatCategoryKey<C>>(
-  //   category: C,
-  //   key: K,
-  //   value: number
-  // ) => {
-  //   setForm((prev) => {
-  //     const updatedCategory = {
-  //       ...prev[category],
-  //       [key]: value,
-  //     } as StatForm[C];
-
-  //     // Auto-calculate hitting percentage
-  //     if (
-  //       (category === "attack" && key == "kills") ||
-  //       key == "total" ||
-  //       key == "errors"
-  //     ) {
-  //       const attack = updatedCategory as StatForm["attack"];
-  //       const kills = key === "kills" ? value : attack.kills;
-  //       const total = key === "total" ? value : attack.total;
-  //       const errors = key === "errors" ? value : attack.errors;
-  //       const percentage = total > 0 ? (kills - errors) / total : 0;
-  //       attack.percentage = Math.round(percentage * 1000) / 1000;
-  //     }
-
-  //     // Auto-calculate serving percentage
-  //     if (
-  //       category === "serving" &&
-  //       (key === "attempts" || key === "errors" || key === "ratingTotal")
-  //     ) {
-  //       const serving = updatedCategory as StatForm["serving"];
-  //       const attempts = key === "attempts" ? value : serving.attempts;
-  //       const errors = key === "errors" ? value : serving.errors;
-  //       const ratingTotal = key === "ratingTotal" ? value : serving.ratingTotal;
-  //       const percentage = attempts > 0 ? (attempts - errors) / attempts : 0;
-  //       const rating = attempts > 0 ? ratingTotal / attempts : 0;
-
-  //       serving.rating = Math.round(rating * 10) / 10;
-  //       serving.percentage = Math.round(percentage * 1000) / 1000;
-  //     }
-
-  //     // Auto-calculate receiving rating
-  //     if (
-  //       category === "receiving" &&
-  //       (key === "ratingTotal" || key === "attempts")
-  //     ) {
-  //       const receiving = updatedCategory as StatForm["receiving"];
-  //       const attempts = key === "attempts" ? value : receiving.attempts;
-  //       const ratingTotal =
-  //         key === "ratingTotal" ? value : receiving.ratingTotal;
-  //       const rating = attempts > 0 ? ratingTotal / attempts : 0;
-
-  //       receiving.rating = Math.round(rating * 10) / 10;
-  //     }
-
-  //     // Auto-calculate defense rating
-  //     if (
-  //       category === "defense" &&
-  //       (key === "ratingTotal" || key === "attempts")
-  //     ) {
-  //       const defense = updatedCategory as StatForm["defense"];
-  //       const attempts = key === "attempts" ? value : defense.attempts;
-  //       const ratingTotal = key === "ratingTotal" ? value : defense.ratingTotal;
-  //       const rating = attempts > 0 ? ratingTotal / attempts : 0;
-
-  //       defense.rating = Math.round(rating * 10) / 10;
-  //     }
-
-  //     return {
-  //       ...prev,
-  //       [category]: updatedCategory,
-  //     };
-  //   });
-  // };
-
-  // const handleSubmit = async () => {
-  //   if (athleteId && form != DEFAULT_STAT_FORM) {
-  //     mutate({ athleteId, form: form, date: form.recordedAt });
-  //   }
-  // };
+  const categories = Object.keys(STAT_LABEL_INDEX) as StatCategory[];
 
   if (isPending)
     return (
@@ -198,40 +104,26 @@ const CreateAthleteStat = (props: createAthleteStatProps) => {
                       mode="single"
                       selected={form.recordedAt}
                       captionLayout="dropdown"
-                      onSelect={
-                        (date) => {
-                          handleChangeDate(date!);
-                        }
-
-                        //   (date) => {
-                        //   const now = new Date();
-                        //   const merged = new Date(date!);
-                        //   merged.setHours(
-                        //     now.getHours(),
-                        //     now.getMinutes(),
-                        //     now.getSeconds(),
-                        //     now.getMilliseconds()
-                        //   );
-                        //   setForm((prev) => ({ ...prev, recordedAt: merged }));
-                        // }
-                      }
+                      onSelect={(date) => {
+                        handleChangeDate(date!);
+                      }}
                     />
                   </PopoverContent>
                 </Popover>
               </div>
-              {STAT_INDEX.map(({ category, labels }) => (
+              {categories.map((category) => (
                 <fieldset key={category} className="border p-4 rounded-md ">
                   <legend className="font-bold capitalize">{category}</legend>
 
                   <div className="grid grid-cols-2 gap-4 mt-2">
-                    {labels.map(({ key, label }) => (
+                    {STAT_LABEL_INDEX[category].map(({ key, label }) => (
                       <Label key={key} className="flex flex-col">
                         <span className="text-sm">{label}</span>
                         <Input
                           type="number"
                           value={
-                            form[category as StatCategory][
-                              key as StatCategoryKey<StatCategory>
+                            form[category][
+                              key as keyof StatForm[keyof StatForm]
                             ]
                           }
                           onChange={(e) =>
