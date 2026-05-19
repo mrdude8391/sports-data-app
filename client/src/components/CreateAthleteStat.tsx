@@ -2,7 +2,7 @@ import { Button } from "./ui/button";
 import { Label } from "./ui/label";
 import { Input } from "./ui/input";
 import { STAT_INDEX } from "@/constants";
-import type { StatCategory, StatCategoryKey, StatForm } from "@/types/Stat";
+import type { StatCategory, StatForm, StatLabel } from "@/types/Stat";
 import {
   Dialog,
   DialogClose,
@@ -23,20 +23,13 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 
-// const initialForm: StatForm = Object.fromEntries(
-//   STAT_INDEX.map(({ category, fields }) => [
-//     category,
-//     Object.fromEntries(fields.map((f) => [f.key, 0])),
-//   ])
-// );
-
 interface createAthleteStatProps {
   athleteId: string;
   form: StatForm;
   handleSubmit: () => void;
   statError: Error | null;
   isPending: boolean;
-  handleChange: <C extends StatCategory, K extends StatCategoryKey<C>>(
+  handleChange: <C extends StatCategory, K extends StatLabel["key"]>(
     category: C,
     key: K,
     value: number,
@@ -226,12 +219,12 @@ const CreateAthleteStat = (props: createAthleteStatProps) => {
                   </PopoverContent>
                 </Popover>
               </div>
-              {STAT_INDEX.map(({ category, fields }) => (
+              {STAT_INDEX.map(({ category, labels }) => (
                 <fieldset key={category} className="border p-4 rounded-md ">
                   <legend className="font-bold capitalize">{category}</legend>
 
                   <div className="grid grid-cols-2 gap-4 mt-2">
-                    {fields.map(({ key, label }) => (
+                    {labels.map(({ key, label }) => (
                       <Label key={key} className="flex flex-col">
                         <span className="text-sm">{label}</span>
                         <Input

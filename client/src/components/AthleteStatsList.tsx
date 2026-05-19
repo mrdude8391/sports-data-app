@@ -79,13 +79,13 @@ const AthleteStatsList = (props: AthleteStatsListProps) => {
 
               <AccordionContent>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-4 gap-x-8 mt-2">
-                  {STAT_INDEX.map(({ category, fields }) => (
+                  {STAT_INDEX.map(({ category, labels }) => (
                     <div key={category}>
                       <h4 className="font-semibold capitalize mb-1">
                         {category}
                       </h4>
                       <div className="grid grid-cols-2 gap-1 text-sm  ">
-                        {fields.map(({ key, label }) => (
+                        {labels.map(({ key, label }) => (
                           <div
                             key={key}
                             className="flex justify-between transition-all ease-out hover:bg-accent rounded-sm px-2 "

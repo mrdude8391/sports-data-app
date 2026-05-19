@@ -110,12 +110,12 @@ const AthleteStatForm = (props: athleteStatFormProps) => {
             </Popover>
           </div>
           <form id="statForm" onSubmit={(e) => e.preventDefault()}>
-            {STAT_INDEX.map(({ category, fields }) => (
+            {STAT_INDEX.map(({ category, labels }) => (
               <fieldset key={category} className="border p-4 rounded-md ">
                 <legend className="font-bold capitalize">{category}</legend>
 
                 <div className="grid grid-cols-2 gap-4 mt-2">
-                  {fields.map(({ key, label }) => (
+                  {labels.map(({ key, label }) => (
                     <Label key={key} className="flex flex-col">
                       <span className="text-sm">{label}</span>
                       <Input

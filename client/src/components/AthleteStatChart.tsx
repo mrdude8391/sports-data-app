@@ -48,10 +48,10 @@ const AthleteStatChart = (props: AthleteStatChartProps) => {
           <SelectValue placeholder="Select a stat" />
         </SelectTrigger>
         <SelectContent>
-          {STAT_INDEX.map(({ category, fields }) => (
+          {STAT_INDEX.map(({ category, labels }) => (
             <SelectGroup key={category}>
               <SelectLabel>{capitalize(category)}</SelectLabel>
-              {fields.map(({ key, label }) => (
+              {labels.map(({ key, label }) => (
                 <SelectItem
                   key={key}
                   value={category.toLowerCase() + "." + key}
