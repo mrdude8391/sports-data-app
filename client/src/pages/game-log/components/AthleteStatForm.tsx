@@ -1,8 +1,8 @@
 import { Button } from "../../../components/ui/button";
 import { Label } from "../../../components/ui/label";
 import { Input } from "../../../components/ui/input";
-import { STAT_INDEX } from "@/constants";
-import type { StatCategory, StatCategoryKey, StatForm } from "@/types/Stat";
+import { STAT_LABEL_INDEX } from "@/constants";
+import type { StatCategory, StatForm } from "@/types/Stat";
 import {
   Dialog,
   DialogClose,
@@ -29,9 +29,9 @@ interface athleteStatFormProps {
   form: StatForm;
   statError: Error | null;
   isPending: boolean;
-  handleChange: <C extends StatCategory, K extends StatCategoryKey<C>>(
+  handleChange: <C extends StatCategory>(
     category: C,
-    key: K,
+    key: string,
     value: number,
     id: string,
   ) => void;
@@ -47,6 +47,8 @@ const AthleteStatForm = (props: athleteStatFormProps) => {
     handleChange,
     handleChangeDate,
   } = props;
+
+  const categories = Object.keys(STAT_LABEL_INDEX) as StatCategory[];
 
   if (isPending)
     return (
@@ -110,25 +112,23 @@ const AthleteStatForm = (props: athleteStatFormProps) => {
             </Popover>
           </div>
           <form id="statForm" onSubmit={(e) => e.preventDefault()}>
-            {STAT_INDEX.map(({ category, labels }) => (
+            {categories.map((category) => (
               <fieldset key={category} className="border p-4 rounded-md ">
                 <legend className="font-bold capitalize">{category}</legend>
 
                 <div className="grid grid-cols-2 gap-4 mt-2">
-                  {labels.map(({ key, label }) => (
+                  {STAT_LABEL_INDEX[category].map(({ key, label }) => (
                     <Label key={key} className="flex flex-col">
                       <span className="text-sm">{label}</span>
                       <Input
                         type="number"
                         value={
-                          form[category as StatCategory][
-                            key as StatCategoryKey<StatCategory>
-                          ]
+                          form[category][key as keyof StatForm[keyof StatForm]]
                         }
                         onChange={(e) =>
                           handleChange(
-                            category as StatCategory,
-                            key as any,
+                            category,
+                            key,
                             Number(e.target.value),
                             athlete.id,
                           )
