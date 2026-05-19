@@ -84,7 +84,7 @@ export type StatResponse = BaseStatData & {
 
 export type AthleteStatResponse = {
   athlete: Athlete;
-  stats: StatResponse[];
+  stats: Stat[];
 };
 
 /**
@@ -142,7 +142,7 @@ export type StatCategory =
   | "receiving"
   | "blocking";
 
-export type Label = {
+export type StatLabel = {
   key: string;
   label: string;
 };
