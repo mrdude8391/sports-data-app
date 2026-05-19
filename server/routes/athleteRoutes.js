@@ -8,7 +8,7 @@ const {
   createAthlete,
   getAthletes,
   deleteAthlete,
-  getStats,
+  getAthleteWithStats,
   createStat,
   deleteStat,
   editStat,
@@ -19,7 +19,7 @@ router.post("/create", protect, createAthlete);
 router.get("/", protect, getAthletes);
 router.delete("/:id", protect, deleteAthlete);
 
-router.get("/:id/stats", protect, getStats);
+router.get("/:id/stats", protect, getAthleteWithStats);
 router.post("/:id/stats", protect, createStat);
 router.post("/stats", protect, createStatsBatch);
 router.delete("/:id/stats", protect, deleteStat);

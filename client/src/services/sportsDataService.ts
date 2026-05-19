@@ -148,7 +148,9 @@ export const editStat = async (req: {
   }
 };
 
-export const getStats = async (id: string): Promise<AthleteStatResponse> => {
+export const getAthleteWithStats = async (
+  id: string,
+): Promise<AthleteStatResponse> => {
   try {
     // console.log("Get Stats for: ", id)
     // Need to add a check for ID to be mongodb ObjectID

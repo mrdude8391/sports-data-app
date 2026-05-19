@@ -48,7 +48,7 @@ const AthleteStats = () => {
     error,
   } = useQuery<AthleteStatResponse>({
     queryKey: ["stats", athleteId],
-    queryFn: () => sportsDataService.getStats(athleteId!),
+    queryFn: () => sportsDataService.getAthleteWithStats(athleteId!),
     enabled: !!athleteId,
     initialData: {
       athlete: {
