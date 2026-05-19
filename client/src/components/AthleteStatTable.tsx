@@ -17,19 +17,17 @@ import {
 } from "@/components/ui/select";
 
 import {
+  type ColumnDef,
   flexRender,
   getCoreRowModel,
   getPaginationRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { useState } from "react";
-import {
-  STAT_LABELS_INDEX,
-  type Stat,
-  type StatCategoryName,
-} from "@/types/Stat";
+import { useMemo, useState } from "react";
 
 import PaginationComponent from "./PaginationComponent";
+import { STAT_LABEL_INDEX } from "@/constants";
+import type { Stat, StatCategory } from "@/types/Stat";
 
 interface AthleteStatTableProps {
   stats: Stat[];
@@ -37,8 +35,27 @@ interface AthleteStatTableProps {
 
 const AthleteStatTable = (props: AthleteStatTableProps) => {
   const { stats } = props;
+  // const [columns, setColumns] = useState<TableColumn[]>([]);
 
-  const [columns, setColumns] = useState<any>([]);
+  const [category, setCategory] = useState<StatCategory>("attack");
+  const dateCol: ColumnDef<Stat> = {
+    accessorKey: "recordedAt",
+    header: "Date",
+    cell: (info) => {
+      const date = new Date(info.getValue<Date>());
+      return date.toLocaleDateString("en-UB");
+    },
+  };
+  const columns = useMemo<ColumnDef<Stat>[]>(() => {
+    const statCols: ColumnDef<Stat>[] = STAT_LABEL_INDEX[category].map(
+      ({ key, label }) => ({
+        accessorKey: category + "." + key,
+        header: label,
+      }),
+    );
+
+    return [dateCol, ...statCols];
+  }, [category]);
 
   const table = useReactTable({
     data: stats,
@@ -48,43 +65,50 @@ const AthleteStatTable = (props: AthleteStatTableProps) => {
     getPaginationRowModel: getPaginationRowModel(),
   });
 
-  const handleStatCategorySelectChange = (category: StatCategoryName) => {
-    // Get fields of selected stat category
-    const labels = STAT_LABELS_INDEX[category];
-    // Set the columns of the tanstack table
-    setColumns(() => {
-      const dateCol = {
-        accessorKey: "recordedAt",
-        header: "Date",
-        cell: (info: { getValue: () => string | number | Date }) => {
-          const date = new Date(info.getValue());
-          return date.toLocaleDateString("en-UB");
-        },
-      };
-      const statCols = Object.entries(labels).map(([stat, label]) => ({
-        accessorKey: category + "." + stat,
-        header: label,
-      }));
-      return [dateCol, ...statCols];
-    });
-    // Perform any other actions with the selected statCategory here
-  };
+  // const handleStatCategorySelectChange = (selectValue: string) => {
+  //   const category = selectValue as StatCategory;
+  //   // Get labels of selected stat category
+  //   // const fields: any = STAT_INDEX.find((s) => s.category === category)!.fields;
+  //   const labels = STAT_LABEL_INDEX[category];
+  //   // Set the columns of the tanstack table
+  //   setColumns(() => {
+  //     const dateCol = {
+  //       accessorKey: "recordedAt",
+  //       header: "Date",
+  //       cell: (props: { getValue: () => string | number | Date }) => {
+  //         const date = new Date(props.getValue());
+  //         return date.toLocaleDateString("en-UB");
+  //       },
+  //     };
+  //     const statCols: TableColumn[] = labels.map(({ key, label }) => ({
+  //       accessorKey: category + "." + key,
+  //       header: label,
+  //     }));
+  //     return [dateCol, ...statCols];
+  //   });
+  //   // Perform any other actions with the selected statCategory here
+  // };
   return (
     <div className="card-container flex flex-col gap-4 py-4">
       <h1>Stats by category</h1>
-      <Select onValueChange={handleStatCategorySelectChange}>
+      <Select
+        onValueChange={(value: string) => {
+          const newCategory = value as StatCategory;
+          setCategory(newCategory);
+        }}
+      >
         <SelectTrigger className="w-48">
           <SelectValue placeholder="Select a category" />
         </SelectTrigger>
         <SelectContent>
           <SelectGroup>
-            {Object.entries(STAT_LABELS_INDEX).map(([category, _]) => (
+            {Object.keys(STAT_LABEL_INDEX).map((categoryKey) => (
               <SelectItem
-                key={category}
-                value={category}
+                key={categoryKey}
+                value={categoryKey}
                 className="capitalize"
               >
-                <p className="capitalize">{category}</p>
+                <p className="capitalize">{categoryKey}</p>
               </SelectItem>
             ))}
           </SelectGroup>
@@ -96,18 +120,14 @@ const AthleteStatTable = (props: AthleteStatTableProps) => {
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map((header) => {
-                  return (
-                    <TableHead key={header.id}>
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext(),
-                          )}
-                    </TableHead>
-                  );
-                })}
+                {headerGroup.headers.map((header) => (
+                  <TableHead key={header.id}>
+                    {flexRender(
+                      header.column.columnDef.header,
+                      header.getContext(),
+                    )}
+                  </TableHead>
+                ))}
               </TableRow>
             ))}
           </TableHeader>
