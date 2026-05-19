@@ -96,12 +96,8 @@ export const createAthlete = async (athlete: NewAthlete): Promise<Athlete> => {
 };
 
 export const deleteAthlete = async (id: string) => {
-  try {
-    // console.log("Delete athlete", {id})
-    await api.delete(`/athlete/${id}`);
-  } catch (error: any) {
-    throw new Error(error.response.data.detail);
-  }
+  // console.log("Delete athlete", {id})
+  await api.delete(`/athlete/${id}`);
 };
 
 export const createStat = async (newStat: NewStatPayload) => {
