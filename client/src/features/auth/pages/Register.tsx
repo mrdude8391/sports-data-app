@@ -11,36 +11,32 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Alert, AlertTitle } from "@/components/ui/alert";
-import { Link, useNavigate } from "react-router-dom";
-import * as sportsDataService from "../../../services/sportsDataService";
+import { Link } from "react-router-dom";
 import { AlertCircleIcon, Loader, Volleyball } from "lucide-react";
 import { useAuth } from "@/context/AuthProvider";
-import type { RegisterPayload } from "@/types/Auth";
-import { useMutation } from "@tanstack/react-query";
+import type { RegisterPayload } from "../types/Auth";
 
 const Register = () => {
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [showAlert, setShowAlert] = useState(false);
-  const [error, setError] = useState("");
 
-  const navigate = useNavigate();
+  const { useRegister } = useAuth();
 
-  const { login } = useAuth();
+  // const { isPending, mutate } = useMutation({
+  //   mutationFn: sportsDataService.register,
+  //   onSuccess: (userData) => {
+  //     setError("");
+  //     setShowAlert(true);
+  //     login(userData);
+  //     navigate("/profile");
+  //   },
+  //   onError: (error) => {
+  //     setError(error.message);
+  //   },
+  // });
 
-  const { isPending, mutate } = useMutation({
-    mutationFn: sportsDataService.register,
-    onSuccess: (userData) => {
-      setError("");
-      setShowAlert(true);
-      login(userData);
-      navigate("/profile");
-    },
-    onError: (error) => {
-      setError(error.message);
-    },
-  });
+  const { isPending, error, mutate } = useRegister();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -115,23 +111,14 @@ const Register = () => {
                 Back to Login
               </Button>
             </Link>
-            {showAlert && (
-              <Alert>
-                <AlertTitle className="text-center">
-                  Success! Your have registered your account
-                </AlertTitle>
-              </Alert>
-            )}
             {error && (
               <Alert
                 variant="destructive"
                 className="flex justify-between items-center"
               >
                 <AlertCircleIcon />
-                <AlertTitle className="text-center">{error}</AlertTitle>
-                <Button variant="destructive" onClick={() => setError("")}>
-                  X
-                </Button>
+                <AlertTitle className="text-center">{error.message}</AlertTitle>
+                <Button variant="destructive">X</Button>
               </Alert>
             )}
           </CardFooter>

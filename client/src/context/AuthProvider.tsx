@@ -1,5 +1,10 @@
 import { loginApi } from "@/features/auth/api/login";
-import type { LoginPayload, User } from "@/features/auth/types/Auth";
+import { register } from "@/features/auth/api/register";
+import type {
+  LoginPayload,
+  RegisterPayload,
+  User,
+} from "@/features/auth/types/Auth";
 import { setLogoutCallback } from "@/lib/api";
 import { useMutation, type UseMutationResult } from "@tanstack/react-query";
 import {
@@ -15,6 +20,7 @@ interface AuthProviderType {
   user: User | null;
   logout: () => void;
   useLogin: () => UseMutationResult<User, Error, LoginPayload, unknown>;
+  useRegister: () => UseMutationResult<User, Error, RegisterPayload, unknown>;
 }
 
 export const AuthContext = createContext<AuthProviderType | null>(null);
@@ -32,6 +38,18 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
         setUser(user);
         console.log("Set current user context", user);
         navigate("/athletes");
+      },
+    });
+
+  const useRegister = () =>
+    useMutation({
+      mutationFn: register,
+      onSuccess: (user) => {
+        console.log("Register Successful");
+        localStorage.setItem("user", JSON.stringify(user));
+        setUser(user);
+        console.log("Set current user context", user);
+        navigate("/profile");
       },
     });
 
@@ -55,7 +73,7 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, useLogin, logout }}>
+    <AuthContext.Provider value={{ user, useLogin, logout, useRegister }}>
       {children}
     </AuthContext.Provider>
   );
