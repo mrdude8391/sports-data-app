@@ -45,6 +45,7 @@ const AthleteStats = () => {
   const {
     data: { athlete, stats },
     isLoading,
+    isFetching,
     error,
   } = useQuery<AthleteStatResponse>({
     queryKey: ["stats", athleteId],
@@ -196,8 +197,10 @@ const AthleteStats = () => {
     }
   };
 
+  if (isFetching) return <Loader className="animate-spin" />;
   if (isLoading) return <Loader className="animate-spin" />;
   if (error) return <p>Error: No athlete exists {error.message}</p>;
+  if (!athleteId) return <p>Error: No athlete exists</p>;
   if (stats.length == 0)
     return (
       <div className="flex flex-col gap-6 w-full max-w-6xl py-3">
@@ -278,7 +281,7 @@ const AthleteStats = () => {
 
           <AthleteStatChart stats={filteredStats} />
           <AthleteStatTable stats={filteredStats} />
-          <AthleteStatsList stats={filteredStats} />
+          <AthleteStatsList stats={filteredStats} athleteId={athleteId} />
         </div>
       </div>
     </>
