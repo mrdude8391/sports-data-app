@@ -1,7 +1,6 @@
 import { Button } from "@/components/ui/button";
 import React, { useState } from "react";
-import * as sportsDataService from "../../../services/sportsDataService";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import {
@@ -16,29 +15,28 @@ import { Alert, AlertTitle } from "@/components/ui/alert";
 import { AlertCircleIcon, Loader, Volleyball, X } from "lucide-react";
 import { useAuth } from "@/context/AuthProvider";
 import type { LoginPayload } from "@/features/auth/types/Auth";
-import { useMutation } from "@tanstack/react-query";
 
 const Login = () => {
   const [loginForm, setLoginForm] = useState<LoginPayload>({
     email: "",
     password: "",
   });
-  const [error, setError] = useState("");
-  const navigate = useNavigate();
-  const { login } = useAuth();
+  const { useLogin } = useAuth();
 
-  const { isPending, mutate } = useMutation({
-    mutationFn: sportsDataService.login,
-    onSuccess: (userData) => {
-      console.log("Login Successful");
-      login(userData);
-      navigate("/athletes");
-    },
-    onError: (error) => {
-      setError(error.message);
-      console.log(error);
-    },
-  });
+  // const { isPending, mutate } = useMutation({
+  //   mutationFn: sportsDataService.login,
+  //   onSuccess: (userData) => {
+  //     console.log("Login Successful");
+  //     login(userData);
+  //     navigate("/athletes");
+  //   },
+  //   onError: (error) => {
+  //     setError(error.message);
+  //     console.log(error);
+  //   },
+  // });
+
+  const { isPending, mutate, error } = useLogin();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -121,13 +119,10 @@ const Login = () => {
                   className="flex flex-row justify-between items-center"
                 >
                   <AlertCircleIcon className="mb-1" />
-                  <AlertTitle className="text-center flex">{error}</AlertTitle>
-                  <Button
-                    variant="destructive"
-                    size="icon"
-                    className="size-5"
-                    onClick={() => setError("")}
-                  >
+                  <AlertTitle className="text-center flex">
+                    {error.message}
+                  </AlertTitle>
+                  <Button variant="destructive" size="icon" className="size-5">
                     <X className="size-4" />
                   </Button>
                 </Alert>
