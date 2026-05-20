@@ -3,7 +3,7 @@ import Home from "./pages/Home.tsx";
 import Login from "./pages/Login.tsx";
 
 import { Routes, Route } from "react-router-dom";
-import MainLayout from "./pages/layouts/MainLayout.tsx";
+import MainLayout from "./layouts/MainLayout.tsx";
 import Profile from "./pages/Profile.tsx";
 import Athletes from "./pages/Athletes.tsx";
 import Register from "./pages/Register.tsx";
