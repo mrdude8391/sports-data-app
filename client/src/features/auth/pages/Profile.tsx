@@ -4,11 +4,11 @@ import { useAuth } from "@/context/AuthProvider";
 import { useNavigate } from "react-router-dom";
 
 const Profile = () => {
-  const { user, isLoggedIn } = useAuth();
+  const { user } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!isLoggedIn) navigate("/login");
+    if (!user) navigate("/login");
   }, []);
 
   return (

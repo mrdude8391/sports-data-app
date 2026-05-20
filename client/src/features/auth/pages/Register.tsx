@@ -15,7 +15,7 @@ import { Link, useNavigate } from "react-router-dom";
 import * as sportsDataService from "../../../services/sportsDataService";
 import { AlertCircleIcon, Loader, Volleyball } from "lucide-react";
 import { useAuth } from "@/context/AuthProvider";
-import type { RegisterPayload } from "@/features/auth/types/Auth";
+import type { RegisterPayload } from "@/types/Auth";
 import { useMutation } from "@tanstack/react-query";
 
 const Register = () => {
