@@ -27,7 +27,7 @@ import { useMemo, useState } from "react";
 
 import PaginationComponent from "../../../components/PaginationComponent";
 import { STAT_LABEL_INDEX } from "@/constants";
-import type { Stat, StatCategory } from "@/types/Stat";
+import type { Stat, StatCategory } from "../types/Stat";
 
 interface AthleteStatTableProps {
   stats: Stat[];

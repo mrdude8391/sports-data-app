@@ -4,8 +4,8 @@ import { useState } from "react";
 import * as sportsDataService from "../../../services/sportsDataService";
 import type { Athlete } from "@/features/athletes/types/Athlete";
 
-import AthleteSelector from "../../multiple-athlete/components/MultipleAthleteSelector";
-import AthleteStatForm from "../../multiple-athlete/components/AthleteStatForm";
+import AthleteSelector from "../components/MultipleAthleteSelector";
+import AthleteStatForm from "../components/AthleteStatForm";
 import { Button } from "@/components/ui/button";
 import useConfirmBlank from "@/features/stats/hooks/useConfirmBlankStatForm";
 import {

@@ -1,5 +1,4 @@
 import { STAT_INDEX } from "@/constants";
-import type { Stat } from "@/types/Stat";
 
 import {
   Accordion,
@@ -17,6 +16,7 @@ import {
   getPaginationRowModel,
   useReactTable,
 } from "@tanstack/react-table";
+import type { Stat } from "../types/Stat";
 
 interface AthleteStatsListProps {
   stats: Stat[];

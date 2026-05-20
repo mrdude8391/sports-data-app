@@ -1,4 +1,3 @@
-import type { Stat } from "@/types/Stat";
 import {
   PolarAngleAxis,
   PolarGrid,
@@ -8,6 +7,7 @@ import {
   ResponsiveContainer,
   Tooltip,
 } from "recharts";
+import type { Stat } from "../types/Stat";
 
 interface AthleteStatRadarProps {
   stats: Stat[];
@@ -84,7 +84,7 @@ const AthleteStatRadar = (props: AthleteStatRadarProps) => {
         value: count
           ? Math.round(
               // normalize(receivingRating / count / 3, 0.333, 1) * 1000
-              (receivingRating / count / 3) * 1000
+              (receivingRating / count / 3) * 1000,
             ) / 10
           : 0,
         // divide by 3 because 3 is a perfect pass, so we are taking the average pass rating total/ perfect pass
@@ -97,7 +97,7 @@ const AthleteStatRadar = (props: AthleteStatRadarProps) => {
               (0.45 * ((defenseRatingTotal / count / 3) * 100) +
                 0.45 * ((digTotal / defenseAttempts) * 100) -
                 0.9 * ((defenseErrors / defenseAttempts) * 100)) *
-                10
+                10,
             ) / 10
           : 0,
       },
@@ -108,7 +108,7 @@ const AthleteStatRadar = (props: AthleteStatRadarProps) => {
         value: settingErrorsTotal
           ? Math.round(
               ((settingAssistsTotal - settingErrorsTotal) / settingAttempts) *
-                1000
+                1000,
             ) / 10
           : 0,
       },
