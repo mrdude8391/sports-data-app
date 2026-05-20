@@ -4,12 +4,11 @@ import { Input } from "./ui/input";
 import { useEffect, useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import * as sportsDataService from "@/services/sportsDataService";
-import { STAT_INDEX } from "@/constants";
+import { STAT_LABEL_INDEX } from "@/constants";
 import {
   DEFAULT_STAT_FORM,
   type Stat,
   type StatCategory,
-  type StatCategoryKey,
   type StatForm,
 } from "@/types/Stat";
 import {
@@ -35,10 +34,11 @@ import {
 
 interface EditAthleteStatProps {
   stat: Stat;
+  athleteId: string;
 }
 
 const EditAthleteStat = (props: EditAthleteStatProps) => {
-  const { stat } = props;
+  const { stat, athleteId } = props;
 
   const [form, setForm] = useState<StatForm>(DEFAULT_STAT_FORM);
   const [open, setOpen] = React.useState(false);
@@ -49,9 +49,11 @@ const EditAthleteStat = (props: EditAthleteStatProps) => {
     mutationFn: sportsDataService.editStat,
     onSuccess: () => {
       // Invalidate and refetch
-      queryClient.invalidateQueries({ queryKey: ["stats"] });
+      queryClient.invalidateQueries({ queryKey: ["stats", athleteId] });
     },
   });
+
+  const categories = Object.keys(STAT_LABEL_INDEX) as StatCategory[];
 
   useEffect(() => {
     if (stat) {
@@ -72,7 +74,7 @@ const EditAthleteStat = (props: EditAthleteStatProps) => {
 
   const handleChange = <C extends StatCategory>(
     category: C,
-    key: StatCategoryKey<C>,
+    key: string,
     value: number,
   ) => {
     setForm((prev) => {
@@ -210,27 +212,23 @@ const EditAthleteStat = (props: EditAthleteStatProps) => {
                   </PopoverContent>
                 </Popover>
               </div>
-              {STAT_INDEX.map(({ category, labels }) => (
+              {categories.map((category) => (
                 <fieldset key={category} className="border p-4 rounded-md ">
                   <legend className="font-bold capitalize">{category}</legend>
 
                   <div className="grid grid-cols-2 gap-4 mt-2">
-                    {labels.map(({ key, label }) => (
+                    {STAT_LABEL_INDEX[category].map(({ key, label }) => (
                       <Label key={key} className="flex flex-col">
                         <span className="text-sm">{label}</span>
                         <Input
                           type="number"
                           value={
-                            form[category as StatCategory][
-                              key as StatCategoryKey<StatCategory>
+                            form[category][
+                              key as keyof StatForm[keyof StatForm]
                             ]
                           }
                           onChange={(e) =>
-                            handleChange(
-                              category as StatCategory,
-                              key as any,
-                              Number(e.target.value),
-                            )
+                            handleChange(category, key, Number(e.target.value))
                           }
                           className="border rounded p-2"
                         />

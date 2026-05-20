@@ -20,10 +20,11 @@ import {
 
 interface AthleteStatsListProps {
   stats: Stat[];
+  athleteId: string;
 }
 
 const AthleteStatsList = (props: AthleteStatsListProps) => {
-  const { stats } = props;
+  const { stats, athleteId } = props;
 
   // const [page, setPage] = useState(0);
   // const [itemsPerPage, setItemsPerPage] = useState(10);
@@ -99,7 +100,7 @@ const AthleteStatsList = (props: AthleteStatsListProps) => {
                   ))}
                 </div>
                 <div className="flex justify-end pt-3 gap-3">
-                  <EditAthleteStat stat={stat} />
+                  <EditAthleteStat stat={stat} athleteId={athleteId} />
                   <DeleteAthleteStat statId={stat.id} />
                 </div>
               </AccordionContent>
