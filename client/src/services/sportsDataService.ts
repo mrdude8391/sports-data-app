@@ -1,6 +1,6 @@
 import type { Athlete, NewAthlete } from "@/features/athletes/types/Athlete";
 
-import axios, { AxiosError } from "axios";
+import axios, { AxiosError, type InternalAxiosRequestConfig } from "axios";
 import type {
   LoginPayload,
   User,
@@ -31,7 +31,11 @@ export const setLogoutCallback = (cb: () => void) => {
   logoutCallback = cb;
 };
 
-api.interceptors.request.use((config) => {
+api.interceptors.request.use((config: InternalAxiosRequestConfig) => {
+  if (config.headers) {
+    config.headers.Accept = "application/json";
+  }
+  config.withCredentials = true;
   const savedUser = localStorage.getItem("user");
   if (savedUser) {
     const user: User = JSON.parse(savedUser);
