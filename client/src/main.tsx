@@ -1,6 +1,6 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import App from "./Router.tsx";
+import Router from "./Router.tsx";
 import { BrowserRouter } from "react-router-dom";
 import AuthProvider from "./context/AuthContext.tsx";
 import { ThemeProvider } from "./context/ThemeProvider.tsx";
@@ -15,7 +15,7 @@ createRoot(document.getElementById("root")!).render(
       <BrowserRouter>
         <AuthProvider>
           <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
-            <App />
+            <Router />
           </ThemeProvider>
         </AuthProvider>
       </BrowserRouter>

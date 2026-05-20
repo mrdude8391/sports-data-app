@@ -12,7 +12,7 @@ import GameLog from "./pages/game-log/GameLog.tsx";
 import NotFound from "./pages/NotFound.tsx";
 import Test from "./pages/Test.tsx";
 
-function App() {
+function Router() {
   return (
     <>
       <Routes>
@@ -35,4 +35,4 @@ function App() {
   );
 }
 
-export default App;
+export default Router;
