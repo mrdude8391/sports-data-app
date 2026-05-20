@@ -11,7 +11,7 @@ import {
 import DeleteAthleteStat from "./DeleteAthleteStat";
 import EditAthleteStat from "./EditAthleteStat";
 import { useState } from "react";
-import PaginationComponent from "./PaginationComponent";
+import PaginationComponent from "../../../components/PaginationComponent";
 import {
   getCoreRowModel,
   getPaginationRowModel,

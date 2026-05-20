@@ -12,11 +12,11 @@ import {
   type StatCategory,
   type StatForm,
 } from "@/types/Stat";
-import AthleteStatsList from "@/components/AthleteStatsList";
-import CreateAthleteStat from "@/components/CreateAthleteStat";
-import AthleteStatChart from "@/components/AthleteStatChart";
-import AthleteStatRadial from "@/components/AthleteStatRadar";
-import AthleteStatTable from "@/components/AthleteStatTable";
+import AthleteStatsList from "@/features/stats/components/AthleteStatsList";
+import CreateAthleteStat from "@/features/stats/components/CreateAthleteStat";
+import AthleteStatChart from "@/features/stats/components/AthleteStatChart";
+import AthleteStatRadial from "@/features/stats/components/AthleteStatRadar";
+import AthleteStatTable from "@/features/stats/components/AthleteStatTable";
 import {
   Popover,
   PopoverContent,

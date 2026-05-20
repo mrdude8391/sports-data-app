@@ -1,5 +1,5 @@
-import { Button } from "./ui/button";
-import * as sportsDataService from "../services/sportsDataService";
+import { Button } from "../../../components/ui/button";
+import * as sportsDataService from "../../../services/sportsDataService";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Trash2 } from "lucide-react";
 

@@ -12,7 +12,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import type { Athlete } from "@/types/Athlete";
-import CreateAthlete from "@/components/CreateAthlete";
+import CreateAthlete from "@/features/athletes/components/CreateAthlete";
 import { useQuery } from "@tanstack/react-query";
 
 const AthleteSelector = (athleteSelectorProps: {

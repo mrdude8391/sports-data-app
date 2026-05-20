@@ -2,7 +2,7 @@ import { NAV_LINKS_LOGGED_IN, NAV_LINKS_LOGGED_OUT } from "@/constants";
 import { useAuth } from "@/context/AuthProvider";
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Button } from "./ui/button";
+import { Button } from "../ui/button";
 import { BurgerMenu } from "./BurgerMenu";
 import { SunMoon, Volleyball } from "lucide-react";
 import { useTheme } from "@/context/ThemeProvider";

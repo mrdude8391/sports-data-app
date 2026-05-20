@@ -1,6 +1,6 @@
-import { Button } from "./ui/button";
-import { Label } from "./ui/label";
-import { Input } from "./ui/input";
+import { Button } from "../../../components/ui/button";
+import { Label } from "../../../components/ui/label";
+import { Input } from "../../../components/ui/input";
 import { STAT_LABEL_INDEX } from "@/constants";
 import { type StatCategory, type StatForm } from "@/types/Stat";
 import {
@@ -13,7 +13,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Alert, AlertTitle } from "./ui/alert";
+import { Alert, AlertTitle } from "../../../components/ui/alert";
 import { AlertCircleIcon, Loader } from "lucide-react";
 import { ChevronDownIcon } from "lucide-react";
 import { Calendar } from "@/components/ui/calendar";

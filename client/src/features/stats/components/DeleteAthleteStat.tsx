@@ -1,4 +1,4 @@
-import { Button } from "./ui/button";
+import { Button } from "../../../components/ui/button";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import * as sportsDataService from "@/services/sportsDataService";
 

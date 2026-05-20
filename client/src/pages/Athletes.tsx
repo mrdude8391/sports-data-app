@@ -1,13 +1,13 @@
-import AthleteCard from "@/components/AthleteCard";
+import AthleteCard from "@/features/athletes/components/AthleteCard";
 import type { Athlete } from "@/types/Athlete";
 import * as sportsDataService from "../services/sportsDataService";
 import sampleImage from "../assets/circle-user-round.svg";
 import { EllipsisVertical, Loader } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
-import CreateAthlete from "@/components/CreateAthlete";
+import CreateAthlete from "@/features/athletes/components/CreateAthlete";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import DeleteAthlete from "@/components/DeleteAthlete";
+import DeleteAthlete from "@/features/athletes/components/DeleteAthlete";
 
 const Athletes = () => {
   const [isEdit, setIsEdit] = useState(false);

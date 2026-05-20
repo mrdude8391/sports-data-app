@@ -1,15 +1,15 @@
-import { DatePicker } from "@/components/shared/DatePicker";
+import { DatePicker } from "@/components/DatePicker";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
-import * as sportsDataService from "../../services/sportsDataService";
+import * as sportsDataService from "../services/sportsDataService";
 import type { Athlete } from "@/types/Athlete";
 import {
   DEFAULT_STAT_FORM,
   type StatCategory,
   type StatForm,
 } from "@/types/Stat";
-import AthleteSelector from "./components/AthleteSelector";
-import AthleteStatForm from "./components/AthleteStatForm";
+import AthleteSelector from "../features/multiple-athlete/components/MultipleAthleteSelector";
+import AthleteStatForm from "../features/multiple-athlete/components/AthleteStatForm";
 import { Button } from "@/components/ui/button";
 import useConfirmBlank from "@/hooks/useConfirmBlank";
 

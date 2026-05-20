@@ -1,9 +1,9 @@
 import { NAV_LINKS_LOGGED_IN, NAV_LINKS_LOGGED_OUT } from "@/constants";
 import { Link } from "react-router-dom";
 import { Menu, SunMoon, X } from "lucide-react";
-import { Button } from "./ui/button";
 import { useTheme } from "@/context/ThemeProvider";
 import { useAuth } from "@/context/AuthProvider";
+import { Button } from "../ui/button";
 
 interface BurgerMenuProps {
   isOpen: boolean;

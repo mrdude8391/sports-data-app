@@ -1,6 +1,6 @@
-import { Button } from "../../../components/ui/button";
-import { Label } from "../../../components/ui/label";
-import { Input } from "../../../components/ui/input";
+import { Button } from "../../../components/ui/button.tsx";
+import { Label } from "../../../components/ui/label.tsx";
+import { Input } from "../../../components/ui/input.tsx";
 import { STAT_LABEL_INDEX } from "@/constants";
 import type { StatCategory, StatForm } from "@/types/Stat";
 import {

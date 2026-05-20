@@ -1,6 +1,6 @@
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
-import { Button } from "./ui/button";
+import { Button } from "../../../components/ui/button";
 import { useState } from "react";
 import * as sportsDataService from "@/services/sportsDataService";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -15,7 +15,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Alert, AlertTitle } from "./ui/alert";
+import { Alert, AlertTitle } from "../../../components/ui/alert";
 import { AlertCircleIcon, Loader } from "lucide-react";
 
 const CreateAthlete = () => {
