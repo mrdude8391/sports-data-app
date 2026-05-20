@@ -12,7 +12,7 @@ interface BurgerMenuProps {
 
 export const BurgerMenu = ({ isOpen, setIsOpen }: BurgerMenuProps) => {
   const { flipTheme } = useTheme();
-  const { isLoggedIn, user, logout } = useAuth();
+  const { user, logout } = useAuth();
 
   return (
     <div className=" flex gap-3 items-center lg:hidden">
@@ -46,7 +46,7 @@ export const BurgerMenu = ({ isOpen, setIsOpen }: BurgerMenuProps) => {
         {isOpen && (
           <nav className="py-2 ">
             <ul className="space-y-2 flex items-center justify-end flex-col p-2">
-              {isLoggedIn && user
+              {user
                 ? NAV_LINKS_LOGGED_IN.map((link) => (
                     <Link
                       to={link.href}
@@ -67,7 +67,7 @@ export const BurgerMenu = ({ isOpen, setIsOpen }: BurgerMenuProps) => {
                       {link.label}
                     </Link>
                   ))}
-              {isLoggedIn && user ? (
+              {user ? (
                 <Button
                   variant="secondary"
                   onClick={() => {

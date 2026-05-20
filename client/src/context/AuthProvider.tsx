@@ -13,7 +13,6 @@ import { useNavigate } from "react-router-dom";
 
 interface AuthProviderType {
   user: User | null;
-  isLoggedIn: boolean;
   logout: () => void;
   useLogin: () => UseMutationResult<User, Error, LoginPayload, unknown>;
 }
@@ -22,7 +21,6 @@ export const AuthContext = createContext<AuthProviderType | null>(null);
 
 const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const navigate = useNavigate();
 
   const useLogin = () =>
@@ -33,7 +31,6 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
         localStorage.setItem("user", JSON.stringify(user));
         setUser(user);
         console.log("Set current user context", user);
-        setIsLoggedIn(true);
         navigate("/athletes");
       },
     });
@@ -42,7 +39,6 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
     console.log("Client Logout");
     localStorage.clear();
     setUser(null);
-    setIsLoggedIn(false);
     navigate("/login");
   };
 
@@ -50,15 +46,16 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
     const savedUser = localStorage.getItem("user");
     if (savedUser) {
       const user = JSON.parse(savedUser);
-      setIsLoggedIn(true);
       setUser(user);
+    } else {
+      setUser(null);
     }
 
     setLogoutCallback(logout);
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, isLoggedIn, useLogin, logout }}>
+    <AuthContext.Provider value={{ user, useLogin, logout }}>
       {children}
     </AuthContext.Provider>
   );

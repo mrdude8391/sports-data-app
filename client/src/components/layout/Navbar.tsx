@@ -11,7 +11,7 @@ const Navbar = () => {
   // Nav bar links are configured in the NAV_LINKS list in the index.ts file
   const [isOpen, setIsOpen] = useState(false);
   const closeMenu = () => setIsOpen(false);
-  const { user, isLoggedIn, logout } = useAuth();
+  const { user, logout } = useAuth();
   const { flipTheme } = useTheme();
   let location = useLocation();
   const currentLocation = "/" + location.pathname.split("/")[1];
@@ -31,7 +31,7 @@ const Navbar = () => {
 
           <ul className="hidden lg:flex h-full gap-6 items-center">
             {/* <ul className={!isOpen ? "nav-menu" : "nav-menu-open"}> */}
-            {isLoggedIn && user
+            {user
               ? NAV_LINKS_LOGGED_IN.map((link) => (
                   <li
                     key={link.key}
@@ -64,7 +64,7 @@ const Navbar = () => {
                     </Link>
                   </li>
                 ))}
-            {isLoggedIn && user ? (
+            {user ? (
               <li>
                 <Button onClick={logout}>Logout</Button>
               </li>
