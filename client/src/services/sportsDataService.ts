@@ -1,12 +1,17 @@
-import type { Athlete, NewAthlete } from "@/types/Athlete";
-import type {
-  AthleteStatResponse,
-  NewStatPayload,
-  Stat,
-  StatForm,
-} from "@/types/Stat";
+import type { Athlete, NewAthlete } from "@/features/athletes/types/Athlete";
+
 import axios, { AxiosError } from "axios";
-import type { LoginPayload, User, RegisterPayload } from "@/types/Auth";
+import type {
+  LoginPayload,
+  User,
+  RegisterPayload,
+} from "@/features/auth/types/Auth";
+import type {
+  NewStatPayload,
+  StatForm,
+  AthleteStatResponse,
+  Stat,
+} from "@/features/stats/types/Stat";
 
 export interface ApiError {
   message: string;

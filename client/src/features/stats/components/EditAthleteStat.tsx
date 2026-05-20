@@ -5,12 +5,7 @@ import { useEffect, useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import * as sportsDataService from "@/services/sportsDataService";
 import { STAT_LABEL_INDEX } from "@/constants";
-import {
-  DEFAULT_STAT_FORM,
-  type Stat,
-  type StatCategory,
-  type StatForm,
-} from "@/types/Stat";
+
 import {
   Dialog,
   DialogClose,
@@ -31,6 +26,12 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import {
+  DEFAULT_STAT_FORM,
+  type Stat,
+  type StatCategory,
+  type StatForm,
+} from "../types/Stat";
 
 interface EditAthleteStatProps {
   stat: Stat;

@@ -1,4 +1,3 @@
-import type { Stat } from "@/types/Stat";
 import {
   LineChart,
   Line,
@@ -20,6 +19,7 @@ import {
 } from "@/components/ui/select";
 import { useState } from "react";
 import { STAT_INDEX } from "@/constants";
+import type { Stat } from "../types/Stat";
 
 interface AthleteStatChartProps {
   stats: Stat[];

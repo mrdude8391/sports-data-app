@@ -3,15 +3,7 @@ import { useParams } from "react-router-dom";
 import * as sportsDataService from "@/services/sportsDataService";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { ChevronDownIcon, Loader } from "lucide-react";
-import {
-  DEFAULT_STAT_FORM,
-  type AthleteStatResponse,
-  type StatLabel,
-  type NewStatPayload,
-  type Stat,
-  type StatCategory,
-  type StatForm,
-} from "@/types/Stat";
+
 import AthleteStatsList from "@/features/stats/components/AthleteStatsList";
 import CreateAthleteStat from "@/features/stats/components/CreateAthleteStat";
 import AthleteStatChart from "@/features/stats/components/AthleteStatChart";
@@ -26,6 +18,15 @@ import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import type { DateRange } from "react-day-picker";
 import useConfirmBlank from "@/features/stats/hooks/useConfirmBlankStatForm";
+import {
+  type StatForm,
+  DEFAULT_STAT_FORM,
+  type AthleteStatResponse,
+  type Stat,
+  type StatCategory,
+  type StatLabel,
+  type NewStatPayload,
+} from "../types/Stat";
 
 type AthleteStatsParams = {
   athleteId: string;

@@ -1,7 +1,7 @@
 import AthleteCard from "@/features/athletes/components/AthleteCard";
-import type { Athlete } from "@/types/Athlete";
-import * as sportsDataService from "../services/sportsDataService";
-import sampleImage from "../assets/circle-user-round.svg";
+import type { Athlete } from "@/features/athletes/types/Athlete";
+import * as sportsDataService from "../../../services/sportsDataService";
+import sampleImage from "../../../assets/circle-user-round.svg";
 import { EllipsisVertical, Loader } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import CreateAthlete from "@/features/athletes/components/CreateAthlete";

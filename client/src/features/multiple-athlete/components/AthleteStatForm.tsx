@@ -2,7 +2,6 @@ import { Button } from "../../../components/ui/button.tsx";
 import { Label } from "../../../components/ui/label.tsx";
 import { Input } from "../../../components/ui/input.tsx";
 import { STAT_LABEL_INDEX } from "@/constants";
-import type { StatCategory, StatForm } from "@/types/Stat";
 import {
   Dialog,
   DialogClose,
@@ -22,7 +21,8 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import type { Athlete } from "@/types/Athlete.ts";
+import type { Athlete } from "@/features/athletes/types/Athlete.ts";
+import type { StatForm, StatCategory } from "@/features/stats/types/Stat.ts";
 
 interface athleteStatFormProps {
   athlete: Athlete;

@@ -1,4 +1,4 @@
-import type { Athlete } from "./Athlete";
+import type { Athlete } from "@/features/athletes/types/Athlete";
 
 type AttackStats = {
   kills: number;

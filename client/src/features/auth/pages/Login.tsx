@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import React, { useState } from "react";
-import * as sportsDataService from "../services/sportsDataService";
+import * as sportsDataService from "../../../services/sportsDataService";
 import { Link, useNavigate } from "react-router-dom";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
@@ -15,7 +15,7 @@ import {
 import { Alert, AlertTitle } from "@/components/ui/alert";
 import { AlertCircleIcon, Loader, Volleyball, X } from "lucide-react";
 import { useAuth } from "@/context/AuthProvider";
-import type { LoginPayload } from "@/types/Auth";
+import type { LoginPayload } from "@/features/auth/types/Auth";
 import { useMutation } from "@tanstack/react-query";
 
 const Login = () => {

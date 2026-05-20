@@ -10,8 +10,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "./ui/select";
-import type { Stat } from "@/types/Stat";
 import type { Table } from "@tanstack/react-table";
+import type { Stat } from "@/features/stats/types/Stat";
 
 interface PaginationComponentProps {
   table: Table<Stat>;

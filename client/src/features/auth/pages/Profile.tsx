@@ -1,4 +1,4 @@
-import sampleImage from "../assets/circle-user-round.svg";
+import sampleImage from "../../../assets/circle-user-round.svg";
 import { useEffect } from "react";
 import { useAuth } from "@/context/AuthProvider";
 import { useNavigate } from "react-router-dom";

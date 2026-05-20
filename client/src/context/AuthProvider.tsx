@@ -1,4 +1,4 @@
-import type { User } from "@/types/Auth";
+import type { User } from "@/features/auth/types/Auth";
 import {
   createContext,
   useContext,

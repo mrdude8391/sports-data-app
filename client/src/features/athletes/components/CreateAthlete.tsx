@@ -4,7 +4,7 @@ import { Button } from "../../../components/ui/button";
 import { useState } from "react";
 import * as sportsDataService from "@/services/sportsDataService";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import type { NewAthlete } from "@/types/Athlete";
+import type { NewAthlete } from "@/features/athletes/types/Athlete";
 import {
   Dialog,
   DialogClose,

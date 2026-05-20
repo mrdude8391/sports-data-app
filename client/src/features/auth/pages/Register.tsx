@@ -12,10 +12,10 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Alert, AlertTitle } from "@/components/ui/alert";
 import { Link, useNavigate } from "react-router-dom";
-import * as sportsDataService from "../services/sportsDataService";
+import * as sportsDataService from "../../../services/sportsDataService";
 import { AlertCircleIcon, Loader, Volleyball } from "lucide-react";
 import { useAuth } from "@/context/AuthProvider";
-import type { RegisterPayload } from "@/types/Auth";
+import type { RegisterPayload } from "@/features/auth/types/Auth";
 import { useMutation } from "@tanstack/react-query";
 
 const Register = () => {

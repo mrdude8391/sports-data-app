@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import type { Athlete } from "@/types/Athlete";
+import type { Athlete } from "@/features/athletes/types/Athlete";
 
 interface AthleteCardProps {
   imageSrc: string;

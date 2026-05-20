@@ -11,7 +11,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import type { Athlete } from "@/types/Athlete";
+import type { Athlete } from "@/features/athletes/types/Athlete";
 import CreateAthlete from "@/features/athletes/components/CreateAthlete";
 import { useQuery } from "@tanstack/react-query";
 
