@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/card";
 import { Alert, AlertTitle } from "@/components/ui/alert";
 import { AlertCircleIcon, Loader, Volleyball, X } from "lucide-react";
-import { useAuth } from "@/context/AuthContext";
+import { useAuth } from "@/context/AuthProvider";
 import type { LoginPayload } from "@/types/Auth";
 import { useMutation } from "@tanstack/react-query";
 

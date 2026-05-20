@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { Menu, SunMoon, X } from "lucide-react";
 import { Button } from "./ui/button";
 import { useTheme } from "@/context/ThemeProvider";
-import { useAuth } from "@/context/AuthContext";
+import { useAuth } from "@/context/AuthProvider";
 
 interface BurgerMenuProps {
   isOpen: boolean;

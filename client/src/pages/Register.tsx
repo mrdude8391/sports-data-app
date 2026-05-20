@@ -14,7 +14,7 @@ import { Alert, AlertTitle } from "@/components/ui/alert";
 import { Link, useNavigate } from "react-router-dom";
 import * as sportsDataService from "../services/sportsDataService";
 import { AlertCircleIcon, Loader, Volleyball } from "lucide-react";
-import { useAuth } from "@/context/AuthContext";
+import { useAuth } from "@/context/AuthProvider";
 import type { RegisterPayload } from "@/types/Auth";
 import { useMutation } from "@tanstack/react-query";
 

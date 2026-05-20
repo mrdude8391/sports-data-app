@@ -9,14 +9,14 @@ import {
 import { useNavigate } from "react-router-dom";
 import { setLogoutCallback } from "@/services/sportsDataService";
 
-interface AuthContextType {
+interface AuthProviderType {
   user: User | null;
   isLoggedIn: boolean;
   login: (user: User) => void;
   logout: () => void;
 }
 
-export const AuthContext = createContext<AuthContextType | null>(null);
+export const AuthContext = createContext<AuthProviderType | null>(null);
 
 const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
