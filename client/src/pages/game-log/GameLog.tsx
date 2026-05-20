@@ -6,7 +6,6 @@ import type { Athlete } from "@/types/Athlete";
 import {
   DEFAULT_STAT_FORM,
   type StatCategory,
-  type StatCategoryKey,
   type StatForm,
 } from "@/types/Stat";
 import AthleteSelector from "./components/AthleteSelector";
@@ -75,9 +74,9 @@ const GameLog = () => {
     });
   };
 
-  const handleChange = <C extends StatCategory, K extends StatCategoryKey<C>>(
+  const handleChange = <C extends StatCategory>(
     category: C,
-    key: K,
+    key: string,
     value: number,
     id: string,
   ) => {
