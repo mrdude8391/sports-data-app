@@ -71,8 +71,8 @@ async def register_user(user_data: RegisterPayload, db: AsyncSession) -> UserWit
         raise DuplicateUserError
 
     # Generate token
-    access_token_expires = timedelta(hours=TOKEN_EXPIRE_TIME)
-    token = create_access_token({"id": str(new_user.id)}, access_token_expires)
+    # access_token_expires = timedelta(hours=TOKEN_EXPIRE_TIME)
+    token = create_access_token({"id": str(new_user.id)})
 
     return UserWithToken(
         id=new_user.id, username=new_user.username, email=new_user.email, token=token
@@ -94,8 +94,8 @@ async def login_user(login_payload: LoginPayload, db: AsyncSession) -> UserWithT
     if not is_match:
         raise InvalidCredentialsError
     # Generate token
-    access_token_expires = timedelta(hours=TOKEN_EXPIRE_TIME)
-    token = create_access_token({"id": str(existing_user.id)}, access_token_expires)
+    # access_token_expires = timedelta(hours=TOKEN_EXPIRE_TIME)
+    token = create_access_token({"id": str(existing_user.id)})
     return UserWithToken(
         id=existing_user.id,
         username=existing_user.username,
