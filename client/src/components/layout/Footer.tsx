@@ -3,7 +3,7 @@ import { useAuth } from "@/context/AuthProvider";
 import { Link } from "react-router-dom";
 
 const Footer = () => {
-  const { isLoggedIn, user } = useAuth();
+  const { user } = useAuth();
   return (
     <>
       <footer className="bg-accent flex flex-col items-center justify-center pb-16 lg:pb-4 pt-4">
@@ -33,7 +33,7 @@ const Footer = () => {
             <div className="flex flex-col gap-2 ">
               {/* <p className="font-bold mb-1">Menu</p> */}
               <ul className="h-full gap-3 flex ">
-                {isLoggedIn && user
+                {user
                   ? NAV_LINKS_LOGGED_IN.map((link) => (
                       <Link
                         to={link.href}
