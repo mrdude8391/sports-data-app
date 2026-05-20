@@ -198,7 +198,8 @@ const AthleteStats = () => {
     }
   };
 
-  if (isFetching) return <Loader className="animate-spin" />;
+  if (isFetching && athlete.name == "")
+    return <Loader className="animate-spin" />;
   if (isLoading) return <Loader className="animate-spin" />;
   if (error) return <p>Error: No athlete exists {error.message}</p>;
   if (!athleteId) return <p>Error: No athlete exists</p>;
