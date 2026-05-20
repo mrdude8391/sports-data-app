@@ -1,4 +1,7 @@
-import type { User } from "@/features/auth/types/Auth";
+import { loginApi } from "@/features/auth/api/login";
+import type { LoginPayload, User } from "@/features/auth/types/Auth";
+import { setLogoutCallback } from "@/lib/api";
+import { useMutation, type UseMutationResult } from "@tanstack/react-query";
 import {
   createContext,
   useContext,
@@ -7,13 +10,12 @@ import {
   type ReactNode,
 } from "react";
 import { useNavigate } from "react-router-dom";
-import { setLogoutCallback } from "@/services/sportsDataService";
 
 interface AuthProviderType {
   user: User | null;
   isLoggedIn: boolean;
-  login: (user: User) => void;
   logout: () => void;
+  useLogin: () => UseMutationResult<User, Error, LoginPayload, unknown>;
 }
 
 export const AuthContext = createContext<AuthProviderType | null>(null);
@@ -23,12 +25,18 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const navigate = useNavigate();
 
-  const login = (user: User) => {
-    localStorage.setItem("user", JSON.stringify(user));
-    setUser(user);
-    console.log("Set current user context", user);
-    setIsLoggedIn(true);
-  };
+  const useLogin = () =>
+    useMutation({
+      mutationFn: loginApi,
+      onSuccess: (user) => {
+        console.log("Login Successful");
+        localStorage.setItem("user", JSON.stringify(user));
+        setUser(user);
+        console.log("Set current user context", user);
+        setIsLoggedIn(true);
+        navigate("/athletes");
+      },
+    });
 
   const logout = () => {
     console.log("Client Logout");
@@ -50,7 +58,7 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, isLoggedIn, login, logout }}>
+    <AuthContext.Provider value={{ user, isLoggedIn, useLogin, logout }}>
       {children}
     </AuthContext.Provider>
   );
