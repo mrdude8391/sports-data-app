@@ -25,7 +25,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import type { DateRange } from "react-day-picker";
-import useConfirmBlank from "@/hooks/useConfirmBlank";
+import useConfirmBlank from "@/features/stats/hooks/useConfirmBlankStatForm";
 
 type AthleteStatsParams = {
   athleteId: string;

@@ -11,7 +11,7 @@ import {
 import AthleteSelector from "../features/multiple-athlete/components/MultipleAthleteSelector";
 import AthleteStatForm from "../features/multiple-athlete/components/AthleteStatForm";
 import { Button } from "@/components/ui/button";
-import useConfirmBlank from "@/hooks/useConfirmBlank";
+import useConfirmBlank from "@/features/stats/hooks/useConfirmBlankStatForm";
 
 const GameLog = () => {
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
