@@ -6,7 +6,7 @@ interface AthleteCardProps {
   athlete: Athlete;
 }
 
-const AthleteCard = (props: AthleteCardProps) => {
+const AthleteListItem = (props: AthleteCardProps) => {
   const { athlete } = props;
   return (
     <div className="w-full flex items-center justify-between gap-3 rounded-lg ">
@@ -26,4 +26,4 @@ const AthleteCard = (props: AthleteCardProps) => {
   );
 };
 
-export default AthleteCard;
+export default AthleteListItem;

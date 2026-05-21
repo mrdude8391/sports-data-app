@@ -20,7 +20,7 @@ const Athletes = () => {
   });
 
   if (isLoading) return <Loader className="animate-spin" />;
-  if (error) return <p>... No Athletes Found</p>;
+  if (error) return <p>Error Loading Athletes</p>;
 
   return (
     <div className="flex flex-col gap-6 w-full sm:w-lg items-center">
