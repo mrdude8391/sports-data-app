@@ -58,7 +58,7 @@ const CreateAthlete = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const athlete: NewAthlete = {
-      name: form.name,
+      name: form.name.trim(),
       age: Number(form.age),
       height: Number(form.height),
     };
