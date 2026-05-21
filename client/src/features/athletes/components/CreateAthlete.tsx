@@ -32,13 +32,12 @@ const initialState: AthleteFormState = {
 const CreateAthlete = () => {
   // Improvements: Can consider adding custom FormField.tsx component
   const [form, setForm] = useState<AthleteFormState>(initialState);
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isDialogOpen, setIsDialogOpen] = useState(false); // Is required so the dialog will stay open until the new athlete is successfully created.
   const resetForm = () => setForm(initialState);
 
   const { isPending, error, mutate } = useCreateAthlete({
     mutationConfig: {
       onSuccess: () => {
-        console.log("booger");
         resetForm();
         setIsDialogOpen(false);
       },
