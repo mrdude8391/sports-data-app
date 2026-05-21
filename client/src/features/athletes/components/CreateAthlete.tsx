@@ -2,8 +2,6 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "../../../components/ui/button";
 import { useState } from "react";
-import * as sportsDataService from "@/services/sportsDataService";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import type { NewAthlete } from "@/features/athletes/types/Athlete";
 import {
   Dialog,
@@ -17,6 +15,7 @@ import {
 } from "@/components/ui/dialog";
 import { Alert, AlertTitle } from "../../../components/ui/alert";
 import { AlertCircleIcon, Loader } from "lucide-react";
+import { useCreateAthlete } from "../api/createAthlete";
 
 type AthleteFormState = {
   name: string;
@@ -31,18 +30,18 @@ const initialState: AthleteFormState = {
 };
 
 const CreateAthlete = () => {
+  // Improvements: Can consider adding custom FormField.tsx component
   const [form, setForm] = useState<AthleteFormState>(initialState);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
   const resetForm = () => setForm(initialState);
 
-  const queryClient = useQueryClient();
-
-  const { isPending, error, mutate } = useMutation({
-    mutationFn: sportsDataService.createAthlete,
-    onSuccess: () => {
-      // Invalidate and refetch
-      queryClient.invalidateQueries({ queryKey: ["athletes"] });
-      resetForm();
-      console.log("New athlete submit success");
+  const { isPending, error, mutate } = useCreateAthlete({
+    mutationConfig: {
+      onSuccess: () => {
+        console.log("booger");
+        resetForm();
+        setIsDialogOpen(false);
+      },
     },
   });
 
@@ -66,7 +65,7 @@ const CreateAthlete = () => {
   };
   return (
     <div>
-      <Dialog>
+      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogTrigger asChild>
           <Button variant="default">Add New Athlete</Button>
         </DialogTrigger>
