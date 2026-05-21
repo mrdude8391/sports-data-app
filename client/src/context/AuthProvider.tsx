@@ -1,11 +1,10 @@
-import { loginApi } from "@/features/auth/api/login";
-import { register } from "@/features/auth/api/register";
 import type {
   LoginPayload,
   RegisterPayload,
   User,
 } from "@/features/auth/types/Auth";
 import { setLogoutCallback } from "@/lib/api";
+import { login, register } from "@/lib/auth";
 import { useMutation, type UseMutationResult } from "@tanstack/react-query";
 import {
   createContext,
@@ -31,7 +30,7 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const useLogin = () =>
     useMutation({
-      mutationFn: loginApi,
+      mutationFn: login,
       onSuccess: (user) => {
         console.log("Login Successful");
         localStorage.setItem("user", JSON.stringify(user));
