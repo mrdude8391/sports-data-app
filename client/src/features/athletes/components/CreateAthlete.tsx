@@ -18,11 +18,21 @@ import {
 import { Alert, AlertTitle } from "../../../components/ui/alert";
 import { AlertCircleIcon, Loader } from "lucide-react";
 
+type AthleteFormState = {
+  name: string;
+  age: string;
+  height: string;
+};
+
+const initialState: AthleteFormState = {
+  name: "",
+  age: "",
+  height: "",
+};
+
 const CreateAthlete = () => {
-  const [name, setName] = useState("");
-  const [age, setAge] = useState("");
-  const [height, setHeight] = useState("");
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [form, setForm] = useState<AthleteFormState>(initialState);
+  const resetForm = () => setForm(initialState);
 
   const queryClient = useQueryClient();
 
@@ -31,30 +41,34 @@ const CreateAthlete = () => {
     onSuccess: () => {
       // Invalidate and refetch
       queryClient.invalidateQueries({ queryKey: ["athletes"] });
-      setName("");
-      setAge("");
-      setHeight("");
-      setIsDialogOpen(false);
+      resetForm();
       console.log("New athlete submit success");
     },
   });
 
+  const handleChange =
+    (field: keyof AthleteFormState) =>
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setForm((prev) => ({
+        ...prev,
+        [field]: e.target.value,
+      }));
+    };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const athlete: NewAthlete = {
-      name: name,
-      age: Number(age),
-      height: Number(height),
+      name: form.name,
+      age: Number(form.age),
+      height: Number(form.height),
     };
     mutate(athlete);
   };
   return (
     <div>
-      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+      <Dialog>
         <DialogTrigger asChild>
-          <Button variant="default" onClick={() => setIsDialogOpen(true)}>
-            Add New Athlete
-          </Button>
+          <Button variant="default">Add New Athlete</Button>
         </DialogTrigger>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
@@ -71,12 +85,10 @@ const CreateAthlete = () => {
                 <Input
                   type="text"
                   id="name"
-                  value={name}
+                  value={form.name}
                   placeholder="Name"
                   required
-                  onChange={(e) => {
-                    setName(e.target.value);
-                  }}
+                  onChange={handleChange("name")}
                 ></Input>
               </div>
               <div className="grid gap-3">
@@ -84,12 +96,10 @@ const CreateAthlete = () => {
                 <Input
                   type="number"
                   id="age"
-                  value={age}
+                  value={form.age}
                   placeholder="Age"
                   required
-                  onChange={(e) => {
-                    setAge(e.target.value);
-                  }}
+                  onChange={handleChange("age")}
                 ></Input>
               </div>
               <div className="grid gap-3">
@@ -97,12 +107,10 @@ const CreateAthlete = () => {
                 <Input
                   type="number"
                   id="height"
-                  value={height}
+                  value={form.height}
                   placeholder="Height"
                   required
-                  onChange={(e) => {
-                    setHeight(e.target.value);
-                  }}
+                  onChange={handleChange("height")}
                 ></Input>
               </div>
             </div>
@@ -115,9 +123,7 @@ const CreateAthlete = () => {
           )}
           <DialogFooter>
             <DialogClose asChild>
-              <Button variant="outline" onClick={() => setIsDialogOpen(false)}>
-                Cancel
-              </Button>
+              <Button variant="outline">Cancel</Button>
             </DialogClose>
             <Button type="submit" form="athleteForm" disabled={isPending}>
               {isPending ? (
