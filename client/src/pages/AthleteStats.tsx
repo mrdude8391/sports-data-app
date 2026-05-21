@@ -26,7 +26,7 @@ import {
   type StatCategory,
   type StatLabel,
   type NewStatPayload,
-} from "../types/Stat";
+} from "../features/stats/types/Stat";
 
 type AthleteStatsParams = {
   athleteId: string;

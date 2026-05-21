@@ -1,10 +1,10 @@
 import { EllipsisVertical, Loader } from "lucide-react";
 import CreateAthlete from "@/features/athletes/components/CreateAthlete";
-import * as sportsDataService from "../../../services/sportsDataService";
+import * as sportsDataService from "../services/sportsDataService";
 
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import AthleteList from "../components/AthleteList";
+import AthleteList from "../features/athletes/components/AthleteList";
 import { useQuery } from "@tanstack/react-query";
 
 const Athletes = () => {
