@@ -45,13 +45,15 @@ const CreateAthlete = () => {
   });
 
   const handleChange =
+    // A curried function, when the onchange event is triggered, onChange{handleChange('name')(e)}
+    // can think of the element just adds/calls (e)=>{} to whatever you put in it.
     (field: keyof AthleteFormState) =>
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      setForm((prev) => ({
-        ...prev,
-        [field]: e.target.value,
-      }));
-    };
+      (e: React.ChangeEvent<HTMLInputElement>) => {
+        setForm((prev) => ({
+          ...prev,
+          [field]: e.target.value,
+        }));
+      };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
