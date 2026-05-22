@@ -21,7 +21,12 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import type { NewStat, StatCategory } from "../types/Stat";
+import type {
+  BaseStatData,
+  NewStat,
+  StatCategory,
+  StatLabel,
+} from "../types/Stat";
 
 interface createAthleteStatProps {
   athleteId: string;
@@ -29,9 +34,12 @@ interface createAthleteStatProps {
   handleSubmit: () => void;
   statError: Error | null;
   isPending: boolean;
-  handleChange: <C extends StatCategory>(
+  handleChange: <
+    C extends StatCategory,
+    K extends StatLabel<BaseStatData[C]>["key"],
+  >(
     category: C,
-    key: string,
+    key: K,
     value: number,
     id: string,
   ) => void;

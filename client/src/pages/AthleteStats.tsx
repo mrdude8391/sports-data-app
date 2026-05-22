@@ -26,6 +26,7 @@ import {
   type StatCategory,
   type StatLabel,
   type NewStatPayload,
+  type BaseStatData,
 } from "../features/stats/types/Stat";
 
 type AthleteStatsParams = {
@@ -101,7 +102,10 @@ const AthleteStats = () => {
     setForm((prev) => ({ ...prev, recordedAt: merged }));
   };
 
-  const handleChange = <C extends StatCategory, K extends StatLabel["key"]>(
+  const handleChange = <
+    C extends StatCategory,
+    K extends StatLabel<BaseStatData[C]>["key"],
+  >(
     category: C,
     key: K,
     value: number,
