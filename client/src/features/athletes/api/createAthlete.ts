@@ -1,5 +1,10 @@
 import { api } from "@/lib/api";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import {
+  mutationOptions,
+  useMutation,
+  useQueryClient,
+  type UseMutationOptions,
+} from "@tanstack/react-query";
 import type { NewAthlete, Athlete } from "../types/Athlete";
 import type { MutationConfig } from "@/lib/react-query";
 
@@ -13,6 +18,12 @@ type UseCreateAthleteOptions = {
   mutationConfig?: MutationConfig<typeof createAthlete>;
 };
 
+// in this way if we want to pass in any special options we can do it with the hook.
+// the options need to be typed though and it normally infers it from the mutationFn
+// a simple solution we can do is just manually plug in the types
+// UseMutationOptions<Athlete, Error, NewAthlete>
+// but we want to do this programatically so we made a MutationConfig Type that takes the ApiMethod and does this for us.
+// so the mutationConfig object is the correct UseMutationOptions object type.
 export const useCreateAthlete = ({
   mutationConfig,
 }: UseCreateAthleteOptions = {}) => {
