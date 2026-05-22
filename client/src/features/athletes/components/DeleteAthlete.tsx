@@ -1,7 +1,6 @@
 import { Button } from "../../../components/ui/button";
-import * as sportsDataService from "../../../services/sportsDataService";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Trash2 } from "lucide-react";
+import { useDeleteAthlete } from "../api/deleteAthlete";
 
 interface deleteAthleteProps {
   id: string;
@@ -10,13 +9,7 @@ interface deleteAthleteProps {
 const DeleteAthlete = (props: deleteAthleteProps) => {
   const { id } = props;
 
-  const queryClient = useQueryClient();
-  const { isPending, error, mutate } = useMutation({
-    mutationFn: sportsDataService.deleteAthlete,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["athletes"] });
-    },
-  });
+  const { isPending, error, mutate } = useDeleteAthlete();
 
   if (isPending) return <p>...Deleting</p>;
   if (error) return <p>{error.message}</p>;
