@@ -5,7 +5,7 @@ import AthleteListItem from "./AthleteListItem";
 
 interface AthleteListProps {
   isEdit: boolean;
-  athletes: Athlete[];
+  athletes?: Athlete[];
 }
 
 const AthleteList = (athleteListProps: AthleteListProps) => {

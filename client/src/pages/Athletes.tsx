@@ -31,7 +31,7 @@ const Athletes = () => {
           </Button>
         </div>
 
-        <AthleteList isEdit={isEdit} athletes={athletes ?? []} />
+        <AthleteList isEdit={isEdit} athletes={athletes} />
       </div>
     </div>
   );
