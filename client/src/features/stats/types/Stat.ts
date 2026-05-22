@@ -46,7 +46,7 @@ type BlockingStats = {
   errors: number;
 };
 
-type BaseStatData = {
+export type BaseStatData = {
   attack: AttackStats;
   setting: SettingStats;
   serving: ServingStats;
@@ -56,7 +56,7 @@ type BaseStatData = {
 };
 
 export type Stat = BaseStatData & {
-  id?: string;
+  id: string;
   userId: string;
   athleteId: string;
   recordedAt: Date;
@@ -64,13 +64,11 @@ export type Stat = BaseStatData & {
   updatedAt: Date;
 };
 
-export type StatForm = BaseStatData & {
-  recordedAt: Date;
-};
+export type NewStat = Omit<Stat, "id">;
 
 export type NewStatPayload = {
   athleteId: string;
-  statForm: StatForm;
+  statForm: NewStat;
 };
 
 export type AthleteStatResponse = {
@@ -81,7 +79,9 @@ export type AthleteStatResponse = {
 /**
  * A blank stat form with all stats set to 0.
  */
-export const DEFAULT_STAT_FORM: StatForm = {
+export const DEFAULT_STAT_FORM: NewStat = {
+  userId: "",
+  athleteId: "",
   attack: {
     kills: 0,
     errors: 0,
@@ -122,7 +122,9 @@ export const DEFAULT_STAT_FORM: StatForm = {
     attempts: 0,
     errors: 0,
   },
+  createdAt: new Date(),
   recordedAt: new Date(),
+  updatedAt: new Date(),
 };
 
 export type StatCategory =
@@ -133,7 +135,8 @@ export type StatCategory =
   | "receiving"
   | "blocking";
 
-export type StatLabel = {
-  key: string;
+// eg. want the labels of "attack" or labels of "receiving"
+export type StatLabel<T extends BaseStatData[keyof BaseStatData]> = {
+  key: keyof T & string;
   label: string;
 };

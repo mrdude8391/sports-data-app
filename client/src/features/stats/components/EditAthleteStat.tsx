@@ -30,7 +30,7 @@ import {
   DEFAULT_STAT_FORM,
   type Stat,
   type StatCategory,
-  type StatForm,
+  type NewStat,
 } from "../types/Stat";
 
 interface EditAthleteStatProps {
@@ -41,7 +41,7 @@ interface EditAthleteStatProps {
 const EditAthleteStat = (props: EditAthleteStatProps) => {
   const { stat, athleteId } = props;
 
-  const [form, setForm] = useState<StatForm>(DEFAULT_STAT_FORM);
+  const [form, setForm] = useState<NewStat>(DEFAULT_STAT_FORM);
   const [open, setOpen] = React.useState(false);
 
   const queryClient = useQueryClient();
@@ -224,9 +224,7 @@ const EditAthleteStat = (props: EditAthleteStatProps) => {
                         <Input
                           type="number"
                           value={
-                            form[category][
-                              key as keyof StatForm[keyof StatForm]
-                            ]
+                            form[category][key as keyof NewStat[keyof NewStat]]
                           }
                           onChange={(e) =>
                             handleChange(category, key, Number(e.target.value))

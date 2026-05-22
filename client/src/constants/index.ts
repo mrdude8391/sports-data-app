@@ -1,4 +1,10 @@
-import type { StatCategory, StatLabel } from "@/features/stats/types/Stat";
+import type {
+  BaseStatData,
+  Stat,
+  StatCategory,
+  NewStat,
+  StatLabel,
+} from "@/features/stats/types/Stat";
 
 export const NAV_LINKS_LOGGED_IN = [
   { href: "/", key: "Home", label: "Home" },
@@ -74,7 +80,13 @@ export const STAT_INDEX = [
   },
 ];
 
-export const STAT_LABEL_INDEX: Record<StatCategory, StatLabel[]> = {
+type StatLabelIndex = {
+  // first part says iterate through the union type to get all the posibilities
+  [C in StatCategory]: StatLabel<BaseStatData[C]>[];
+  // second part says a StatLabel list[]
+};
+
+export const STAT_LABEL_INDEX = {
   attack: [
     { key: "kills", label: "Kills" },
     { key: "errors", label: "Attack Errors" },

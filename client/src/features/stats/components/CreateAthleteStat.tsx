@@ -21,11 +21,11 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import type { StatForm, StatCategory } from "../types/Stat";
+import type { NewStat, StatCategory } from "../types/Stat";
 
 interface createAthleteStatProps {
   athleteId: string;
-  form: StatForm;
+  form: NewStat;
   handleSubmit: () => void;
   statError: Error | null;
   isPending: boolean;
@@ -122,9 +122,7 @@ const CreateAthleteStat = (props: createAthleteStatProps) => {
                         <Input
                           type="number"
                           value={
-                            form[category][
-                              key as keyof StatForm[keyof StatForm]
-                            ]
+                            form[category][key as keyof NewStat[keyof NewStat]]
                           }
                           onChange={(e) =>
                             handleChange(

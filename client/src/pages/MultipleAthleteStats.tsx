@@ -9,7 +9,7 @@ import AthleteStatForm from "../features/athletes/components/AthleteStatForm";
 import { Button } from "@/components/ui/button";
 import useConfirmBlank from "@/features/stats/hooks/useConfirmBlankStatForm";
 import {
-  type StatForm,
+  type NewStat,
   type StatCategory,
   DEFAULT_STAT_FORM,
 } from "@/features/stats/types/Stat";
@@ -18,8 +18,8 @@ const GameLog = () => {
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
 
   const [selectedAthletes, setSelectedAthletes] = useState(new Set<Athlete>());
-  const [forms, setForms] = useState<Map<string, StatForm>>(
-    new Map<string, StatForm>(),
+  const [forms, setForms] = useState<Map<string, NewStat>>(
+    new Map<string, NewStat>(),
   );
   // if i use a dictionary, i can have the ids : form
   // add the new form whenver an athlete is added to the selection list
@@ -40,7 +40,7 @@ const GameLog = () => {
       });
       // delete from from dictionary
       setForms((prev) => {
-        const newMap = new Map<string, StatForm>(prev);
+        const newMap = new Map<string, NewStat>(prev);
         newMap.delete(athlete.id);
         return newMap;
       });
@@ -67,7 +67,7 @@ const GameLog = () => {
       now.getMilliseconds(),
     );
     setForms((prev) => {
-      const newMap = new Map<string, StatForm>(prev);
+      const newMap = new Map<string, NewStat>(prev);
       for (const [key, value] of newMap) {
         newMap.set(key, { ...value, recordedAt: newDate });
       }
@@ -86,7 +86,7 @@ const GameLog = () => {
       const updatedCategory = {
         ...form![category],
         [key]: value,
-      } as StatForm[C];
+      } as NewStat[C];
 
       // Auto-calculate hitting percentage
       if (
@@ -94,7 +94,7 @@ const GameLog = () => {
         key == "total" ||
         key == "errors"
       ) {
-        const attack = updatedCategory as StatForm["attack"];
+        const attack = updatedCategory as NewStat["attack"];
         const kills = key === "kills" ? value : attack.kills;
         const total = key === "total" ? value : attack.total;
         const errors = key === "errors" ? value : attack.errors;
@@ -107,7 +107,7 @@ const GameLog = () => {
         category === "serving" &&
         (key === "attempts" || key === "errors" || key === "ratingTotal")
       ) {
-        const serving = updatedCategory as StatForm["serving"];
+        const serving = updatedCategory as NewStat["serving"];
         const attempts = key === "attempts" ? value : serving.attempts;
         const errors = key === "errors" ? value : serving.errors;
         const ratingTotal = key === "ratingTotal" ? value : serving.ratingTotal;
@@ -123,7 +123,7 @@ const GameLog = () => {
         category === "receiving" &&
         (key === "ratingTotal" || key === "attempts")
       ) {
-        const receiving = updatedCategory as StatForm["receiving"];
+        const receiving = updatedCategory as NewStat["receiving"];
         const attempts = key === "attempts" ? value : receiving.attempts;
         const ratingTotal =
           key === "ratingTotal" ? value : receiving.ratingTotal;
@@ -137,7 +137,7 @@ const GameLog = () => {
         category === "defense" &&
         (key === "ratingTotal" || key === "attempts")
       ) {
-        const defense = updatedCategory as StatForm["defense"];
+        const defense = updatedCategory as NewStat["defense"];
         const attempts = key === "attempts" ? value : defense.attempts;
         const ratingTotal = key === "ratingTotal" ? value : defense.ratingTotal;
         const rating = attempts > 0 ? ratingTotal / attempts : 0;
@@ -152,7 +152,7 @@ const GameLog = () => {
     };
     const updatedForm = createUpdatedCategory();
     setForms((prev) => {
-      const newMap = new Map<string, StatForm>(prev);
+      const newMap = new Map<string, NewStat>(prev);
       newMap.set(id, updatedForm);
       return newMap;
     });
@@ -167,7 +167,7 @@ const GameLog = () => {
     onSuccess: () => {
       // Invalidate and refetch
       queryClient.invalidateQueries({ queryKey: ["statsBatch"] });
-      setForms(new Map<string, StatForm>());
+      setForms(new Map<string, NewStat>());
       setSelectedAthletes(new Set<Athlete>());
     },
   });

@@ -7,7 +7,7 @@ import type {
 } from "@/features/auth/types/Auth";
 import type {
   NewStatPayload,
-  StatForm,
+  NewStat,
   AthleteStatResponse,
   Stat,
 } from "@/features/stats/types/Stat";
@@ -64,7 +64,7 @@ export const createStat = async (newStat: NewStatPayload) => {
 export const createStatsBatch = async ({
   forms,
 }: {
-  forms: Map<string, StatForm>;
+  forms: Map<string, NewStat>;
 }) => {
   // console.log("create stats batch")
   const payload = Array.from(forms.entries()).map(([id, form]) => ({
@@ -79,7 +79,7 @@ export const createStatsBatch = async ({
 
 export const editStat = async (req: {
   statId: string;
-  form: StatForm;
+  form: NewStat;
   date: Date;
 }) => {
   const payload = { ...req.form, recordedAt: req.date };

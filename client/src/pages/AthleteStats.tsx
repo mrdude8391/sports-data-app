@@ -19,7 +19,7 @@ import { Calendar } from "@/components/ui/calendar";
 import type { DateRange } from "react-day-picker";
 import useConfirmBlank from "@/features/stats/hooks/useConfirmBlankStatForm";
 import {
-  type StatForm,
+  type NewStat,
   DEFAULT_STAT_FORM,
   type AthleteStatResponse,
   type Stat,
@@ -37,7 +37,7 @@ const AthleteStats = () => {
 
   const [open, setOpen] = useState(false);
   const [date, setDate] = useState<DateRange | undefined>();
-  const [form, setForm] = useState<StatForm>(DEFAULT_STAT_FORM);
+  const [form, setForm] = useState<NewStat>(DEFAULT_STAT_FORM);
 
   const { confirm, ConfirmDialog, changeAlertAthleteName } = useConfirmBlank();
 
@@ -110,7 +110,7 @@ const AthleteStats = () => {
       const updatedCategory = {
         ...prev[category],
         [key]: value,
-      } as StatForm[C];
+      } as NewStat[C];
 
       // Auto-calculate hitting percentage
       if (
@@ -118,7 +118,7 @@ const AthleteStats = () => {
         key == "total" ||
         key == "errors"
       ) {
-        const attack = updatedCategory as StatForm["attack"];
+        const attack = updatedCategory as NewStat["attack"];
         const kills = key === "kills" ? value : attack.kills;
         const total = key === "total" ? value : attack.total;
         const errors = key === "errors" ? value : attack.errors;
@@ -131,7 +131,7 @@ const AthleteStats = () => {
         category === "serving" &&
         (key === "attempts" || key === "errors" || key === "ratingTotal")
       ) {
-        const serving = updatedCategory as StatForm["serving"];
+        const serving = updatedCategory as NewStat["serving"];
         const attempts = key === "attempts" ? value : serving.attempts;
         const errors = key === "errors" ? value : serving.errors;
         const ratingTotal = key === "ratingTotal" ? value : serving.ratingTotal;
@@ -147,7 +147,7 @@ const AthleteStats = () => {
         category === "receiving" &&
         (key === "ratingTotal" || key === "attempts")
       ) {
-        const receiving = updatedCategory as StatForm["receiving"];
+        const receiving = updatedCategory as NewStat["receiving"];
         const attempts = key === "attempts" ? value : receiving.attempts;
         const ratingTotal =
           key === "ratingTotal" ? value : receiving.ratingTotal;
@@ -161,7 +161,7 @@ const AthleteStats = () => {
         category === "defense" &&
         (key === "ratingTotal" || key === "attempts")
       ) {
-        const defense = updatedCategory as StatForm["defense"];
+        const defense = updatedCategory as NewStat["defense"];
         const attempts = key === "attempts" ? value : defense.attempts;
         const ratingTotal = key === "ratingTotal" ? value : defense.ratingTotal;
         const rating = attempts > 0 ? ratingTotal / attempts : 0;
