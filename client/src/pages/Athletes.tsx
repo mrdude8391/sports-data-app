@@ -1,23 +1,14 @@
 import { EllipsisVertical, Loader } from "lucide-react";
 import CreateAthlete from "@/features/athletes/components/CreateAthlete";
-import * as sportsDataService from "../services/sportsDataService";
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import AthleteList from "../features/athletes/components/AthleteList";
-import { useQuery } from "@tanstack/react-query";
+import { useAthletes } from "@/features/athletes/api/getAthletes";
 
 const Athletes = () => {
   const [isEdit, setIsEdit] = useState(false);
 
-  const {
-    data: athletes,
-    isLoading,
-    error,
-  } = useQuery({
-    queryKey: ["athletes"],
-    queryFn: sportsDataService.getAthletes,
-  });
+  const { data: athletes, isLoading, error } = useAthletes();
 
   if (isLoading) return <Loader className="animate-spin" />;
   if (error) return <p>Error Loading Athletes</p>;
