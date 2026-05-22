@@ -11,7 +11,12 @@ const Athletes = () => {
   const { data: athletes, isLoading, error } = useAthletes();
 
   if (isLoading) return <Loader className="animate-spin" />;
-  if (error) return <p>Error Loading Athletes</p>;
+  if (error)
+    return (
+      <p>
+        Error Loading Athletes <span>{error.message}</span>
+      </p>
+    );
 
   return (
     <div className="flex flex-col gap-6 w-full sm:w-lg items-center">
