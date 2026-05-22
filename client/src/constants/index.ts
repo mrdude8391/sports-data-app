@@ -86,7 +86,7 @@ type StatLabelIndex = {
   // second part says a StatLabel list[]
 };
 
-export const STAT_LABEL_INDEX = {
+export const STAT_LABEL_INDEX: StatLabelIndex = {
   attack: [
     { key: "kills", label: "Kills" },
     { key: "errors", label: "Attack Errors" },
