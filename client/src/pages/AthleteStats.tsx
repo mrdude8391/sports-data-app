@@ -1,6 +1,5 @@
 import { useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
-import * as sportsDataService from "@/services/sportsDataService";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { ChevronDownIcon, Loader } from "lucide-react";
 
@@ -28,6 +27,7 @@ import {
   type BaseStatData,
 } from "../features/stats/types/Stat";
 import useConfirmBlankStatForm from "@/features/stats/hooks/useConfirmBlankStatForm";
+import { createStat, getAthleteWithStats } from "@/features/stats/api/statsApi";
 
 type AthleteStatsParams = {
   athleteId: string;
@@ -52,7 +52,7 @@ const AthleteStats = () => {
     error,
   } = useQuery<AthleteStatResponse>({
     queryKey: ["stats", athleteId],
-    queryFn: () => sportsDataService.getAthleteWithStats(athleteId!),
+    queryFn: () => getAthleteWithStats(athleteId!),
     enabled: !!athleteId,
     initialData: {
       athlete: {
@@ -70,7 +70,7 @@ const AthleteStats = () => {
     error: statError,
     mutate,
   } = useMutation({
-    mutationFn: sportsDataService.createStat,
+    mutationFn: createStat,
     onSuccess: () => {
       // Invalidate and refetch
       queryClient.invalidateQueries({ queryKey: ["stats", athleteId] });
