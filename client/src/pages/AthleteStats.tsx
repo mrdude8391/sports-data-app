@@ -17,7 +17,6 @@ import {
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import type { DateRange } from "react-day-picker";
-import useConfirmBlank from "@/features/stats/hooks/useConfirmBlankStatForm";
 import {
   type NewStat,
   DEFAULT_STAT_FORM,
@@ -28,6 +27,7 @@ import {
   type NewStatPayload,
   type BaseStatData,
 } from "../features/stats/types/Stat";
+import useConfirmBlankStatForm from "@/features/stats/hooks/useConfirmBlankStatForm";
 
 type AthleteStatsParams = {
   athleteId: string;
@@ -40,7 +40,8 @@ const AthleteStats = () => {
   const [date, setDate] = useState<DateRange | undefined>();
   const [form, setForm] = useState<NewStat>(DEFAULT_STAT_FORM);
 
-  const { confirm, ConfirmDialog, changeAlertAthleteName } = useConfirmBlank();
+  const { confirm, ConfirmDialog, changeAlertAthleteName } =
+    useConfirmBlankStatForm();
 
   const queryClient = useQueryClient();
 
