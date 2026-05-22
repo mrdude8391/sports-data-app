@@ -21,43 +21,156 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import type {
-  BaseStatData,
-  NewStat,
-  StatCategory,
-  StatLabel,
+import {
+  DEFAULT_STAT_FORM,
+  type BaseStatData,
+  type NewStat,
+  type NewStatPayload,
+  type StatCategory,
+  type StatLabel,
 } from "../types/Stat";
+import { createStat } from "@/services/sportsDataService";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useState } from "react";
+import type { Athlete } from "@/features/athletes/types/Athlete";
+import useConfirmBlankStatForm from "../hooks/useConfirmBlankStatForm";
 
 interface createAthleteStatProps {
   athleteId: string;
-  form: NewStat;
-  handleSubmit: () => void;
-  statError: Error | null;
-  isPending: boolean;
-  handleChange: <
+  athlete: Athlete;
+}
+
+const CreateAthleteStat = (props: createAthleteStatProps) => {
+  const { athleteId, athlete } = props;
+
+  const [form, setForm] = useState<NewStat>(DEFAULT_STAT_FORM);
+
+  const categories = Object.keys(STAT_LABEL_INDEX) as StatCategory[];
+  const queryClient = useQueryClient();
+
+  const { confirm, ConfirmDialog, changeAlertAthleteName } =
+    useConfirmBlankStatForm();
+
+  const { isPending, error, mutate } = useMutation({
+    mutationFn: createStat,
+    onSuccess: () => {
+      // Invalidate and refetch
+      queryClient.invalidateQueries({ queryKey: ["stats", athleteId] });
+      setForm(DEFAULT_STAT_FORM);
+    },
+  });
+
+  const handleChangeDate = (date: Date) => {
+    const now = new Date();
+    const merged = new Date(date!);
+    merged.setHours(
+      now.getHours(),
+      now.getMinutes(),
+      now.getSeconds(),
+      now.getMilliseconds(),
+    );
+    setForm((prev) => ({ ...prev, recordedAt: merged }));
+  };
+
+  const handleChange = <
     C extends StatCategory,
     K extends StatLabel<BaseStatData[C]>["key"],
   >(
     category: C,
     key: K,
     value: number,
-    id: string,
-  ) => void;
-  handleChangeDate: (date: Date) => void;
-}
+  ) => {
+    setForm((prev) => {
+      const updatedCategory = {
+        ...prev[category],
+        [key]: value,
+      } as NewStat[C];
 
-const CreateAthleteStat = (props: createAthleteStatProps) => {
-  const {
-    athleteId,
-    form,
-    handleSubmit,
-    statError: error,
-    isPending,
-    handleChange,
-    handleChangeDate,
-  } = props;
+      // Auto-calculate hitting percentage
+      if (
+        (category === "attack" && key == "kills") ||
+        key == "total" ||
+        key == "errors"
+      ) {
+        const attack = updatedCategory as NewStat["attack"];
+        const kills = key === "kills" ? value : attack.kills;
+        const total = key === "total" ? value : attack.total;
+        const errors = key === "errors" ? value : attack.errors;
+        const percentage = total > 0 ? (kills - errors) / total : 0;
+        attack.percentage = Math.round(percentage * 1000) / 1000;
+      }
 
-  const categories = Object.keys(STAT_LABEL_INDEX) as StatCategory[];
+      // Auto-calculate serving percentage
+      if (
+        category === "serving" &&
+        (key === "attempts" || key === "errors" || key === "ratingTotal")
+      ) {
+        const serving = updatedCategory as NewStat["serving"];
+        const attempts = key === "attempts" ? value : serving.attempts;
+        const errors = key === "errors" ? value : serving.errors;
+        const ratingTotal = key === "ratingTotal" ? value : serving.ratingTotal;
+        const percentage = attempts > 0 ? (attempts - errors) / attempts : 0;
+        const rating = attempts > 0 ? ratingTotal / attempts : 0;
+
+        serving.rating = Math.round(rating * 10) / 10;
+        serving.percentage = Math.round(percentage * 1000) / 1000;
+      }
+
+      // Auto-calculate receiving rating
+      if (
+        category === "receiving" &&
+        (key === "ratingTotal" || key === "attempts")
+      ) {
+        const receiving = updatedCategory as NewStat["receiving"];
+        const attempts = key === "attempts" ? value : receiving.attempts;
+        const ratingTotal =
+          key === "ratingTotal" ? value : receiving.ratingTotal;
+        const rating = attempts > 0 ? ratingTotal / attempts : 0;
+
+        receiving.rating = Math.round(rating * 10) / 10;
+      }
+
+      // Auto-calculate defense rating
+      if (
+        category === "defense" &&
+        (key === "ratingTotal" || key === "attempts")
+      ) {
+        const defense = updatedCategory as NewStat["defense"];
+        const attempts = key === "attempts" ? value : defense.attempts;
+        const ratingTotal = key === "ratingTotal" ? value : defense.ratingTotal;
+        const rating = attempts > 0 ? ratingTotal / attempts : 0;
+
+        defense.rating = Math.round(rating * 10) / 10;
+      }
+
+      return {
+        ...prev,
+        [category]: updatedCategory,
+      };
+    });
+  };
+
+  const handleSubmit = async () => {
+    try {
+      if (athleteId) {
+        if (form === DEFAULT_STAT_FORM) {
+          changeAlertAthleteName(athlete.name);
+          const shouldContinue = await confirm();
+          // this async await means that the method handle submit will wait for confirm() to finish
+          // go read confirm
+          if (!shouldContinue) return;
+          const newStat: NewStatPayload = { athleteId, statForm: form };
+          mutate(newStat);
+        } else {
+          // form != initial form (user changed the form)
+          const newStat: NewStatPayload = { athleteId, statForm: form };
+          mutate(newStat);
+        }
+      }
+    } catch (error) {
+      console.log("Athlete Stats", error);
+    }
+  };
 
   if (isPending)
     return (
@@ -68,6 +181,8 @@ const CreateAthleteStat = (props: createAthleteStatProps) => {
     );
   return (
     <div>
+      <ConfirmDialog />
+
       <Dialog>
         <form
           id="statForm"
@@ -133,12 +248,7 @@ const CreateAthleteStat = (props: createAthleteStatProps) => {
                             form[category][key as keyof NewStat[keyof NewStat]]
                           }
                           onChange={(e) =>
-                            handleChange(
-                              category,
-                              key,
-                              Number(e.target.value),
-                              athleteId,
-                            )
+                            handleChange(category, key, Number(e.target.value))
                           }
                           className="border rounded p-2"
                         />
