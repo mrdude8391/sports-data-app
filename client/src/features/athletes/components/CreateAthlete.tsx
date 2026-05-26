@@ -15,7 +15,8 @@ import {
 } from "@/components/ui/dialog";
 import { Alert, AlertTitle } from "../../../components/ui/alert";
 import { AlertCircleIcon, Loader } from "lucide-react";
-import { useCreateAthlete } from "../api/createAthlete";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { createAthlete } from "../api/athletesApi";
 
 type AthleteFormState = {
   name: string;
@@ -35,12 +36,14 @@ const CreateAthlete = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false); // Is required so the dialog will stay open until the new athlete is successfully created.
   const resetForm = () => setForm(initialState);
 
-  const { isPending, error, mutate } = useCreateAthlete({
-    mutationConfig: {
-      onSuccess: () => {
-        resetForm();
-        setIsDialogOpen(false);
-      },
+  const queryClient = useQueryClient();
+  const { isPending, error, mutate } = useMutation({
+    mutationFn: createAthlete,
+    onSuccess: () => {
+      // Invalidate and refetch
+      queryClient.invalidateQueries({ queryKey: ["athletes"] });
+      resetForm();
+      setIsDialogOpen(false);
     },
   });
 

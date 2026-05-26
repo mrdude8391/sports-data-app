@@ -3,12 +3,20 @@ import CreateAthlete from "@/features/athletes/components/CreateAthlete";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import AthleteList from "../features/athletes/components/AthleteList";
-import { useAthletes } from "@/features/athletes/api/getAthletes";
+import { useQuery } from "@tanstack/react-query";
+import { getAthletes } from "@/features/athletes/api/athletesApi";
 
 const Athletes = () => {
   const [isEdit, setIsEdit] = useState(false);
 
-  const { data: athletes, isLoading, error } = useAthletes();
+  const {
+    data: athletes,
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: ["athletes"],
+    queryFn: getAthletes,
+  });
 
   if (isLoading) return <Loader className="animate-spin" />;
   if (error)

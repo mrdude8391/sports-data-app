@@ -10,10 +10,10 @@ import {
 } from "@/components/ui/alert-dialog";
 import { useState } from "react";
 
-const useConfirmBlank = () => {
+const useConfirmBlankStatForm = () => {
   const [open, setOpen] = useState(false);
   const [resolver, setResolver] = useState<((value: boolean) => void) | null>(
-    null
+    null,
   );
   const [athleteName, setAthleteName] = useState("");
 
@@ -74,4 +74,4 @@ const useConfirmBlank = () => {
   return { confirm, ConfirmDialog, changeAlertAthleteName };
 };
 
-export default useConfirmBlank;
+export default useConfirmBlankStatForm;
