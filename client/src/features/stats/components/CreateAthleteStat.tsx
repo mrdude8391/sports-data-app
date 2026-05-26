@@ -136,6 +136,7 @@ const CreateAthleteStat = (props: createAthleteStatProps) => {
                             handleChange(
                               category,
                               key,
+
                               Number(e.target.value),
                               athleteId,
                             )
