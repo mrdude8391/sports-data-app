@@ -82,7 +82,7 @@ const AthleteStats = () => {
           <AthleteStatRadial stats={filteredStats} />
         </div>
         <CreateAthleteStat
-          athleteId={athleteId!}
+          athleteId={athleteId}
           athlete={athlete}
         ></CreateAthleteStat>
         <p>No Stats</p>

@@ -245,10 +245,16 @@ const CreateAthleteStat = (props: createAthleteStatProps) => {
                         <Input
                           type="number"
                           value={
-                            form[category][key as keyof NewStat[keyof NewStat]]
+                            form[category][
+                              key as keyof BaseStatData[typeof category]
+                            ]
                           }
                           onChange={(e) =>
-                            handleChange(category, key, Number(e.target.value))
+                            handleChange(
+                              category,
+                              key as keyof BaseStatData[typeof category],
+                              Number(e.target.value),
+                            )
                           }
                           className="border rounded p-2"
                         />
@@ -257,8 +263,6 @@ const CreateAthleteStat = (props: createAthleteStatProps) => {
                   </div>
                 </fieldset>
               ))}
-
-              {/* <pre>{JSON.stringify(form, null, 2)}</pre> */}
             </div>
 
             {error && (

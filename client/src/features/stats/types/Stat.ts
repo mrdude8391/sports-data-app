@@ -136,7 +136,7 @@ export type StatCategory =
   | "blocking";
 
 // eg. want the labels of "attack" or labels of "receiving"
-export type StatLabel<T extends BaseStatData[keyof BaseStatData]> = {
-  key: keyof T & string;
+export type StatLabel<StatField extends BaseStatData[StatCategory]> = {
+  key: keyof StatField & string;
   label: string;
 };
