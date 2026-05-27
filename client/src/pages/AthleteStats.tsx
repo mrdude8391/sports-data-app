@@ -139,7 +139,7 @@ const AthleteStats = () => {
 
           <AthleteStatChart stats={filteredStats} />
           <AthleteStatTable stats={filteredStats} />
-          <AthleteStatsList stats={filteredStats ?? []} athleteId={athleteId} />
+          <AthleteStatsList stats={filteredStats} athleteId={athleteId} />
         </div>
       </div>
     </>
