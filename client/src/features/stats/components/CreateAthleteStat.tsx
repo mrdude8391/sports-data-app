@@ -172,6 +172,13 @@ const CreateAthleteStat = (props: createAthleteStatProps) => {
     }
   };
 
+  if (!athleteId)
+    return (
+      <div className="flex gap-4">
+        <Loader className="animate-spin" />
+        No Athlete Id Found
+      </div>
+    );
   if (isPending)
     return (
       <div className="flex gap-4">
