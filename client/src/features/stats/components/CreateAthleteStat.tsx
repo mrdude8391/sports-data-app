@@ -153,6 +153,10 @@ const CreateAthleteStat = (props: createAthleteStatProps) => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    const submit = () => {
+      const newStat: NewStatPayload = { athleteId, statForm: form };
+      mutate(newStat);
+    };
     try {
       if (form === DEFAULT_STAT_FORM) {
         changeAlertAthleteName(athlete.name);
@@ -160,12 +164,10 @@ const CreateAthleteStat = (props: createAthleteStatProps) => {
         // this async await means that the method handle submit will wait for confirm() to finish
         // go read confirm
         if (!shouldContinue) return;
-        const newStat: NewStatPayload = { athleteId, statForm: form };
-        mutate(newStat);
+        submit();
       } else {
         // form != initial form (user changed the form)
-        const newStat: NewStatPayload = { athleteId, statForm: form };
-        mutate(newStat);
+        submit();
       }
     } catch (error) {
       console.log("Athlete Stats", error);
