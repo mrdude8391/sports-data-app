@@ -28,14 +28,14 @@ const useConfirmBlankStatForm = () => {
     // to get the resolve function in a way where we can call it at will we can store it in state
     // so what we do is store this resolve function as a state variable so that we can move it around and so that the function persists.
     new Promise<boolean>((resolve) => {
+      setOpen(true);
+      // and basically while the promise is started we want to open the alert
+      // see handle continue and cancel next
       setResolver(() => resolve);
       // we store resolve function in an anon arrow bc useState set function will run any function that is passed through to update state
       // i.e setState(prev => state(prev))
       // so by putting the anon arrow function that returns resolve function, the setState runs the function and receives resolve
       // thus the Resolver state variable === resolve function
-      setOpen(true);
-      // and basically while the promise is started we want to open the alert
-      // see handle continue and cancel next
     });
 
   const handleContinue = () => {
