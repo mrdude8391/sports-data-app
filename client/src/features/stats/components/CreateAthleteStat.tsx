@@ -152,20 +152,18 @@ const CreateAthleteStat = (props: createAthleteStatProps) => {
 
   const handleSubmit = async () => {
     try {
-      if (athleteId) {
-        if (form === DEFAULT_STAT_FORM) {
-          changeAlertAthleteName(athlete.name);
-          const shouldContinue = await confirm();
-          // this async await means that the method handle submit will wait for confirm() to finish
-          // go read confirm
-          if (!shouldContinue) return;
-          const newStat: NewStatPayload = { athleteId, statForm: form };
-          mutate(newStat);
-        } else {
-          // form != initial form (user changed the form)
-          const newStat: NewStatPayload = { athleteId, statForm: form };
-          mutate(newStat);
-        }
+      if (form === DEFAULT_STAT_FORM) {
+        changeAlertAthleteName(athlete.name);
+        const shouldContinue = await confirm();
+        // this async await means that the method handle submit will wait for confirm() to finish
+        // go read confirm
+        if (!shouldContinue) return;
+        const newStat: NewStatPayload = { athleteId, statForm: form };
+        mutate(newStat);
+      } else {
+        // form != initial form (user changed the form)
+        const newStat: NewStatPayload = { athleteId, statForm: form };
+        mutate(newStat);
       }
     } catch (error) {
       console.log("Athlete Stats", error);
