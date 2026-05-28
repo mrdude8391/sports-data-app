@@ -45,6 +45,7 @@ const CreateAthleteStat = (props: createAthleteStatProps) => {
 
   const [form, setForm] = useState<NewStat>(DEFAULT_STAT_FORM);
   const categories = Object.keys(STAT_LABEL_INDEX) as StatCategory[];
+  // custom hook to handle when a user tries to create a blank stat form
   const { confirm, ConfirmDialog, changeAlertAthleteName } =
     useConfirmBlankStatForm();
 
@@ -150,7 +151,8 @@ const CreateAthleteStat = (props: createAthleteStatProps) => {
     });
   };
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
     try {
       if (form === DEFAULT_STAT_FORM) {
         changeAlertAthleteName(athlete.name);
@@ -189,24 +191,20 @@ const CreateAthleteStat = (props: createAthleteStatProps) => {
       <ConfirmDialog />
 
       <Dialog>
-        <form
-          id="statForm"
-          className="space-y-6"
-          onSubmit={(e) => e.preventDefault()}
-        >
-          <DialogTrigger asChild>
-            <Button variant="default" size="lg">
-              Add New Game Stats
-            </Button>
-          </DialogTrigger>
-          <DialogContent className="max-h-11/12 flex flex-col overflow-hidden ">
-            <DialogHeader className="sticky">
-              <DialogTitle>Create New Stats</DialogTitle>
-              <DialogDescription>
-                Add a new stats here. Click save when you&apos;re done.
-              </DialogDescription>
-            </DialogHeader>
-            <div className="overflow-y-auto space-y-4 p-4">
+        <DialogTrigger asChild>
+          <Button variant="default" size="lg">
+            Add New Game Stats
+          </Button>
+        </DialogTrigger>
+        <DialogContent className="max-h-11/12 flex flex-col overflow-hidden ">
+          <DialogHeader className="sticky">
+            <DialogTitle>Create New Stats</DialogTitle>
+            <DialogDescription>
+              Add a new stats here. Click save when you&apos;re done.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="overflow-y-auto space-y-4 p-4">
+            <form id="statForm" onSubmit={handleSubmit}>
               <div className="flex flex-col gap-3">
                 <Label htmlFor="date" className="px-1">
                   Date
@@ -268,26 +266,25 @@ const CreateAthleteStat = (props: createAthleteStatProps) => {
                   </div>
                 </fieldset>
               ))}
-            </div>
+            </form>
+          </div>
 
-            {error && (
-              <Alert variant="destructive" className="flex justify-start ">
-                <AlertCircleIcon />
-                <AlertTitle className="px-1">{error.message}</AlertTitle>
-              </Alert>
-            )}
-            <DialogFooter>
-              <DialogClose asChild>
-                <Button variant="outline">Cancel</Button>
-              </DialogClose>
-              <Button type="submit" form="statForm" onClick={handleSubmit}>
-                Save New Stats
-              </Button>
-            </DialogFooter>
-          </DialogContent>
-        </form>
+          {error && (
+            <Alert variant="destructive" className="flex justify-start ">
+              <AlertCircleIcon />
+              <AlertTitle className="px-1">{error.message}</AlertTitle>
+            </Alert>
+          )}
+          <DialogFooter>
+            <DialogClose asChild>
+              <Button variant="outline">Cancel</Button>
+            </DialogClose>
+            <Button type="submit" form="statForm">
+              Save New Stats
+            </Button>
+          </DialogFooter>
+        </DialogContent>
       </Dialog>
-      <form></form>
     </div>
   );
 };
