@@ -44,13 +44,11 @@ const CreateAthleteStat = (props: createAthleteStatProps) => {
   const { athleteId, athlete } = props;
 
   const [form, setForm] = useState<NewStat>(DEFAULT_STAT_FORM);
-
   const categories = Object.keys(STAT_LABEL_INDEX) as StatCategory[];
-  const queryClient = useQueryClient();
-
   const { confirm, ConfirmDialog, changeAlertAthleteName } =
     useConfirmBlankStatForm();
 
+  const queryClient = useQueryClient();
   const { isPending, error, mutate } = useMutation({
     mutationFn: createStat,
     onSuccess: () => {
@@ -60,9 +58,11 @@ const CreateAthleteStat = (props: createAthleteStatProps) => {
     },
   });
 
-  const handleChangeDate = (date: Date) => {
+  const handleChangeDate = (date: Date | undefined) => {
+    if (!date) return;
+    // this logic imports the hours etc into the selected date, otherwise if creating old stats, they will all be at 0:0 time causing errors with sorting.
     const now = new Date();
-    const merged = new Date(date!);
+    const merged = new Date(date);
     merged.setHours(
       now.getHours(),
       now.getMinutes(),
@@ -228,7 +228,7 @@ const CreateAthleteStat = (props: createAthleteStatProps) => {
                       selected={form.recordedAt}
                       captionLayout="dropdown"
                       onSelect={(date) => {
-                        handleChangeDate(date!);
+                        handleChangeDate(date);
                       }}
                     />
                   </PopoverContent>

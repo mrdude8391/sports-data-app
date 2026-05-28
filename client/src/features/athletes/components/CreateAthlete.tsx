@@ -60,6 +60,8 @@ const CreateAthlete = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    // Validation
+    // Todo: Add validation with schema
     const athlete: NewAthlete = {
       name: form.name.trim(),
       age: Number(form.age),
