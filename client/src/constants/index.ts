@@ -82,7 +82,7 @@ export const STAT_INDEX = [
 
 type StatLabelIndex = {
   // first part says iterate through the union type to get all the posibilities
-  [C in StatCategory]: StatLabel<BaseStatData[C]>[];
+  [C in StatCategory]: StatLabel<C>[];
   // second part says a StatLabel list[]
 };
 
