@@ -39,17 +39,21 @@ const useConfirmBlankStatForm = () => {
     });
 
   const handleContinue = () => {
-    // we want the promise to be resolved i.e. call the resolver when user clicks dialog buttons so we set up handlers
-    resolver?.(true);
-    // the handler will call the resolve function through the state variable with value "true" to continue
-    setOpen(false);
-    // once we continue we also lose th alert
+    if (resolver) {
+      // we want the promise to be resolved i.e. call the resolver when user clicks dialog buttons so we set up handlers
+      resolver(true);
+      // the handler will call the resolve function through the state variable with value "true" to continue
+      setOpen(false);
+      // once we continue we also lose th alert
+    }
   };
 
   const handleCancel = () => {
-    // same same as above
-    resolver?.(false);
-    setOpen(false);
+    if (resolver) {
+      // same same as above
+      resolver(false);
+      setOpen(false);
+    }
   };
 
   const ConfirmDialog = () => (
