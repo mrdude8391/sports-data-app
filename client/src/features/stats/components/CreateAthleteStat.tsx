@@ -23,11 +23,11 @@ import {
 } from "@/components/ui/popover";
 import {
   DEFAULT_STAT_FORM,
-  type BaseStatData,
   type NewStat,
   type NewStatPayload,
   type StatCategory,
-  type StatLabel,
+  type StatFieldKey,
+  type StatFields,
 } from "../types/Stat";
 import { createStat } from "@/services/sportsDataService";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -73,39 +73,33 @@ const CreateAthleteStat = (props: createAthleteStatProps) => {
     setForm((prev) => ({ ...prev, recordedAt: merged }));
   };
 
-  const handleChange = <
+  const updateStatFormFieldsByCategory = <
     C extends StatCategory,
-    K extends StatLabel<BaseStatData[C]>["key"],
+    K extends StatFieldKey<C>,
   >(
     category: C,
     key: K,
+    prevForm: NewStat,
     value: number,
   ) => {
-    setForm((prev) => {
-      const updatedCategory = {
-        ...prev[category],
-        [key]: value,
-      } as NewStat[C];
+    const updatedCategory = {
+      ...prevForm[category],
+      [key]: value,
+    } as StatFields<C>;
 
-      // Auto-calculate hitting percentage
-      if (
-        (category === "attack" && key == "kills") ||
-        key == "total" ||
-        key == "errors"
-      ) {
+    switch (category) {
+      case "attack": {
+        // Auto-calculate hitting percentage
         const attack = updatedCategory as NewStat["attack"];
         const kills = key === "kills" ? value : attack.kills;
         const total = key === "total" ? value : attack.total;
         const errors = key === "errors" ? value : attack.errors;
         const percentage = total > 0 ? (kills - errors) / total : 0;
         attack.percentage = Math.round(percentage * 1000) / 1000;
+        break;
       }
-
-      // Auto-calculate serving percentage
-      if (
-        category === "serving" &&
-        (key === "attempts" || key === "errors" || key === "ratingTotal")
-      ) {
+      case "serving": {
+        // Auto-calculate serving percentage
         const serving = updatedCategory as NewStat["serving"];
         const attempts = key === "attempts" ? value : serving.attempts;
         const errors = key === "errors" ? value : serving.errors;
@@ -115,13 +109,10 @@ const CreateAthleteStat = (props: createAthleteStatProps) => {
 
         serving.rating = Math.round(rating * 10) / 10;
         serving.percentage = Math.round(percentage * 1000) / 1000;
+        break;
       }
-
-      // Auto-calculate receiving rating
-      if (
-        category === "receiving" &&
-        (key === "ratingTotal" || key === "attempts")
-      ) {
+      case "receiving": {
+        // Auto-calculate receiving rating
         const receiving = updatedCategory as NewStat["receiving"];
         const attempts = key === "attempts" ? value : receiving.attempts;
         const ratingTotal =
@@ -129,27 +120,41 @@ const CreateAthleteStat = (props: createAthleteStatProps) => {
         const rating = attempts > 0 ? ratingTotal / attempts : 0;
 
         receiving.rating = Math.round(rating * 10) / 10;
+        break;
       }
-
-      // Auto-calculate defense rating
-      if (
-        category === "defense" &&
-        (key === "ratingTotal" || key === "attempts")
-      ) {
+      case "defense": {
+        // Auto-calculate defense rating
         const defense = updatedCategory as NewStat["defense"];
         const attempts = key === "attempts" ? value : defense.attempts;
         const ratingTotal = key === "ratingTotal" ? value : defense.ratingTotal;
         const rating = attempts > 0 ? ratingTotal / attempts : 0;
 
         defense.rating = Math.round(rating * 10) / 10;
+        break;
       }
-
-      return {
-        ...prev,
-        [category]: updatedCategory,
-      };
-    });
+    }
+    return updatedCategory;
   };
+
+  const handleChange =
+    <C extends StatCategory, K extends StatFieldKey<C>>(category: C, key: K) =>
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const value = e.target.valueAsNumber;
+
+      setForm((prevForm) => {
+        const updatedCategory = updateStatFormFieldsByCategory(
+          category,
+          key,
+          prevForm,
+          value,
+        );
+
+        return {
+          ...prevForm,
+          [category]: updatedCategory,
+        };
+      });
+    };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -205,8 +210,12 @@ const CreateAthleteStat = (props: createAthleteStatProps) => {
               Add a new stats here. Click save when you&apos;re done.
             </DialogDescription>
           </DialogHeader>
-          <div className="overflow-y-auto space-y-4 p-4">
-            <form id="statForm" onSubmit={handleSubmit}>
+          <form
+            id="statForm"
+            className="overflow-y-auto "
+            onSubmit={handleSubmit}
+          >
+            <div className="space-y-4 p-4">
               <div className="flex flex-col gap-3">
                 <Label htmlFor="date" className="px-1">
                   Date
@@ -250,17 +259,12 @@ const CreateAthleteStat = (props: createAthleteStatProps) => {
                         <Input
                           type="number"
                           value={
-                            form[category][
-                              key as keyof BaseStatData[typeof category]
-                            ]
+                            form[category][key as StatFieldKey<typeof category>]
                           }
-                          onChange={(e) =>
-                            handleChange(
-                              category,
-                              key as keyof BaseStatData[typeof category],
-                              Number(e.target.value),
-                            )
-                          }
+                          onChange={handleChange(
+                            category,
+                            key as StatFieldKey<typeof category>,
+                          )}
                           className="border rounded p-2"
                         />
                       </Label>
@@ -268,8 +272,8 @@ const CreateAthleteStat = (props: createAthleteStatProps) => {
                   </div>
                 </fieldset>
               ))}
-            </form>
-          </div>
+            </div>
+          </form>
 
           {error && (
             <Alert variant="destructive" className="flex justify-start ">
