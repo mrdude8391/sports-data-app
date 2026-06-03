@@ -1,21 +1,21 @@
 from typing import List
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
-from database import get_db
-from schemas.athlete_schemas import (
+from src.database import get_db
+from src.athletes.schemas import (
     AthleteWithStats,
     StatCreate,
     StatCreateBatch,
 )
-from controllers.stat_controller import (
+from src.stats.controller import (
     create_stats_batch,
     delete_stat,
     edit_stat,
     get_stats,
     create_stat,
 )
-from dependencies.auth import get_current_user
-from models import User, Stat
+from src.auth.dependencies import get_current_user
+from src.auth.models import User
 from uuid import UUID
 
 # Stat Router

@@ -3,7 +3,7 @@ from fastapi import HTTPException, status
 from sqlalchemy import delete, select
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
-from schemas.athlete_schemas import (
+from src.athletes.schemas import (
     AthleteResponse,
     AthleteWithStats,
     StatCreate,
@@ -11,7 +11,9 @@ from schemas.athlete_schemas import (
     StatResponse,
     StatUpdate,
 )
-from models import Athlete, User, Stat
+from src.auth.models import User
+from src.athletes.models import Athlete
+from src.stats.models import Stat
 from uuid import UUID
 
 

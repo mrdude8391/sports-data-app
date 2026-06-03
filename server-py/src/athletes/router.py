@@ -2,17 +2,17 @@ from typing import List
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from src.database import get_db
-from src.athletes.athlete_schemas import (
+from .schemas import (
     AthleteCreate,
     AthleteResponse,
 )
-from src.athletes.athlete_controller import (
+from .controller import (
     create_athlete,
     get_athletes,
     delete_athlete,
 )
 from src.auth.dependencies import get_current_user
-from .models import User, Stat
+from src.auth.models import User
 from uuid import UUID
 
 # Athlete Router
@@ -47,6 +47,3 @@ async def delete_one_athlete(
 ):
     """Delete athlete of id provided in path parameter"""
     return await delete_athlete(id, db, current_user)
-
-
-###############################################################################################

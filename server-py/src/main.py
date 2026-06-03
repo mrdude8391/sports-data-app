@@ -3,9 +3,9 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI, HTTPException, status
 from fastapi.middleware.cors import CORSMiddleware
 from .database import engine, init_db
-from src.auth import auth_router
-from src.athletes import athlete_router
-from src.stats import stat_router
+from src.auth import router as auth_router
+from src.athletes import router as athlete_router
+from src.stats import router as stat_router
 from .exceptions import register_exception_handlers
 
 
