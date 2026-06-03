@@ -1,10 +1,4 @@
-import type {
-  BaseStatData,
-  Stat,
-  StatCategory,
-  NewStat,
-  StatLabel,
-} from "@/features/stats/types/Stat";
+import type { StatCategory, StatLabel } from "@/features/stats/types/Stat";
 
 export const NAV_LINKS_LOGGED_IN = [
   { href: "/", key: "Home", label: "Home" },
