@@ -1,18 +1,18 @@
 from typing import List
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
-from database import get_db
-from schemas.athlete_schemas import (
+from src.database import get_db
+from src.athletes.athlete_schemas import (
     AthleteCreate,
     AthleteResponse,
 )
-from controllers.athlete_controller import (
+from src.athletes.athlete_controller import (
     create_athlete,
     get_athletes,
     delete_athlete,
 )
-from dependencies.auth import get_current_user
-from models import User, Stat
+from src.auth.dependencies import get_current_user
+from .models import User, Stat
 from uuid import UUID
 
 # Athlete Router

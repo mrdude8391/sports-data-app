@@ -6,7 +6,7 @@ from fastapi.encoders import jsonable_encoder
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 
-from exceptions.errors import DuplicateUserError, InvalidCredentialsError
+from src.auth.exceptions import InvalidCredentialsError, DuplicateUserError
 
 from sqlalchemy.exc import IntegrityError, SQLAlchemyError
 

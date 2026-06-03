@@ -1,14 +1,14 @@
 from datetime import datetime, timedelta, timezone
 from sqlalchemy.ext.asyncio import AsyncSession
-from models import User
-from schemas.auth_schemas import RegisterPayload, UserWithToken, LoginPayload
+from .models import User
+from .schemas import RegisterPayload, UserWithToken, LoginPayload
 from pwdlib import PasswordHash
 import jwt
 from dotenv import load_dotenv
 import os
 import logging
-from repositories.user_repository import UserRepository
-from exceptions.errors import DuplicateUserError, InvalidCredentialsError
+from .repository import UserRepository
+from .exceptions import DuplicateUserError, InvalidCredentialsError
 from sqlalchemy.exc import IntegrityError
 
 logger = logging.getLogger(__name__)
