@@ -3,7 +3,6 @@ import { Label } from "../../../components/ui/label";
 import { Input } from "../../../components/ui/input";
 import { useEffect, useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import * as sportsDataService from "@/services/sportsDataService";
 import { STAT_LABEL_INDEX } from "@/constants";
 
 import {
@@ -32,6 +31,7 @@ import {
   type StatCategory,
   type NewStat,
 } from "../types/Stat";
+import { editStat } from "../api/statsApi";
 
 interface EditAthleteStatProps {
   stat: Stat;
@@ -47,7 +47,7 @@ const EditAthleteStat = (props: EditAthleteStatProps) => {
   const queryClient = useQueryClient();
 
   const { isPending, error, mutate } = useMutation({
-    mutationFn: sportsDataService.editStat,
+    mutationFn: editStat,
     onSuccess: () => {
       // Invalidate and refetch
       queryClient.invalidateQueries({ queryKey: ["stats", athleteId] });

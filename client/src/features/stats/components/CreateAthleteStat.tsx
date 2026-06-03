@@ -29,11 +29,11 @@ import {
   type StatFieldKey,
   type StatFields,
 } from "../types/Stat";
-import { createStat } from "@/services/sportsDataService";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import type { Athlete } from "@/features/athletes/types/Athlete";
 import useConfirmBlankStatForm from "../hooks/useConfirmBlankStatForm";
+import { createStat } from "../api/statsApi";
 
 interface createAthleteStatProps {
   athleteId: string;

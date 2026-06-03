@@ -8,7 +8,7 @@ import type {
 
 export const createStat = async (newStat: NewStatPayload) => {
   const { athleteId, statForm } = newStat;
-  await api.post(`/athlete/${athleteId}/stats`, statForm);
+  await api.post(`/stats/${athleteId}`, statForm);
 };
 
 export const createStatsBatch = async ({
@@ -23,7 +23,7 @@ export const createStatsBatch = async ({
   // Form.entries turns the map into an iterable tuple.
   // array from turns the iterator into an array of tuples
   // map generates an array of objects => callback function turns every tuple into an object.
-  await api.post(`/athlete/stats`, payload);
+  await api.post(`/stats`, payload);
 };
 
 export const editStat = async (req: {
@@ -32,7 +32,7 @@ export const editStat = async (req: {
   date: Date;
 }) => {
   const payload = { ...req.form, recordedAt: req.date };
-  await api.patch(`/athlete/${req.statId}/stats`, payload);
+  await api.patch(`/stats/${req.statId}`, payload);
 };
 
 export const getAthleteWithStats = async (
@@ -40,7 +40,7 @@ export const getAthleteWithStats = async (
 ): Promise<AthleteStatResponse> => {
   // console.log("Get Stats for: ", id)
   // Need to add a check for ID to be mongodb ObjectID
-  const { data } = await api.get<AthleteStatResponse>(`/athlete/${id}/stats`);
+  const { data } = await api.get<AthleteStatResponse>(`/stats/${id}`);
   const stats: Stat[] = data.stats.map((stat) => ({
     ...stat,
     recordedAt: new Date(stat.recordedAt),
@@ -54,5 +54,5 @@ export const getAthleteWithStats = async (
 
 export const deleteStat = async (statId: string) => {
   // console.log("delete stat", statId)
-  await api.delete(`/athlete/${statId}/stats`);
+  await api.delete(`/stats/${statId}`);
 };

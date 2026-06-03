@@ -3,7 +3,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI, HTTPException, status
 from fastapi.middleware.cors import CORSMiddleware
 from database import Base, engine, init_db
-from routers import auth_router, athlete_router
+from routers import auth_router, athlete_router, stat_router
 from exceptions.exception_handlers import register_exception_handlers
 import models
 
@@ -55,6 +55,7 @@ def test():
 # Include Routers
 app.include_router(auth_router.router)
 app.include_router(athlete_router.router)
+app.include_router(stat_router.router)
 
 # if __name__ == "__main__":
 #     import uvicorn

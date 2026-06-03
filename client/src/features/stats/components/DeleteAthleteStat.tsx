@@ -1,6 +1,6 @@
 import { Button } from "../../../components/ui/button";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import * as sportsDataService from "@/services/sportsDataService";
+import { deleteStat } from "../api/statsApi";
 
 interface DeleteAthleteStatProps {
   statId?: string;
@@ -10,7 +10,7 @@ const DeleteAthleteStat = (props: DeleteAthleteStatProps) => {
   const queryClient = useQueryClient();
 
   const { isPending, error, mutate } = useMutation({
-    mutationFn: sportsDataService.deleteStat,
+    mutationFn: deleteStat,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["stats"] });
     },

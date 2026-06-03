@@ -25,7 +25,7 @@ function Router() {
           <Route path="/profile" element={<Profile />} />
           <Route path="/athletes" element={<Athletes />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/athletes/:athleteId/stats" element={<AthleteStats />} />
+          <Route path="/stats/:athleteId" element={<AthleteStats />} />
           <Route path="/teamstats" element={<GameLog />} />
           <Route path="/test" element={<Test />} />
           <Route path="*" element={<NotFound />} />

@@ -1,7 +1,6 @@
 import { DatePicker } from "@/components/DatePicker";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
-import * as sportsDataService from "../services/sportsDataService";
 import type { Athlete } from "@/features/athletes/types/Athlete";
 
 import AthleteSelector from "../features/athletes/components/MultipleAthleteSelector";
@@ -13,6 +12,7 @@ import {
   type StatCategory,
   DEFAULT_STAT_FORM,
 } from "@/features/stats/types/Stat";
+import { createStatsBatch } from "@/features/stats/api/statsApi";
 
 const GameLog = () => {
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
@@ -163,7 +163,7 @@ const GameLog = () => {
     error: statError,
     mutate,
   } = useMutation({
-    mutationFn: sportsDataService.createStatsBatch,
+    mutationFn: createStatsBatch,
     onSuccess: () => {
       // Invalidate and refetch
       queryClient.invalidateQueries({ queryKey: ["statsBatch"] });
