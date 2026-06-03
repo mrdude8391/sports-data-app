@@ -5,7 +5,7 @@ from .models import User
 
 
 async def get_by_email(db: AsyncSession, email: EmailStr) -> User | None:
-    results = await db.execute(select(User).filter(User.email == email))
+    results = await db.execute(select(User).where(User.email == email))
     return results.scalars().first()
 
 

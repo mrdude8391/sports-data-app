@@ -3,7 +3,7 @@ from .models import User
 from .schemas import RegisterPayload, UserWithToken, LoginPayload
 from src.auth import utils as auth_utils
 import logging
-from src.auth import repository as auth_repository
+from src.auth import repository as auth_repo
 from .exceptions import DuplicateUserError, InvalidCredentialsError
 from sqlalchemy.exc import IntegrityError
 
@@ -25,13 +25,13 @@ async def register_user(user_data: RegisterPayload, db: AsyncSession) -> UserWit
     )
 
     try:
-        await auth_repository.create_user(db, new_user)
+        await auth_repo.create_user(db, new_user)
     except IntegrityError:
         raise DuplicateUserError
 
     # Generate token
     # access_token_expires = timedelta(hours=TOKEN_EXPIRE_TIME)
-    token = auth_utils.create_access_token({"id": str(new_user.id)})
+    token = auth_utils.create_access_token_for_user(new_user)
 
     return UserWithToken(
         id=new_user.id, username=new_user.username, email=new_user.email, token=token
@@ -45,7 +45,7 @@ async def login_user(login_payload: LoginPayload, db: AsyncSession) -> UserWithT
     Returns User info with token
     """
     logger.info("Login attempt for email=%s", login_payload.email)
-    existing_user = await auth_repository.get_by_email(db, login_payload.email)
+    existing_user = await auth_repo.get_by_email(db, login_payload.email)
     if not existing_user:
         raise InvalidCredentialsError
     # Match the provided password with hashed password
@@ -56,7 +56,7 @@ async def login_user(login_payload: LoginPayload, db: AsyncSession) -> UserWithT
         raise InvalidCredentialsError
     # Generate token
     # access_token_expires = timedelta(hours=TOKEN_EXPIRE_TIME)
-    token = auth_utils.create_access_token({"id": str(existing_user.id)})
+    token = auth_utils.create_access_token_for_user(existing_user)
     return UserWithToken(
         id=existing_user.id,
         username=existing_user.username,

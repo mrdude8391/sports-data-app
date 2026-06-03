@@ -3,6 +3,7 @@ from pwdlib import PasswordHash
 import jwt
 from dotenv import load_dotenv
 import os
+from src.auth.models import User
 
 load_dotenv()
 
@@ -40,3 +41,8 @@ def create_access_token(data: dict, expires_delta: timedelta | None = None):
         to_encode, os.getenv("JWT_SECRET"), algorithm=os.getenv("ALGORITHM")
     )
     return encoded_jwt
+
+
+def create_access_token_for_user(user: User):
+    payload = {"id": str(user.id)}
+    return create_access_token(payload)
