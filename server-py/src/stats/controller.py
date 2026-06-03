@@ -321,7 +321,7 @@ async def edit_stat(
 
 def _convert_stat_to_response(stat: Stat) -> StatResponse:
     """Helper function to convert Stat model to StatResponse schema"""
-    from schemas.athlete_schemas import (
+    from src.athletes.schemas import (
         AttackStats,
         SettingStats,
         ServingStats,

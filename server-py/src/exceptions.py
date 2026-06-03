@@ -1,13 +1,10 @@
 import logging
-
 from asyncpg import UniqueViolationError
 from fastapi import FastAPI
 from fastapi.encoders import jsonable_encoder
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
-
 from src.auth.exceptions import InvalidCredentialsError, DuplicateUserError
-
 from sqlalchemy.exc import IntegrityError, SQLAlchemyError
 
 logger = logging.getLogger(__name__)
