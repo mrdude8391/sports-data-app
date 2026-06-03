@@ -7,13 +7,7 @@ from src.athletes.schemas import (
     StatCreate,
     StatCreateBatch,
 )
-from src.stats.controller import (
-    create_stats_batch,
-    delete_stat,
-    edit_stat,
-    get_stats,
-    create_stat,
-)
+from src.stats import service as stats_service
 from src.auth.dependencies import get_current_user
 from src.auth.models import User
 from uuid import UUID
@@ -32,7 +26,7 @@ async def create_new_stat(
     current_user: User = Depends(get_current_user),
 ):
     """Create new stat for athlete"""
-    return await create_stat(athlete_id, stat_data, db, current_user)
+    return await stats_service.create_stat(athlete_id, stat_data, db, current_user)
 
 
 @router.get("/{athlete_id}", response_model=AthleteWithStats)
@@ -42,7 +36,7 @@ async def get_athlete_stats(
     current_user: User = Depends(get_current_user),
 ):
     """Get all athlete's stats"""
-    return await get_stats(athlete_id, db, current_user)
+    return await stats_service.get_stats(athlete_id, db, current_user)
 
 
 @router.delete("/{stat_id}")
@@ -52,7 +46,7 @@ async def delete_one_stat(
     current_user: User = Depends(get_current_user),
 ):
     """Delete one stat"""
-    return await delete_stat(stat_id, db, current_user)
+    return await stats_service.delete_stat(stat_id, db, current_user)
 
 
 @router.patch("/{stat_id}")
@@ -63,7 +57,7 @@ async def edit_one_stat(
     current_user: User = Depends(get_current_user),
 ):
     """Edit one stat"""
-    return await edit_stat(stat_id, stat_data, db, current_user)
+    return await stats_service.edit_stat(stat_id, stat_data, db, current_user)
 
 
 @router.post("/")
@@ -73,4 +67,4 @@ async def create_many_stats(
     current_user: User = Depends(get_current_user),
 ):
     """Create stat row for multiple athletes"""
-    return await create_stats_batch(stats_data, db, current_user)
+    return await stats_service.create_stats_batch(stats_data, db, current_user)
