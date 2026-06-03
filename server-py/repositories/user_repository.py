@@ -11,7 +11,12 @@ class UserRepository:
         return results.scalars().first()
 
     async def create_user(db: AsyncSession, new_user: User) -> User:
-        # Insert new User into database
-        db.add(new_user)
-        await db.commit()
-        await db.refresh(new_user)
+        async with db.begin():
+            # Insert new User into database
+            db.add(new_user)
+        # await db.commit()
+        # await db.refresh(new_user)
+
+        #     with db.begin():
+        # # Insert new User into database
+        # db.add(new_user)

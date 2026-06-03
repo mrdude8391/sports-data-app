@@ -44,7 +44,6 @@ async_session = async_sessionmaker(
     engine,
     class_=AsyncSession,
     expire_on_commit=False,  # Recommended for async ORM usage to prevent implicit I/O
-    autoflush=False,
 )
 
 
