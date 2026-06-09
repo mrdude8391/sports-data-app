@@ -10,6 +10,7 @@ from src.athletes import service as athlete_service
 from src.auth.dependencies import get_current_user
 from src.auth.models import User
 from uuid import UUID
+from src.database import DbSession
 
 # Athlete Router
 # Prefix prefix="/athlete"
@@ -20,7 +21,7 @@ router = APIRouter(prefix="/athlete", tags=["Athletes"])
 @router.post("/create", response_model=AthleteResponse)
 async def create_new_athlete(
     athlete_info: AthleteCreate,
-    db: Session = Depends(get_db),
+    db: DbSession,
     current_user: User = Depends(get_current_user),
 ):
     """Create a new athlete"""
@@ -29,7 +30,7 @@ async def create_new_athlete(
 
 @router.get("/", response_model=List[AthleteResponse])
 async def get_all_athletes(
-    db: Session = Depends(get_db), current_user: User = Depends(get_current_user)
+    db: DbSession, current_user: User = Depends(get_current_user)
 ):
     """Get all athletes"""
     return await athlete_service.get_athletes(db, current_user)
@@ -38,7 +39,7 @@ async def get_all_athletes(
 @router.delete("/{id}")
 async def delete_one_athlete(
     id: UUID,
-    db: Session = Depends(get_db),
+    db: DbSession,
     current_user: User = Depends(get_current_user),
 ):
     """Delete athlete of id provided in path parameter"""

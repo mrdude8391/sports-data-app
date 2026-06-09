@@ -11,6 +11,7 @@ from src.stats import service as stats_service
 from src.auth.dependencies import get_current_user
 from src.auth.models import User
 from uuid import UUID
+from src.database import DbSession
 
 # Stat Router
 # Prefix prefix="/stat"
@@ -22,7 +23,7 @@ router = APIRouter(prefix="/stats", tags=["Stats"])
 async def create_new_stat(
     athlete_id: UUID,
     stat_data: StatCreate,
-    db: Session = Depends(get_db),
+    db: DbSession,
     current_user: User = Depends(get_current_user),
 ):
     """Create new stat for athlete"""
@@ -32,7 +33,7 @@ async def create_new_stat(
 @router.get("/{athlete_id}", response_model=AthleteWithStats)
 async def get_athlete_stats(
     athlete_id: UUID,
-    db: Session = Depends(get_db),
+    db: DbSession,
     current_user: User = Depends(get_current_user),
 ):
     """Get all athlete's stats"""
@@ -42,7 +43,7 @@ async def get_athlete_stats(
 @router.delete("/{stat_id}")
 async def delete_one_stat(
     stat_id: UUID,
-    db: Session = Depends(get_db),
+    db: DbSession,
     current_user: User = Depends(get_current_user),
 ):
     """Delete one stat"""
@@ -53,7 +54,7 @@ async def delete_one_stat(
 async def edit_one_stat(
     stat_id: UUID,
     stat_data: StatCreate,
-    db: Session = Depends(get_db),
+    db: DbSession,
     current_user: User = Depends(get_current_user),
 ):
     """Edit one stat"""
@@ -63,7 +64,7 @@ async def edit_one_stat(
 @router.post("/")
 async def create_many_stats(
     stats_data: List[StatCreateBatch],
-    db: Session = Depends(get_db),
+    db: DbSession,
     current_user: User = Depends(get_current_user),
 ):
     """Create stat row for multiple athletes"""

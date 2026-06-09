@@ -1,5 +1,4 @@
-from fastapi import APIRouter, Depends
-from sqlalchemy.orm import Session
+from fastapi import APIRouter
 from src.database import DbSession
 from src.auth.schemas import LoginPayload, RegisterPayload, UserWithToken
 from src.auth import service as auth_service
