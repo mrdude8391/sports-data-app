@@ -3,10 +3,10 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from .database import engine, init_db
-from src.auth import router as auth_router
-from src.athletes import router as athlete_router
-from src.stats import router as stat_router
+
 from .exceptions import register_exception_handlers
+
+from .api import api_router
 
 
 @asynccontextmanager
@@ -20,7 +20,6 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(lifespan=lifespan)
-
 
 origins = [
     "http://localhost:5173",
@@ -54,7 +53,4 @@ def test():
     return {"Test Response Local"}
 
 
-# Include Routers
-app.include_router(auth_router.router)
-app.include_router(athlete_router.router)
-app.include_router(stat_router.router)
+app.include_router(api_router)
