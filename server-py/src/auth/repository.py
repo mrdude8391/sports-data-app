@@ -6,7 +6,7 @@ from .models import User
 
 async def get_by_email(db: AsyncSession, email: EmailStr) -> User | None:
     results = await db.execute(select(User).where(User.email == email))
-    return results.scalars().first()
+    return results.scalar_one_or_none()
 
 
 async def create_user(db: AsyncSession, new_user: User) -> User:

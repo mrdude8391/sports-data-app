@@ -1,3 +1,4 @@
+from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from .models import User
 from .schemas import RegisterPayload, UserWithToken, LoginPayload
@@ -13,7 +14,7 @@ logging.basicConfig(level=logging.DEBUG)
 
 async def register_user(user_data: RegisterPayload, db: AsyncSession) -> UserWithToken:
     """
-    Create a new user row using provided information in the database
+    Create a new user row using provided credentials
     """
     # Hash the password
     hashed_password = auth_utils.get_password_hash(user_data.password)
@@ -40,12 +41,11 @@ async def register_user(user_data: RegisterPayload, db: AsyncSession) -> UserWit
 
 async def login_user(login_payload: LoginPayload, db: AsyncSession) -> UserWithToken:
     """
-    Login user using provided login credentials
-
-    Returns User info with token
+    Returns User info with token provided login credentials
     """
     logger.info("Login attempt for email=%s", login_payload.email)
-    existing_user = await auth_repo.get_by_email(db, login_payload.email)
+    results = await db.execute(select(User).where(User.email == login_payload.email))
+    existing_user = results.scalar_one_or_none()
     if not existing_user:
         raise InvalidCredentialsError
     # Match the provided password with hashed password
