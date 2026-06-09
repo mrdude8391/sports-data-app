@@ -26,7 +26,7 @@ async def register_user(user_data: RegisterPayload, db: AsyncSession) -> UserWit
     )
 
     try:
-        await auth_repo.create_user(db, new_user)
+        await auth_repo.create_user(new_user, db)
     except IntegrityError:
         raise DuplicateUserError
 
@@ -44,8 +44,8 @@ async def login_user(login_payload: LoginPayload, db: AsyncSession) -> UserWithT
     Returns User info with token provided login credentials
     """
     logger.info("Login attempt for email=%s", login_payload.email)
-    results = await db.execute(select(User).where(User.email == login_payload.email))
-    existing_user = results.scalar_one_or_none()
+
+    existing_user = auth_repo.get_by_email(login_payload.email, db)
     if not existing_user:
         raise InvalidCredentialsError
     # Match the provided password with hashed password
