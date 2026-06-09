@@ -4,7 +4,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from .database import engine, init_db
 
-from .exceptions import register_exception_handlers
+from .exception_handlers import register_exception_handlers
 
 from .api import api_router
 
