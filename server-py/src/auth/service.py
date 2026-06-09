@@ -44,7 +44,7 @@ async def login_user(login_payload: LoginPayload, db: AsyncSession) -> UserWithT
     """
     logger.info("Login attempt for email=%s", login_payload.email)
 
-    existing_user = auth_repo.get_by_email(login_payload.email, db)
+    existing_user = await auth_repo.get_by_email(login_payload.email, db)
     if not existing_user:
         raise InvalidCredentialsError
     # Match the provided password with hashed password
