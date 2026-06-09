@@ -1,6 +1,6 @@
 from contextlib import asynccontextmanager
 
-from fastapi import FastAPI, HTTPException, status
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from .database import engine, init_db
 from src.auth import router as auth_router
@@ -12,7 +12,8 @@ from .exceptions import register_exception_handlers
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # Startup: engine already created globally
-    await init_db()
+    # uncomment and run below to create tables
+    # await init_db()
     yield
     # Shutdown: dispose engine to close pool connections
     await engine.dispose()
@@ -57,7 +58,3 @@ def test():
 app.include_router(auth_router.router)
 app.include_router(athlete_router.router)
 app.include_router(stat_router.router)
-
-# if __name__ == "__main__":
-#     import uvicorn
-#     uvicorn.run(app="main:app", host="0.0.0.0", port=os.getenv("SERVER_PORT"), reload=True)
