@@ -1,6 +1,6 @@
-class InvalidCredentialsError(Exception):
+class InvalidCredentialsException(Exception):
     pass
 
 
-class DuplicateUserError(Exception):
+class DuplicateUserException(Exception):
     pass

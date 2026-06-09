@@ -4,7 +4,7 @@ from .schemas import RegisterPayload, UserWithToken, LoginPayload
 from src.auth import utils as auth_utils
 import logging
 from src.auth import repository as auth_repo
-from .exceptions import DuplicateUserError, InvalidCredentialsError
+from .exceptions import DuplicateUserException, InvalidCredentialsException
 from sqlalchemy.exc import IntegrityError
 
 logger = logging.getLogger(__name__)
@@ -27,7 +27,7 @@ async def register_user(user_data: RegisterPayload, db: AsyncSession) -> UserWit
     try:
         await auth_repo.create_user(new_user, db)
     except IntegrityError:
-        raise DuplicateUserError
+        raise DuplicateUserException
 
     # Generate token
     # access_token_expires = timedelta(hours=TOKEN_EXPIRE_TIME)
@@ -46,13 +46,13 @@ async def login_user(login_payload: LoginPayload, db: AsyncSession) -> UserWithT
 
     existing_user = await auth_repo.get_by_email(login_payload.email, db)
     if not existing_user:
-        raise InvalidCredentialsError
+        raise InvalidCredentialsException
     # Match the provided password with hashed password
     is_match = auth_utils.verify_password(
         login_payload.password, existing_user.password
     )
     if not is_match:
-        raise InvalidCredentialsError
+        raise InvalidCredentialsException
     # Generate token
     # access_token_expires = timedelta(hours=TOKEN_EXPIRE_TIME)
     token = auth_utils.create_access_token_for_user(existing_user)

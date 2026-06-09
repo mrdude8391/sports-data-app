@@ -4,7 +4,7 @@ from fastapi import FastAPI
 from fastapi.encoders import jsonable_encoder
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
-from src.auth.exceptions import InvalidCredentialsError, DuplicateUserError
+from src.auth.exceptions import InvalidCredentialsException, DuplicateUserException
 from sqlalchemy.exc import IntegrityError, SQLAlchemyError
 
 logger = logging.getLogger(__name__)
@@ -13,8 +13,8 @@ logging.basicConfig(level=logging.DEBUG)
 
 def register_exception_handlers(app: FastAPI):
 
-    @app.exception_handler(InvalidCredentialsError)
-    async def invalid_credentials_handler(_, exc: InvalidCredentialsError):
+    @app.exception_handler(InvalidCredentialsException)
+    async def invalid_credentials_handler(_, exc: InvalidCredentialsException):
         logger.error("Invalid Credentials Error")
         return JSONResponse(
             status_code=401,
@@ -24,8 +24,8 @@ def register_exception_handlers(app: FastAPI):
             },
         )
 
-    @app.exception_handler(DuplicateUserError)
-    async def duplicate_user_handler(_, exc: DuplicateUserError):
+    @app.exception_handler(DuplicateUserException)
+    async def duplicate_user_handler(_, exc: DuplicateUserException):
         logger.error("Duplicate Error")
         return JSONResponse(
             status_code=409,
