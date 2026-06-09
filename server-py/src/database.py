@@ -7,8 +7,7 @@ from sqlalchemy.ext.asyncio import (
     async_sessionmaker,
     AsyncSession,
 )
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import DeclarativeBase
+from sqlalchemy.orm import DeclarativeBase, Session
 
 # from sqlalchemy.pool import NullPool
 from dotenv import load_dotenv
@@ -64,3 +63,6 @@ async def get_db():
             raise
         finally:
             await session.close()
+
+
+DbSession = Annotated[Session, Depends(get_db)]

@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
-from src.database import get_db
+from src.database import DbSession
 from src.auth.schemas import LoginPayload, RegisterPayload, UserWithToken
 from src.auth import service as auth_service
 
@@ -10,7 +10,7 @@ router = APIRouter(prefix="/auth", tags=["Authentication"])
 
 
 @router.post("/register", response_model=UserWithToken)
-async def register(user_data: RegisterPayload, db: Session = Depends(get_db)):
+async def register(user_data: RegisterPayload, db: DbSession):
     """Register a new user
 
     Returns a UserWithToken Schema. Allowing client to store token
@@ -19,7 +19,7 @@ async def register(user_data: RegisterPayload, db: Session = Depends(get_db)):
 
 
 @router.post("/login", response_model=UserWithToken)
-async def login(login_payload: LoginPayload, db: Session = Depends(get_db)):
+async def login(login_payload: LoginPayload, db: DbSession):
     """Login with provided credentials
 
     Returns a UserWithToken Schema. Allowing client to store token
