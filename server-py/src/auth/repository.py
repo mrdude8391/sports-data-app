@@ -13,8 +13,3 @@ async def create_user(new_user: User, db: AsyncSession) -> User:
     async with db.begin():
         # Insert new User into database
         db.add(new_user)
-    # await db.commit()
-    # await db.refresh(new_user)
-    #     with db.begin():
-    # # Insert new User into database
-    # db.add(new_user)

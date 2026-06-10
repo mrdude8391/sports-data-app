@@ -65,4 +65,4 @@ async def get_db():
             await session.close()
 
 
-DbSession = Annotated[Session, Depends(get_db)]
+DbSession = Annotated[AsyncSession, Depends(get_db)]
