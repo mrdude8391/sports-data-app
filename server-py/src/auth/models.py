@@ -10,14 +10,6 @@ from sqlalchemy import types
 class User(Base):
     __tablename__ = "users"
 
-    # # Columns in databse
-    # id = Column(UUID(as_uuid=True), primary_key=True, index=True, default=uuid.uuid4)
-    # username = Column(String, nullable=False)
-    # email = Column(String, unique=True, nullable=False, index=True)
-    # password = Column(String, nullable=False)
-    # created_at = Column(DateTime(timezone=True), server_default=func.now())
-    # updated_at = Column(DateTime(timezone=True), onupdate=func.now())
-
     # Columns in databse
     id: Mapped[uuid.UUID] = mapped_column(
         primary_key=True, index=True, default=uuid.uuid4
