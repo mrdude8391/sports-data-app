@@ -1,5 +1,7 @@
+import datetime
+
 from sqlalchemy import Column, String, Integer, Float, DateTime, ForeignKey, Index, JSON
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.sql import func
 from src.database import Base
 import uuid
@@ -9,61 +11,66 @@ from sqlalchemy.dialects.postgresql import UUID
 class Stat(Base):
     __tablename__ = "stats"
 
-    id = Column(UUID(as_uuid=True), primary_key=True, index=True, default=uuid.uuid4)
-    user_id = Column(
-        UUID(as_uuid=True), ForeignKey("users.id"), nullable=False, index=True
+    id: Mapped[uuid.UUID] = mapped_column(primary_key=True, default=uuid.uuid4)
+    user_id: Mapped[uuid.UUID] = mapped_column(
+        ForeignKey("users.id"), nullable=False, index=True
     )
-    athlete_id = Column(
-        UUID(as_uuid=True), ForeignKey("athletes.id"), nullable=False, index=True
+    athlete_id: Mapped[uuid.UUID] = mapped_column(
+        ForeignKey("athletes.id"), nullable=False, index=True
     )
-
     # Attack stats
-    attack_kills = Column(Integer, default=0)
-    attack_errors = Column(Integer, default=0)
-    attack_total = Column(Integer, default=0)
-    attack_percentage = Column(Float, default=0.0)
+    attack_kills: Mapped[int] = mapped_column(default=0)
+    attack_errors: Mapped[int] = mapped_column(default=0)
+    attack_total: Mapped[int] = mapped_column(default=0)
+    attack_percentage: Mapped[float] = mapped_column(default=0.0)
 
     # Setting stats
-    setting_assists = Column(Integer, default=0)
-    setting_errors = Column(Integer, default=0)
-    setting_attempts = Column(Integer, default=0)
+    setting_assists: Mapped[int] = mapped_column(default=0)
+    setting_errors: Mapped[int] = mapped_column(default=0)
+    setting_attempts: Mapped[int] = mapped_column(default=0)
 
     # Serving stats
-    serving_rating = Column(Float, default=0.0)
-    serving_rating_total = Column(Float, default=0.0)
-    serving_aces = Column(Integer, default=0)
-    serving_errors = Column(Integer, default=0)
-    serving_attempts = Column(Integer, default=0)
-    serving_percentage = Column(Float, default=0.0)
+    serving_rating: Mapped[float] = mapped_column(default=0.0)
+    serving_rating_total: Mapped[float] = mapped_column(default=0.0)
+    serving_aces: Mapped[int] = mapped_column(default=0)
+    serving_errors: Mapped[int] = mapped_column(default=0)
+    serving_attempts: Mapped[int] = mapped_column(default=0)
+    serving_percentage: Mapped[float] = mapped_column(default=0.0)
 
     # Receiving stats
-    receiving_rating = Column(Float, default=0.0)
-    receiving_rating_total = Column(Float, default=0.0)
-    receiving_errors = Column(Integer, default=0)
-    receiving_attempts = Column(Integer, default=0)
+    receiving_rating: Mapped[float] = mapped_column(default=0.0)
+    receiving_rating_total: Mapped[float] = mapped_column(default=0.0)
+    receiving_errors: Mapped[int] = mapped_column(default=0)
+    receiving_attempts: Mapped[int] = mapped_column(default=0)
 
     # Defense stats
-    defense_digs = Column(Integer, default=0)
-    defense_rating = Column(Float, default=0.0)
-    defense_rating_total = Column(Float, default=0.0)
-    defense_errors = Column(Integer, default=0)
-    defense_attempts = Column(Integer, default=0)
+    defense_digs: Mapped[int] = mapped_column(default=0)
+    defense_rating: Mapped[float] = mapped_column(default=0.0)
+    defense_rating_total: Mapped[float] = mapped_column(default=0.0)
+    defense_errors: Mapped[int] = mapped_column(default=0)
+    defense_attempts: Mapped[int] = mapped_column(default=0)
 
     # Blocking stats
-    blocking_total = Column(Integer, default=0)
-    blocking_kills = Column(Integer, default=0)
-    blocking_solos = Column(Integer, default=0)
-    blocking_good_touches = Column(Integer, default=0)
-    blocking_attempts = Column(Integer, default=0)
-    blocking_errors = Column(Integer, default=0)
+    blocking_total: Mapped[int] = mapped_column(default=0)
+    blocking_kills: Mapped[int] = mapped_column(default=0)
+    blocking_solos: Mapped[int] = mapped_column(default=0)
+    blocking_good_touches: Mapped[int] = mapped_column(default=0)
+    blocking_attempts: Mapped[int] = mapped_column(default=0)
+    blocking_errors: Mapped[int] = mapped_column(default=0)
 
-    recorded_at = Column(DateTime(timezone=True), server_default=func.now())
-    created_at = Column(DateTime(timezone=True), server_default=func.now())
-    updated_at = Column(DateTime(timezone=True), onupdate=func.now())
+    recorded_at: Mapped[datetime.datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now(), nullable=True
+    )
+    created_at: Mapped[datetime.datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now(), nullable=True
+    )
+    updated_at: Mapped[datetime.datetime] = mapped_column(
+        DateTime(timezone=True), onupdate=func.now(), nullable=True
+    )
 
     # Relationships
-    user = relationship("User")
-    athlete = relationship("Athlete", back_populates="stats")
+    user: Mapped["User"] = relationship()  # type: ignore
+    athlete: Mapped["Athlete"] = relationship(back_populates="stats")  # type: ignore
 
     # Index for efficient querying
     __table_args__ = (Index("idx_user_id_athlete_id", "user_id", "athlete_id"),)
