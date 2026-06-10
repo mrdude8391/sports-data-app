@@ -4,6 +4,7 @@ from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.sql import func
 from sqlalchemy.orm import relationship, Mapped, mapped_column
 from src.database import Base
+from sqlalchemy import types
 
 
 class User(Base):
@@ -19,7 +20,7 @@ class User(Base):
 
     # Columns in databse
     id: Mapped[uuid.UUID] = mapped_column(
-        UUID(as_uuid=True), primary_key=True, index=True, default=uuid.uuid4
+        primary_key=True, index=True, default=uuid.uuid4
     )
     username: Mapped[str] = mapped_column(nullable=False)
     email: Mapped[str] = mapped_column(unique=True, nullable=False, index=True)

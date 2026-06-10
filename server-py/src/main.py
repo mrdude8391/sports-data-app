@@ -13,7 +13,7 @@ from .api import api_router
 async def lifespan(app: FastAPI):
     # Startup: engine already created globally
     # uncomment and run below to create tables
-    # await init_db()
+    await init_db()
     yield
     # Shutdown: dispose engine to close pool connections
     await engine.dispose()
