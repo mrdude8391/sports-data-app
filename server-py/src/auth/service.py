@@ -23,7 +23,6 @@ async def register_user(user_data: RegisterPayload, db: AsyncSession) -> UserWit
         email=user_data.email,
         password=hashed_password,
     )
-
     try:
         await auth_repo.create_user(new_user, db)
     except IntegrityError:
@@ -43,7 +42,8 @@ async def login_user(login_payload: LoginPayload, db: AsyncSession) -> UserWithT
     """
     logger.info("Login attempt for email=%s", login_payload.email)
 
-    existing_user = await auth_repo.get_by_email(login_payload.email, db)
+    existing_user: User = await auth_repo.get_by_email(login_payload.email, db)
+    
     if not existing_user:
         raise InvalidCredentialsException
     # Match the provided password with hashed password

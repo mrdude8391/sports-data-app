@@ -39,7 +39,7 @@ def register_exception_handlers(app: FastAPI):
             status_code=409,
             content={
                 "error": "DB_INTEGRITY_ERROR",
-                "message": "Database integrity violation",
+                "message": "The record you are trying to create already exists - Database integrity violation",
             },
         )
 

@@ -2,6 +2,7 @@ from typing import Annotated
 from fastapi import Depends
 from sqlalchemy import NullPool
 from sqlalchemy.ext.asyncio import (
+    AsyncAttrs,
     async_session,
     create_async_engine,
     async_sessionmaker,
@@ -38,7 +39,7 @@ async_session = async_sessionmaker(
 
 
 # Create Base class for models
-class Base(DeclarativeBase):
+class Base(AsyncAttrs, DeclarativeBase):
     pass
 
 

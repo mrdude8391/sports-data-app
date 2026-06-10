@@ -121,9 +121,9 @@ const CreateAthlete = () => {
             </div>
           </form>
           {error && (
-            <Alert variant="destructive" className="flex justify-start ">
+            <Alert variant="destructive" className="flex justify-start">
               <AlertCircleIcon />
-              <AlertTitle className="px-1">{error.message}</AlertTitle>
+              <AlertTitle className="flex px-1">{error.message}</AlertTitle>
             </Alert>
           )}
           <DialogFooter>

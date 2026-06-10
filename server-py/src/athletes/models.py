@@ -1,27 +1,32 @@
+from typing import List
 from sqlalchemy import Column, String, Integer, DateTime, ForeignKey, Index
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 from src.database import Base
 from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy.orm import relationship, Mapped, mapped_column
 import uuid
-
+import datetime
 
 class Athlete(Base):
     __tablename__ = "athletes"
 
-    id = Column(UUID(as_uuid=True), primary_key=True, index=True, default=uuid.uuid4)
-    user_id = Column(
-        UUID(as_uuid=True), ForeignKey("users.id"), nullable=False, index=True
+    id: Mapped[uuid.UUID] = mapped_column(primary_key=True, default=uuid.uuid4)
+    user_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("users.id"), nullable=False, index=True
     )
-    name = Column(String, nullable=False)
-    age = Column(Integer, nullable=False)
-    height = Column(Integer, nullable=False)
-    created_at = Column(DateTime(timezone=True), server_default=func.now())
-    updated_at = Column(DateTime(timezone=True), onupdate=func.now())
+    name: Mapped[str] = mapped_column(nullable=False)
+    age: Mapped[int] = mapped_column(nullable=False)
+    height: Mapped[int] = mapped_column(nullable=False)
+    created_at: Mapped[datetime.datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now()
+    )
+    updated_at: Mapped[datetime.datetime] = mapped_column(
+        DateTime(timezone=True), onupdate=func.now()
+    )
 
     # Relationships
-    user = relationship("User")
-    stats = relationship("Stat", back_populates="athlete", cascade="all, delete-orphan")
+    user: Mapped["User"] = relationship(back_populates="athletes") # type: ignore
+    stats: Mapped[List["Stat"]] = relationship(back_populates="athlete", cascade="all, delete-orphan") # type: ignore
 
     # Compound unique index: prevents duplicate athlete names per user
     __table_args__ = (Index("idx_user_athlete_name", "user_id", "name", unique=True),)

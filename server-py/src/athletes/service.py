@@ -19,15 +19,6 @@ async def create_athlete(
     """Create a new athlete in the database"""
     try:
         print("\nLog:\tcreate_athlete() => Create new athlete")
-        # Check database for existing athlete name
-        results = await db.execute(
-            select(Athlete).filter(
-                Athlete.name == athlete_info.name, Athlete.user_id == current_user.id
-            )
-        )
-        existing_user = results.scalars().first()
-        if existing_user:
-            raise HTTPException(status_code=400, detail="Athlete name already exists")
 
         # Create new athlete object
         new_athlete = Athlete(
