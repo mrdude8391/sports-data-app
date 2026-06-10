@@ -44,5 +44,8 @@ def create_access_token(data: dict, expires_delta: timedelta | None = None):
 
 
 def create_access_token_for_user(user: User):
+    """
+    Helper function to transform user object into access token payload
+    """
     payload = {"id": str(user.id)}
     return create_access_token(payload)
