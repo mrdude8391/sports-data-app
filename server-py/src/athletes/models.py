@@ -1,9 +1,8 @@
 from typing import List
-from sqlalchemy import Column, String, Integer, DateTime, ForeignKey, Index, UniqueConstraint
+from sqlalchemy import  DateTime, ForeignKey, Index
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 from src.database import Base
-from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship, Mapped, mapped_column
 import uuid
 import datetime
