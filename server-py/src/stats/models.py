@@ -1,11 +1,11 @@
 import datetime
 
-from sqlalchemy import Column, String, Integer, Float, DateTime, ForeignKey, Index, JSON
+from sqlalchemy import DateTime, ForeignKey, Index
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.sql import func
 from src.database import Base
 import uuid
-from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy import types
 
 
 class Stat(Base):
