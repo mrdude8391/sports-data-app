@@ -1,5 +1,5 @@
 from typing import List
-from sqlalchemy import Column, String, Integer, DateTime, ForeignKey, Index
+from sqlalchemy import Column, String, Integer, DateTime, ForeignKey, Index, UniqueConstraint
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 from src.database import Base
@@ -18,10 +18,10 @@ class Athlete(Base):
     age: Mapped[int] = mapped_column(nullable=False)
     height: Mapped[int] = mapped_column(nullable=False)
     created_at: Mapped[datetime.datetime] = mapped_column(
-        DateTime(timezone=True), server_default=func.now()
+        DateTime(timezone=True), server_default=func.now(), nullable=True
     )
     updated_at: Mapped[datetime.datetime] = mapped_column(
-        DateTime(timezone=True), onupdate=func.now()
+        DateTime(timezone=True), onupdate=func.now(), nullable=True
     )
 
     # Relationships
@@ -30,3 +30,5 @@ class Athlete(Base):
 
     # Compound unique index: prevents duplicate athlete names per user
     __table_args__ = (Index("idx_user_athlete_name", "user_id", "name", unique=True),)
+
+    # UniqueConstraint(user_id, name, name="uq_userid_athletename")

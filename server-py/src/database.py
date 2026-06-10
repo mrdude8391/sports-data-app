@@ -10,7 +10,6 @@ from sqlalchemy.ext.asyncio import (
 )
 from sqlalchemy.orm import DeclarativeBase, Session
 
-# from sqlalchemy.pool import NullPool
 from dotenv import load_dotenv
 
 # Load environment variables from .env

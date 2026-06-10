@@ -20,10 +20,10 @@ class User(Base):
     email: Mapped[str] = mapped_column(unique=True, nullable=False, index=True)
     password: Mapped[str] = mapped_column(nullable=False)
     created_at: Mapped[datetime.datetime] = mapped_column(
-        DateTime(timezone=True), server_default=func.now()
+        DateTime(timezone=True), server_default=func.now(), nullable=True
     )
     updated_at: Mapped[datetime.datetime] = mapped_column(
-        DateTime(timezone=True), onupdate=func.now()
+        DateTime(timezone=True), onupdate=func.now(), nullable=True
     )
 
     # Relationships for ORM
