@@ -30,7 +30,6 @@ async def register_user(user_data: RegisterPayload, db: AsyncSession) -> UserWit
         raise DuplicateUserException
 
     # Generate token
-    # access_token_expires = timedelta(hours=TOKEN_EXPIRE_TIME)
     token = auth_utils.create_access_token_for_user(new_user)
 
     return UserWithToken(

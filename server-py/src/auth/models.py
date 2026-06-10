@@ -18,7 +18,7 @@ class User(Base):
     # updated_at = Column(DateTime(timezone=True), onupdate=func.now())
 
     # Columns in databse
-    id: Mapped[UUID] = mapped_column(
+    id: Mapped[uuid.UUID] = mapped_column(
         UUID(as_uuid=True), primary_key=True, index=True, default=uuid.uuid4
     )
     username: Mapped[str] = mapped_column(nullable=False)
