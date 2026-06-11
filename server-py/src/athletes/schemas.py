@@ -4,6 +4,7 @@ from pydantic.alias_generators import to_camel
 from typing import Optional, List
 from datetime import datetime
 
+
 class BaseSchema(BaseModel):
     model_config = ConfigDict(
         alias_generator=to_camel,
@@ -28,7 +29,7 @@ class AthleteResponse(AthleteBase):
     user_id: uuid.UUID
     created_at: datetime
     updated_at: Optional[datetime] = None
-    
+
 
 # Nested stat structures
 class AttackStats(BaseSchema):
@@ -116,8 +117,8 @@ class StatResponse(BaseSchema):
     recorded_at: datetime
     created_at: datetime
     updated_at: Optional[datetime] = None
-    
-    
+
+
 class StatUpdate(BaseSchema):
     attack: Optional[AttackStats] = None
     setting: Optional[SettingStats] = None
@@ -131,4 +132,3 @@ class StatUpdate(BaseSchema):
 class AthleteWithStats(BaseSchema):
     athlete: AthleteResponse
     stats: List[StatResponse]
-    

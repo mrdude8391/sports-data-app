@@ -24,15 +24,15 @@ async def register_user(user_data: RegisterPayload, db: AsyncSession) -> UserWit
         password=hashed_password,
     )
     try:
-        await auth_repo.create_user(new_user, db)
+        user = await auth_repo.create_user(new_user, db)
     except IntegrityError:
         raise DuplicateUserException
 
     # Generate token
-    token = auth_utils.create_access_token_for_user(new_user)
+    token = auth_utils.create_access_token_for_user(user)
 
     return UserWithToken(
-        id=new_user.id, username=new_user.username, email=new_user.email, token=token
+        id=user.id, username=user.username, email=user.email, token=token
     )
 
 
@@ -43,7 +43,7 @@ async def login_user(login_payload: LoginPayload, db: AsyncSession) -> UserWithT
     logger.info("Login attempt for email=%s", login_payload.email)
 
     existing_user: User = await auth_repo.get_by_email(login_payload.email, db)
-    
+
     if not existing_user:
         raise InvalidCredentialsException
     # Match the provided password with hashed password

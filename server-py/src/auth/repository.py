@@ -10,6 +10,8 @@ async def get_by_email(email: EmailStr, db: AsyncSession) -> User | None:
 
 
 async def create_user(new_user: User, db: AsyncSession) -> User:
-    async with db.begin():
-        # Insert new User into database
-        db.add(new_user)
+    # Insert new User into database
+    db.add(new_user)
+    await db.flush()
+    await db.refresh(new_user)
+    return new_user

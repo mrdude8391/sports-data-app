@@ -11,46 +11,31 @@ from .models import Athlete
 from src.auth.models import User
 from src.stats.models import Stat
 from uuid import UUID
+from src.athletes import repository as athlete_repo
 
 
 async def create_athlete(
     athlete_info: AthleteCreate, db: AsyncSession, current_user: User
 ) -> AthleteResponse:
     """Create a new athlete in the database"""
-    try:
-        print("\nLog:\tcreate_athlete() => Create new athlete")
 
-        # Create new athlete object
-        new_athlete = Athlete(
-            user_id=current_user.id,
-            name=athlete_info.name,
-            age=athlete_info.age,
-            height=athlete_info.height,
-        )
-        # Insert new athlete
-        db.add(new_athlete)
-        # Add doesnt occur in the db only commit so we await the below operations
-        await db.commit()
-        await db.refresh(new_athlete)
+    # Create new athlete object
+    new_athlete = Athlete(
+        user_id=current_user.id,
+        name=athlete_info.name,
+        age=athlete_info.age,
+        height=athlete_info.height,
+    )
+    athlete = await athlete_repo.create_new_athlete(new_athlete, db)
 
-        return AthleteResponse.model_validate(new_athlete)
-    except ValueError as err:
-        raise HTTPException(status_code=500, detail="Failed to create new athlete")
+    return AthleteResponse.model_validate(athlete)
 
 
 async def get_athletes(db: AsyncSession, current_user: User) -> List[AthleteResponse]:
     """Returns all athletes of current user ID"""
-    try:
-        print("\nLog:\tget_athletes() => Get all athletes with user ID foreign key")
-        # Retreive all athletes whos user_id foreign key === the user id of the requester
-        results = await db.execute(
-            select(Athlete).filter(Athlete.user_id == current_user.id)
-        )
-        athletes = results.scalars().all()
-        # Validate and return the response
-        return [AthleteResponse.model_validate(athlete) for athlete in athletes]
-    except ValueError:
-        raise HTTPException(status_code=500, detail=f"Get all athletes Failed")
+    athletes = await athlete_repo.get_athletes_by_user_id(current_user.id, db)
+    # Validate and return the response
+    return [AthleteResponse.model_validate(athlete) for athlete in athletes]
 
 
 async def delete_athlete(athlete_id: UUID, db: AsyncSession, current_user: User):

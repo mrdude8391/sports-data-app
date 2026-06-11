@@ -6,12 +6,24 @@ from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 from src.auth.exceptions import InvalidCredentialsException, DuplicateUserException
 from sqlalchemy.exc import IntegrityError, SQLAlchemyError
+from pydantic_core import ValidationError
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.DEBUG)
 
 
 def register_exception_handlers(app: FastAPI):
+
+    @app.exception_handler(ValidationError)
+    async def pydantic_validation_handler(_, exc: ValidationError):
+        logger.exception("Validation Error")
+        return JSONResponse(
+            status_code=422,
+            content={
+                "error": "VALIDATION_ERROR",
+                "message": "Invalid Input",
+            },
+        )
 
     @app.exception_handler(InvalidCredentialsException)
     async def invalid_credentials_handler(_, exc: InvalidCredentialsException):

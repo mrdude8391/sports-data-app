@@ -56,13 +56,16 @@ async def get_db():
     """
     print("\nLog:\tget_db() => SqlAlchemy db Session Dependency")
     async with async_session() as session:
-        try:
+        async with session.begin():
             yield session
-        except Exception:
-            await session.rollback()
-            raise
-        finally:
-            await session.close()
+            ## verbose version of what it already does under the hood
+            # try:
+            #     yield session
+            # except Exception:
+            #     await session.rollback()
+            #     raise
+            # finally:
+            #     await session.close()
 
 
 DbSession = Annotated[AsyncSession, Depends(get_db)]
