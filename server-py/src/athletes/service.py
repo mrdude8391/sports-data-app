@@ -39,25 +39,8 @@ async def get_athletes(db: AsyncSession, current_user: User) -> List[AthleteResp
 
 async def delete_athlete(athlete_id: UUID, db: AsyncSession, current_user: User):
     """Delete an athlete by athleteId"""
-    try:
-        print(
-            "\nLog:\tdelete_athlete() => Delete athlete with ID provided from path parameter"
-        )
-
-        # Delete the object
-        result = await db.execute(
-            delete(Athlete).where(
-                Athlete.id == athlete_id, Athlete.user_id == current_user.id
-            )
-        )
-        # Observe the result
-        if result.rowcount == 0:
-            raise HTTPException(status_code=404, detail="Not found")
-
-    except IntegrityError as err:
-        print("\nERROR\n", err)
-        raise HTTPException(
-            status_code=status.HTTP_409_CONFLICT, detail="Athlete still contains stats"
-        )
-    except ValueError as err:
-        raise HTTPException(status_code=500, detail="Delete Athlete Failed")
+    rows_deleted = await athlete_repo.delete_athlete_by_id(
+        athlete_id, current_user.id, db
+    )
+    if rows_deleted == 0:
+        raise HTTPException(status_code=404, detail="Not found")
