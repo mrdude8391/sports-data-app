@@ -1,5 +1,5 @@
 from typing import List
-from sqlalchemy import  DateTime, ForeignKey, Index
+from sqlalchemy import DateTime, ForeignKey, Index
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 from src.database import Base
@@ -7,11 +7,13 @@ from sqlalchemy.orm import relationship, Mapped, mapped_column
 import uuid
 import datetime
 
+
 class Athlete(Base):
     __tablename__ = "athletes"
 
     id: Mapped[uuid.UUID] = mapped_column(primary_key=True, default=uuid.uuid4)
-    user_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("users.id"), nullable=False, index=True
+    user_id: Mapped[uuid.UUID] = mapped_column(
+        ForeignKey("users.id"), nullable=False, index=True
     )
     name: Mapped[str] = mapped_column(nullable=False)
     age: Mapped[int] = mapped_column(nullable=False)
@@ -24,8 +26,8 @@ class Athlete(Base):
     )
 
     # Relationships
-    user: Mapped["User"] = relationship(back_populates="athletes") # type: ignore
-    stats: Mapped[List["Stat"]] = relationship(back_populates="athlete", cascade="all, delete-orphan") # type: ignore
+    user: Mapped["User"] = relationship(back_populates="athletes")  # type: ignore
+    stats: Mapped[List["Stat"]] = relationship(back_populates="athlete", cascade="all, delete-orphan", passive_deletes=True)  # type: ignore
 
     # Compound unique index: prevents duplicate athlete names per user
     __table_args__ = (Index("idx_user_athlete_name", "user_id", "name", unique=True),)

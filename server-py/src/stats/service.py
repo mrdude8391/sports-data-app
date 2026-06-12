@@ -94,7 +94,7 @@ async def create_stat(
 
         # insert new stat
         db.add(new_stat)
-        await db.commit()
+        await db.flush()
         await db.refresh(new_stat)
 
         # return _convert_stat_to_response(new_stat)
@@ -218,7 +218,7 @@ async def create_stats_batch(
             stat_objects.append(new_stat)
 
         db.add_all(stat_objects)
-        await db.commit()
+        await db.flush()
 
         return {"message": "Successfully added batch"}
     except ValueError as err:
@@ -234,7 +234,7 @@ async def delete_stat(stat_id: int, db: AsyncSession, current_user: User) -> dic
         result = await db.execute(
             delete(Stat).where(Stat.id == stat_id, Stat.user_id == current_user.id)
         )
-        await db.commit()
+        await db.flush()
 
         if result.rowcount == 0:
             raise HTTPException(

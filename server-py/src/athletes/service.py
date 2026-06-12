@@ -38,25 +38,18 @@ async def get_athletes(db: AsyncSession, current_user: User) -> List[AthleteResp
 
 
 async def delete_athlete(athlete_id: UUID, db: AsyncSession, current_user: User):
-    """Deletes an athlete"""
+    """Delete an athlete by athleteId"""
     try:
         print(
             "\nLog:\tdelete_athlete() => Delete athlete with ID provided from path parameter"
         )
-        # Delete all stats
-        deletedStats = await db.execute(
-            delete(Stat).where(
-                Stat.athlete_id == athlete_id, Stat.user_id == current_user.id
-            )
-        )
+
         # Delete the object
         result = await db.execute(
             delete(Athlete).where(
                 Athlete.id == athlete_id, Athlete.user_id == current_user.id
             )
         )
-        # Commit to database
-        await db.commit()
         # Observe the result
         if result.rowcount == 0:
             raise HTTPException(status_code=404, detail="Not found")

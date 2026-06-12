@@ -16,7 +16,9 @@ class Stat(Base):
         ForeignKey("users.id"), nullable=False, index=True
     )
     athlete_id: Mapped[uuid.UUID] = mapped_column(
-        ForeignKey("athletes.id"), nullable=False, index=True
+        ForeignKey("athletes.id", ondelete="CASCADE"),
+        nullable=False,
+        index=True,
     )
     # Attack stats
     attack_kills: Mapped[int] = mapped_column(default=0)
