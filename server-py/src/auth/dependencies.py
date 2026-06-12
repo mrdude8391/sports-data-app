@@ -14,7 +14,7 @@ load_dotenv()
 security = HTTPBearer()
 
 
-async def get_current_user(
+async def get_valid_current_user(
     credentials: HTTPAuthorizationCredentials = Depends(security),
     db: Session = Depends(get_db),
 ):

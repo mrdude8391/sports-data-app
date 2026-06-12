@@ -18,7 +18,6 @@ async def create_athlete(
     athlete_info: AthleteCreate, db: AsyncSession, current_user: User
 ) -> AthleteResponse:
     """Create a new athlete in the database"""
-
     # Create new athlete object
     new_athlete = Athlete(
         user_id=current_user.id,
