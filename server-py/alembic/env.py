@@ -19,13 +19,11 @@ config = context.config
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
-  
-
 
 # Load environment variables from .env
 load_dotenv()
 
-DATABASE_URL = os.getenv("SUPABASE_URI", '')
+DATABASE_URL = os.getenv("SUPABASE_URI", "")
 percent_replaced_url = DATABASE_URL.replace("%", "%%")
 config.set_main_option("sqlalchemy.url", percent_replaced_url)
 
@@ -34,6 +32,7 @@ from src.database import Base
 from src.athletes.models import Athlete
 from src.auth.models import User
 from src.stats.models import Stat
+
 # for 'autogenerate' support
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
@@ -86,6 +85,9 @@ async def run_async_migrations() -> None:
         config.get_section(config.config_ini_section, {}),
         prefix="sqlalchemy.",
         poolclass=pool.NullPool,
+        connect_args={
+            "statement_cache_size": 0,
+        },
     )
 
     async with connectable.connect() as connection:
