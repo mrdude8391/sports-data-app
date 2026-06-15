@@ -1,4 +1,5 @@
 import traceback
+from typing import Annotated
 from fastapi import Request, HTTPException, Depends, status
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from sqlalchemy import select
@@ -56,3 +57,6 @@ async def get_valid_current_user(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Server Error : {err}",
         )
+
+
+ValidUser = Annotated[User, Depends(get_valid_current_user)]
