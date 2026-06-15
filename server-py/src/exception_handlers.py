@@ -21,7 +21,7 @@ def register_exception_handlers(app: FastAPI):
             status_code=422,
             content={
                 "error": "VALIDATION_ERROR",
-                "message": "Invalid Input",
+                "detail": "Invalid Input",
             },
         )
 
@@ -32,7 +32,7 @@ def register_exception_handlers(app: FastAPI):
             status_code=401,
             content={
                 "error": "INVALID_CREDENTIALS",
-                "message": "Invalid email or password",
+                "detail": "Invalid email or password",
             },
         )
 
@@ -41,31 +41,32 @@ def register_exception_handlers(app: FastAPI):
         logger.error("Duplicate Error")
         return JSONResponse(
             status_code=409,
-            content={"error": "DUPLICATE_USER", "message": "Email already being used"},
+            content={"error": "DUPLICATE_USER", "detail": "Email already being used"},
         )
 
     @app.exception_handler(IntegrityError)
     async def duplicate_key_handler(_, exc: IntegrityError):
-        logger.exception("Duplicate Key Error")
+        logger.exception(f"Integrity Error\n\n{exc}")
+
         return JSONResponse(
             status_code=409,
             content={
                 "error": "DB_INTEGRITY_ERROR",
-                "message": "The record you are trying to create already exists - Database integrity violation",
+                "detail": f"Database integrity violation {exc.orig}",
             },
         )
 
     @app.exception_handler(RequestValidationError)
     async def unexpected_validation_exception_handler(_, exc: RequestValidationError):
         logger.exception("Request Validation Error")
-        message = "Value Error: "
+        detail = "Value Error: "
         for error in exc.errors():
-            message += error["msg"]
+            detail += error["msg"]
         return JSONResponse(
             status_code=400,
             content={
                 "error": "VALIDATION_ERROR",
-                "message": message,
+                "detail": detail,
             },
         )
 
@@ -76,7 +77,7 @@ def register_exception_handlers(app: FastAPI):
             status_code=500,
             content={
                 "error": "INTERNAL_SERVER_ERROR",
-                "message": "Something went wrong",
+                "detail": "Something went wrong",
             },
         )
 
@@ -87,6 +88,6 @@ def register_exception_handlers(app: FastAPI):
             status_code=500,
             content={
                 "error": "INTERNAL_SERVER_ERROR",
-                "message": "Something went wrong",
+                "detail": "Something went wrong",
             },
         )

@@ -25,6 +25,7 @@ import {
   DEFAULT_STAT_FORM,
   type NewStat,
   type NewStatPayload,
+  type Stat,
   type StatCategory,
   type StatFieldKey,
   type StatFields,
@@ -52,10 +53,11 @@ const CreateAthleteStat = (props: createAthleteStatProps) => {
   const queryClient = useQueryClient();
   const { isPending, error, mutate } = useMutation({
     mutationFn: createStat,
-    onSuccess: () => {
+    onSuccess: (stat: Stat) => {
       // Invalidate and refetch
       queryClient.invalidateQueries({ queryKey: ["stats", athleteId] });
       setForm(DEFAULT_STAT_FORM);
+      console.log("created athlete", stat);
     },
   });
 
@@ -193,10 +195,10 @@ const CreateAthleteStat = (props: createAthleteStatProps) => {
         Adding stats...
       </div>
     );
+
   return (
     <div>
       <ConfirmDialog />
-
       <Dialog>
         <DialogTrigger asChild>
           <Button variant="default" size="lg">

@@ -40,7 +40,7 @@ async def login_user(login_payload: LoginPayload, db: AsyncSession) -> UserWithT
     """
     Returns User info with token provided login credentials
     """
-    logger.info("Login attempt for email=%s", login_payload.email)
+    logger.info("\tLogin attempt for email=%s", login_payload.email)
 
     existing_user: User = await auth_repo.get_by_email(login_payload.email, db)
 

@@ -1,3 +1,4 @@
+import logging
 from typing import Annotated
 from fastapi import Depends
 from sqlalchemy import NullPool
@@ -11,6 +12,9 @@ from sqlalchemy.ext.asyncio import (
 from sqlalchemy.orm import DeclarativeBase
 
 from dotenv import load_dotenv
+
+logger = logging.getLogger(__name__)
+logging.basicConfig(level=logging.DEBUG)
 
 # Load environment variables from .env
 load_dotenv()
@@ -54,7 +58,7 @@ async def get_db():
     """
     Dependency that provides a database session per request.
     """
-    print("\nLog:\tget_db() => SqlAlchemy db Session Dependency")
+    logger.info("\tget_db() => SqlAlchemy db Session Dependency")
     async with async_session() as session:
         async with session.begin():
             yield session

@@ -14,6 +14,7 @@ from src.athletes.schemas import (
 from src.auth.models import User
 from src.athletes.models import Athlete
 from src.stats.models import Stat
+from src.stats import repository as stats_repo
 from uuid import UUID
 
 
@@ -21,35 +22,17 @@ async def create_stat(
     athlete_id: UUID, stat_data: StatCreate, db: AsyncSession, current_user: User
 ) -> StatResponse:
     """Create a new stat entry for an athlete"""
-    try:
-        # Verify athlete exists and belongs to user
-        result = await db.execute(
-            select(Athlete).filter(
-                Athlete.id == athlete_id, Athlete.user_id == current_user.id
-            )
-        )
-        athlete_exists = result.scalar_one_or_none()
-
-        if not athlete_exists:
-            raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND, detail="Athlete not found"
-            )
-        # Create stat entry
-        new_stat = Stat(
-            athlete_id=athlete_id,
-            user_id=current_user.id,
-            stat_data=stat_data,
-        )
-
-        # insert new stat
-        db.add(new_stat)
-        await db.flush()
-        await db.refresh(new_stat)
-
-        # return _convert_stat_to_response(new_stat)
-    except ValueError as err:
-        print(err)
-        raise HTTPException(status_code=500, detail="Failed to create stat")
+    athlete = await stats_repo.get_valid_athlete_by_id(athlete_id, current_user.id, db)
+    if not athlete:
+        raise HTTPException(status_code=404, detail="Athlete doesn't belong to user")
+    # Create stat entry
+    new_stat = Stat(
+        athlete_id=athlete_id,
+        user_id=current_user.id,
+        stat_data=stat_data,
+    )
+    stat = await stats_repo.create_new_stat(new_stat, db)
+    return StatResponse.model_validate(_convert_stat_to_response(stat))
 
 
 async def get_stats(

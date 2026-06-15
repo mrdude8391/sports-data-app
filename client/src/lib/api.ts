@@ -2,7 +2,7 @@ import type { User } from "@/features/auth/types/Auth";
 import axios, { AxiosError, type InternalAxiosRequestConfig } from "axios";
 
 export interface ApiError {
-  message: string;
+  detail: string;
   error: string;
   status: number;
 }
@@ -43,7 +43,7 @@ api.interceptors.response.use(
     }
     console.log(error);
     const normalizedError = {
-      message: error.response?.data?.message ?? "Unknown error",
+      message: error.response?.data?.detail ?? "Unknown error",
       error: error.response?.data?.error ?? "UNKNOWN_ERROR",
       status: error.response?.status,
     };

@@ -8,7 +8,11 @@ from sqlalchemy.orm import Session
 from .models import User
 import jwt
 from dotenv import load_dotenv
+import logging
 import os
+
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
 
 load_dotenv()
 
@@ -23,13 +27,13 @@ async def get_valid_current_user(
 
     Returns the current user object after verifying existence in db
     """
-    print("\nLog:\tget_current_user() => Dependency called")
+    logger.info("\tget_valid_current_user() => Dependency called")
     # Retreive token from credentials dependency
     token = credentials.credentials
     try:
         # Decode the JWT into the payload structures
         # {"id" : str(existing_user.id)}
-        print("\tTry Decode JWT")
+        logger.debug("\tTry Decode JWT")
         payload = jwt.decode(token, key=os.getenv("JWT_SECRET"), algorithms=["HS256"])
 
         # Extract ID from the payload

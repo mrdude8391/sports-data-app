@@ -6,9 +6,10 @@ import type {
   Stat,
 } from "../types/Stat";
 
-export const createStat = async (newStat: NewStatPayload) => {
+export const createStat = async (newStat: NewStatPayload): Promise<Stat> => {
   const { athleteId, statForm } = newStat;
-  await api.post(`/stats/${athleteId}`, statForm);
+  const { data } = await api.post(`/stats/${athleteId}`, statForm);
+  return data;
 };
 
 export const createStatsBatch = async ({
