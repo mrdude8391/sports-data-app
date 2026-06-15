@@ -16,6 +16,10 @@ from src.athletes.models import Athlete
 from src.stats.models import Stat
 from src.stats import repository as stats_repo
 from uuid import UUID
+import logging
+
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
 
 
 async def create_stat(
@@ -35,31 +39,24 @@ async def create_stat(
     return StatResponse.model_validate(_convert_stat_to_response(stat))
 
 
-async def get_stats(
+async def get_athlete_with_stats(
     athlete_id: UUID, db: AsyncSession, current_user: User
 ) -> AthleteWithStats:
-    try:
-        print("\nLog:\tGet_stats() => Get all stats of Athlete Id")
-        # Retrieve the Athlete
-        result = await db.execute(select(Athlete).filter(Athlete.id == athlete_id))
-        athlete = result.scalar_one_or_none()
+    logger.info("Get_stats() => Get all stats of Athlete Id")
+    # Retrieve the Athlete
+    athlete = stats_repo.get_valid_athlete_by_id(athlete_id, current_user.id, db)
 
-        # Retrieve the Stats
-        result = await db.execute(
-            select(Stat)
-            .filter(Stat.user_id == current_user.id, Stat.athlete_id == athlete_id)
-            .order_by(Stat.recorded_at)
-        )
-        stats = result.scalars().all()
-
-        # Convert to response format
-        athlete_response = AthleteResponse.model_validate(athlete)
-        stats_response = [_convert_stat_to_response(stat) for stat in stats]
-
-        return AthleteWithStats(athlete=athlete_response, stats=stats_response)
-    except ValueError as err:
-        print(err)
-        raise HTTPException(status_code=500, detail="Failed to get all stats")
+    # Retrieve the Stats
+    result = await db.execute(
+        select(Stat)
+        .filter(Stat.user_id == current_user.id, Stat.athlete_id == athlete_id)
+        .order_by(Stat.recorded_at)
+    )
+    stats = result.scalars().all()
+    # Convert to response format
+    athlete_response = AthleteResponse.model_validate(athlete)
+    stats_response = [_convert_stat_to_response(stat) for stat in stats]
+    return AthleteWithStats(athlete=athlete_response, stats=stats_response)
 
 
 async def create_stats_batch(
@@ -67,7 +64,7 @@ async def create_stats_batch(
 ) -> dict:
     """Create multiple stat entries at once"""
     try:
-        print("\nLog:\tcreate_stats_batch() => Create multiple stats at once")
+        logger.info("create_stats_batch() => Create multiple stats at once")
 
         stat_objects = []
 

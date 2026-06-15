@@ -38,7 +38,7 @@ async def get_athlete_stats(
     current_user: ValidUser,
 ):
     """Get all athlete's stats"""
-    return await stats_service.get_stats(athlete_id, db, current_user)
+    return await stats_service.get_athlete_with_stats(athlete_id, db, current_user)
 
 
 @router.delete("/{stat_id}")
