@@ -21,8 +21,9 @@ async def delete_athlete_by_id(
     athlete_id: uuid.UUID, user_id: uuid.UUID, db: AsyncSession
 ) -> int:
     """
-    Delete athlete by athleteId and userId
-    Orphaned stats rows are deleted by database configured by foreign key constraints in orm model
+    Delete athlete by athleteId and userId.
+    Orphaned stats rows are deleted by database configured by foreign key constraints in orm model.
+
     Returns number of rows deleted
     """
     # Delete the object
