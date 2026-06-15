@@ -22,9 +22,6 @@ async def create_stat(
 ) -> StatResponse:
     """Create a new stat entry for an athlete"""
     try:
-        print(
-            "\nLog:\tcreate_stat() => Create new Stat for athlete ID provided from path parameter, and stat body passed in request body."
-        )
         # Verify athlete exists and belongs to user
         result = await db.execute(
             select(Athlete).filter(
@@ -37,59 +34,11 @@ async def create_stat(
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND, detail="Athlete not found"
             )
-        print("recorded at", stat_data.recordedAt)
         # Create stat entry
         new_stat = Stat(
-            user_id=current_user.id,
             athlete_id=athlete_id,
-            # Attack stats
-            attack_kills=stat_data.attack.kills if stat_data.attack else 0,
-            attack_errors=stat_data.attack.errors if stat_data.attack else 0,
-            attack_total=stat_data.attack.total if stat_data.attack else 0,
-            attack_percentage=stat_data.attack.percentage if stat_data.attack else 0.0,
-            # Setting stats
-            setting_assists=stat_data.setting.assists if stat_data.setting else 0,
-            setting_errors=stat_data.setting.errors if stat_data.setting else 0,
-            setting_attempts=stat_data.setting.attempts if stat_data.setting else 0,
-            # Serving stats
-            serving_rating=stat_data.serving.rating if stat_data.serving else 0.0,
-            serving_rating_total=(
-                stat_data.serving.ratingTotal if stat_data.serving else 0.0
-            ),
-            serving_aces=stat_data.serving.aces if stat_data.serving else 0,
-            serving_errors=stat_data.serving.errors if stat_data.serving else 0,
-            serving_attempts=stat_data.serving.attempts if stat_data.serving else 0,
-            serving_percentage=(
-                stat_data.serving.percentage if stat_data.serving else 0.0
-            ),
-            # Receiving stats
-            receiving_rating=stat_data.receiving.rating if stat_data.receiving else 0.0,
-            receiving_rating_total=(
-                stat_data.receiving.ratingTotal if stat_data.receiving else 0.0
-            ),
-            receiving_errors=stat_data.receiving.errors if stat_data.receiving else 0,
-            receiving_attempts=(
-                stat_data.receiving.attempts if stat_data.receiving else 0
-            ),
-            # Defense stats
-            defense_digs=stat_data.defense.digs if stat_data.defense else 0,
-            defense_rating=stat_data.defense.rating if stat_data.defense else 0.0,
-            defense_rating_total=(
-                stat_data.defense.ratingTotal if stat_data.defense else 0.0
-            ),
-            defense_errors=stat_data.defense.errors if stat_data.defense else 0,
-            defense_attempts=stat_data.defense.attempts if stat_data.defense else 0,
-            # Blocking stats
-            blocking_total=stat_data.blocking.total if stat_data.blocking else 0,
-            blocking_kills=stat_data.blocking.kills if stat_data.blocking else 0,
-            blocking_solos=stat_data.blocking.solos if stat_data.blocking else 0,
-            blocking_good_touches=(
-                stat_data.blocking.goodTouches if stat_data.blocking else 0
-            ),
-            blocking_attempts=stat_data.blocking.attempts if stat_data.blocking else 0,
-            blocking_errors=stat_data.blocking.errors if stat_data.blocking else 0,
-            # Recorded at
-            recorded_at=stat_data.recordedAt if stat_data.recordedAt else None,
+            user_id=current_user.id,
+            stat_data=stat_data,
         )
 
         # insert new stat
@@ -156,64 +105,9 @@ async def create_stats_batch(
                 )
 
             new_stat = Stat(
-                user_id=current_user.id,
                 athlete_id=stat_data.athleteId,
-                # Attack stats
-                attack_kills=stat_data.attack.kills if stat_data.attack else 0,
-                attack_errors=stat_data.attack.errors if stat_data.attack else 0,
-                attack_total=stat_data.attack.total if stat_data.attack else 0,
-                attack_percentage=(
-                    stat_data.attack.percentage if stat_data.attack else 0.0
-                ),
-                # Setting stats
-                setting_assists=stat_data.setting.assists if stat_data.setting else 0,
-                setting_errors=stat_data.setting.errors if stat_data.setting else 0,
-                setting_attempts=stat_data.setting.attempts if stat_data.setting else 0,
-                # Serving stats
-                serving_rating=stat_data.serving.rating if stat_data.serving else 0.0,
-                serving_rating_total=(
-                    stat_data.serving.ratingTotal if stat_data.serving else 0.0
-                ),
-                serving_aces=stat_data.serving.aces if stat_data.serving else 0,
-                serving_errors=stat_data.serving.errors if stat_data.serving else 0,
-                serving_attempts=stat_data.serving.attempts if stat_data.serving else 0,
-                serving_percentage=(
-                    stat_data.serving.percentage if stat_data.serving else 0.0
-                ),
-                # Receiving stats
-                receiving_rating=(
-                    stat_data.receiving.rating if stat_data.receiving else 0.0
-                ),
-                receiving_rating_total=(
-                    stat_data.receiving.ratingTotal if stat_data.receiving else 0.0
-                ),
-                receiving_errors=(
-                    stat_data.receiving.errors if stat_data.receiving else 0
-                ),
-                receiving_attempts=(
-                    stat_data.receiving.attempts if stat_data.receiving else 0
-                ),
-                # Defense stats
-                defense_digs=stat_data.defense.digs if stat_data.defense else 0,
-                defense_rating=stat_data.defense.rating if stat_data.defense else 0.0,
-                defense_rating_total=(
-                    stat_data.defense.ratingTotal if stat_data.defense else 0.0
-                ),
-                defense_errors=stat_data.defense.errors if stat_data.defense else 0,
-                defense_attempts=stat_data.defense.attempts if stat_data.defense else 0,
-                # Blocking stats
-                blocking_total=stat_data.blocking.total if stat_data.blocking else 0,
-                blocking_kills=stat_data.blocking.kills if stat_data.blocking else 0,
-                blocking_solos=stat_data.blocking.solos if stat_data.blocking else 0,
-                blocking_good_touches=(
-                    stat_data.blocking.goodTouches if stat_data.blocking else 0
-                ),
-                blocking_attempts=(
-                    stat_data.blocking.attempts if stat_data.blocking else 0
-                ),
-                blocking_errors=stat_data.blocking.errors if stat_data.blocking else 0,
-                # Recorded at
-                recorded_at=stat_data.recordedAt if stat_data.recordedAt else None,
+                user_id=current_user.id,
+                stat_data=stat_data,
             )
             stat_objects.append(new_stat)
 
