@@ -14,7 +14,8 @@ from src.athletes.schemas import (
 from src.auth.models import User
 from src.athletes.models import Athlete
 from src.stats.models import Stat
-from src.stats import repository as stats_repo
+from src.stats import repository as stat_repo
+from src.athletes import repository as athlete_repo
 from uuid import UUID
 import logging
 
@@ -26,7 +27,7 @@ async def create_stat(
     athlete_id: UUID, stat_data: StatCreate, db: AsyncSession, current_user: User
 ) -> StatResponse:
     """Create a new stat entry for an athlete"""
-    athlete = await stats_repo.get_valid_athlete_by_id(athlete_id, current_user.id, db)
+    athlete = await stat_repo.get_valid_athlete_by_id(athlete_id, current_user.id, db)
     if not athlete:
         raise HTTPException(status_code=404, detail="Athlete doesn't belong to user")
     # Create stat entry
@@ -35,7 +36,7 @@ async def create_stat(
         user_id=current_user.id,
         stat_data=stat_data,
     )
-    stat = await stats_repo.create_new_stat(new_stat, db)
+    stat = await stat_repo.create_new_stat(new_stat, db)
     return StatResponse.model_validate(_convert_stat_to_response(stat))
 
 
@@ -49,11 +50,11 @@ async def get_athlete_with_stats(
     """
     logger.info(f"\tget_athlete_with_stats() => Get all stats of Athlete Id")
     # Retrieve the Athlete
-    athlete: Athlete = await stats_repo.get_valid_athlete_by_id(
+    athlete: Athlete = await athlete_repo.get_valid_athlete_by_id(
         athlete_id, current_user.id, db
     )
 
-    stats: List[Stat] = await stats_repo.get_all_stats_by_athlete_id(
+    stats: List[Stat] = await stat_repo.get_all_stats_by_athlete_id(
         athlete_id, current_user.id, db
     )
 
@@ -108,7 +109,7 @@ async def delete_stat(stat_id: int, db: AsyncSession, current_user: User) -> dic
     """Delete a stat entry"""
     logger.info(f"\tdelete_stat() => delete stat by id")
     # Delete
-    rows_deleted = await stats_repo.delete_stat_by_id(stat_id, current_user.id, db)
+    rows_deleted = await stat_repo.delete_stat_by_id(stat_id, current_user.id, db)
     if rows_deleted == 0:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail="Stat not found"
@@ -123,7 +124,7 @@ async def edit_stat(
 ) -> dict:
     """Update a stat entry"""
     logger.info(f"\tedit_stat() => Edit a stat")
-    stat = await stats_repo.get_stat_by_id(stat_id, current_user.id, db)
+    stat = await stat_repo.get_stat_by_id(stat_id, current_user.id, db)
     if not stat:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail="Stat not found"

@@ -13,16 +13,6 @@ async def create_new_stat(new_stat: Stat, db: AsyncSession) -> Stat:
     return new_stat
 
 
-async def get_valid_athlete_by_id(
-    athlete_id: UUID, user_id: UUID, db: AsyncSession
-) -> Athlete:
-    # Verify Athlete belongs to current user
-    result = await db.execute(
-        select(Athlete).where(Athlete.id == athlete_id, Athlete.user_id == user_id)
-    )
-    return result.scalar_one_or_none()
-
-
 async def get_all_stats_by_athlete_id(
     athlete_id: UUID, current_user_id: UUID, db: AsyncSession
 ) -> List[Stat]:
