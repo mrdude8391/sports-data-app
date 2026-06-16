@@ -103,14 +103,11 @@ async def create_stats_batch(
 async def delete_stat(stat_id: int, db: AsyncSession, current_user: User) -> dict:
     """Delete a stat entry"""
     try:
-        print("\nLog:\tcreate_stats_batch() => Create multiple stats at once")
+        logger.info(f"\tdelete_stat() => delete stat by id")
         # Delete
-        result = await db.execute(
-            delete(Stat).where(Stat.id == stat_id, Stat.user_id == current_user.id)
-        )
-        await db.flush()
+        rows_deleted = await stats_repo.delete_stat_by_id(stat_id, current_user.id, db)
 
-        if result.rowcount == 0:
+        if rows_deleted == 0:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND, detail="Stat not found"
             )
