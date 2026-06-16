@@ -18,8 +18,9 @@ export const createStatsBatch = async ({
   forms: Map<string, NewStat>;
 }) => {
   // console.log("create stats batch")
-  const payload = Array.from(forms.entries()).map(([_, form]) => ({
+  const payload = Array.from(forms.entries()).map(([athleteId, form]) => ({
     ...form,
+    athleteId: athleteId,
   }));
   // Form.entries turns the map into an iterable tuple.
   // array from turns the iterator into an array of tuples

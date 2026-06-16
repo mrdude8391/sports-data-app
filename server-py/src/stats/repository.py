@@ -41,3 +41,11 @@ async def delete_stat_by_id(
         delete(Stat).where(Stat.id == stat_id, Stat.user_id == current_user_id)
     )
     return result.rowcount
+
+
+async def insert_list_of_stats(stat_objects: List[Stat], db: AsyncSession):
+    db.add_all(stat_objects)
+    await db.flush()
+    ### cant refresh a list
+    # await db.refresh(stat_objects)
+    # return stat_objects

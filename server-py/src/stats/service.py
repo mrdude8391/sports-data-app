@@ -27,7 +27,9 @@ async def create_stat(
     athlete_id: UUID, stat_data: StatCreate, db: AsyncSession, current_user: User
 ) -> StatResponse:
     """Create a new stat entry for an athlete"""
-    athlete = await stat_repo.get_valid_athlete_by_id(athlete_id, current_user.id, db)
+    athlete = await athlete_repo.get_valid_athlete_by_id(
+        athlete_id, current_user.id, db
+    )
     if not athlete:
         raise HTTPException(status_code=404, detail="Athlete doesn't belong to user")
     # Create stat entry
@@ -74,21 +76,21 @@ async def create_stats_batch(
         stat_objects = []
 
         for stat_data in stats_data:
-            # Verify athlete exists and belongs to user
-            result = await db.execute(
-                select(Athlete).filter(
-                    Athlete.id == stat_data.athleteId,
-                    Athlete.user_id == current_user.id,
-                )
+
+            new_stat = Stat(
+                athlete_id=stat_data.athleteId,
+                user_id=current_user.id,
+                stat_data=stat_data,
             )
-            athlete_exists = result.scalar_one_or_none()
 
-            if not athlete_exists:
+            athlete = await athlete_repo.get_valid_athlete_by_id(
+                stat_data.athleteId, current_user.id, db
+            )
+            if not athlete:
                 raise HTTPException(
-                    status_code=status.HTTP_404_NOT_FOUND,
-                    detail=f"Athlete with id {stat_data.athleteId} not found",
+                    status_code=404, detail="Athlete doesn't belong to user"
                 )
-
+            # Create stat entry
             new_stat = Stat(
                 athlete_id=stat_data.athleteId,
                 user_id=current_user.id,
@@ -96,10 +98,7 @@ async def create_stats_batch(
             )
             stat_objects.append(new_stat)
 
-        db.add_all(stat_objects)
-        await db.flush()
-
-        return {"message": "Successfully added batch"}
+        return await stat_repo.insert_list_of_stats(stat_objects, db)
     except ValueError as err:
         print(err)
         raise HTTPException(status_code=500, detail="Failed to Create batch stats")
