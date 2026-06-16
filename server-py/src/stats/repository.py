@@ -23,7 +23,29 @@ async def get_valid_athlete_by_id(
     return result.scalar_one_or_none()
 
 
-async def delete_stat_by_id(stat_id: UUID, current_user_id: UUID, db: AsyncSession):
+async def get_all_stats_by_athlete_id(
+    athlete_id: UUID, current_user_id: UUID, db: AsyncSession
+) -> List[Stat]:
+    # Retrieve the Stats
+    result = await db.execute(
+        select(Stat)
+        .where(Stat.user_id == current_user_id, Stat.athlete_id == athlete_id)
+        .order_by(Stat.recorded_at)
+    )
+    return result.scalars().all()
+
+
+async def get_stat_by_id(stat_id: UUID, current_user_id: UUID, db: AsyncSession):
+    # Get stat and make sure it exists
+    result = await db.execute(
+        select(Stat).where(Stat.id == stat_id, Stat.user_id == current_user_id)
+    )
+    return result.scalar_one_or_none()
+
+
+async def delete_stat_by_id(
+    stat_id: UUID, current_user_id: UUID, db: AsyncSession
+) -> int:
     # Delete
     result = await db.execute(
         delete(Stat).where(Stat.id == stat_id, Stat.user_id == current_user_id)
