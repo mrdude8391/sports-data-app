@@ -1,11 +1,8 @@
-from typing import List
+from typing import List, Optional
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from src.database import get_db
-from .schemas import (
-    AthleteCreate,
-    AthleteResponse,
-)
+from .schemas import AthleteCreate, AthleteResponse, AthleteListResponse
 from src.athletes import service as athlete_service
 from src.auth.dependencies import ValidUser
 from uuid import UUID
@@ -27,10 +24,13 @@ async def create_new_athlete(
     return await athlete_service.create_athlete(athlete_info, db, current_user)
 
 
-@router.get("/", response_model=List[AthleteResponse])
-async def get_all_athletes(db: DbSession, current_user: ValidUser):
+@router.get("/", response_model=AthleteListResponse)
+async def get_all_athletes(
+    db: DbSession, current_user: ValidUser, cursor: Optional[str] = None
+):
     """Get all athletes"""
-    return await athlete_service.get_athletes(db, current_user)
+    print(cursor, type(cursor))
+    return await athlete_service.get_athletes(cursor, db, current_user)
 
 
 @router.delete("/{id}")

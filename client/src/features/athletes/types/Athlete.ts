@@ -6,3 +6,8 @@ export type Athlete = {
 };
 
 export type NewAthlete = Omit<Athlete, "id">;
+
+export type AthleteListResponse = {
+  athleteList: Athlete[];
+  nextCursor: string | null;
+};

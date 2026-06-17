@@ -12,9 +12,23 @@ async def create_new_athlete(new_athlete: Athlete, db: AsyncSession) -> Athlete:
     return new_athlete
 
 
-async def get_athletes_by_user_id(userId: UUID, db: AsyncSession) -> List[Athlete]:
-    results = await db.execute(select(Athlete).where(Athlete.user_id == userId))
-    return results.scalars().all()
+async def get_athletes_by_user_id(
+    cursor: str | None, userId: UUID, db: AsyncSession
+) -> List[Athlete]:
+    if not cursor:
+        results = await db.execute(
+            select(Athlete)
+            .where(Athlete.user_id == userId)
+            .order_by(Athlete.created_at)
+        )
+        return results.scalars().all()
+    else:
+        results = await db.execute(
+            select(Athlete)
+            .where(Athlete.user_id == userId, Athlete.created_at > cursor)
+            .order_by(Athlete.created_at)
+        )
+        return results.scalars().all()
 
 
 async def get_valid_athlete_by_id(

@@ -3,23 +3,30 @@ import CreateAthlete from "@/features/athletes/components/CreateAthlete";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import AthleteList from "../features/athletes/components/AthleteList";
-import { useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import { getAthletes } from "@/features/athletes/api/athletesApi";
+import React from "react";
 
 const Athletes = () => {
   const [isEdit, setIsEdit] = useState(false);
 
   const {
-    data: athletes,
-    isLoading,
+    data,
     error,
-  } = useQuery({
+    fetchNextPage,
+    hasNextPage,
+    isFetching,
+    isFetchingNextPage,
+    status,
+  } = useInfiniteQuery({
     queryKey: ["athletes"],
     queryFn: getAthletes,
+    initialPageParam: "",
+    getNextPageParam: (lastPage, pages) => lastPage.nextCursor,
   });
 
-  if (isLoading) return <Loader className="animate-spin" />;
-  if (error)
+  if (status === "pending") return <Loader className="animate-spin" />;
+  if (status === "error")
     return (
       <p>
         Error Loading Athletes <span>{error.message}</span>
@@ -39,7 +46,24 @@ const Athletes = () => {
           </Button>
         </div>
 
-        <AthleteList isEdit={isEdit} athletes={athletes} />
+        {data.pages.map((group, i) => (
+          <React.Fragment key={i}>
+            <AthleteList isEdit={isEdit} athletes={group.athleteList} />
+          </React.Fragment>
+        ))}
+        <div>
+          <button
+            onClick={() => fetchNextPage()}
+            disabled={!hasNextPage || isFetching}
+          >
+            {isFetchingNextPage
+              ? "Loading more..."
+              : hasNextPage
+                ? "Load More"
+                : "Nothing more to load"}
+          </button>
+        </div>
+        <div>{isFetching && !isFetchingNextPage ? "Fetching..." : null}</div>
       </div>
     </div>
   );

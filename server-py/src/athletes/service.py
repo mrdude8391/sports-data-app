@@ -3,10 +3,7 @@ from fastapi import HTTPException, status
 from sqlalchemy import delete, select
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
-from .schemas import (
-    AthleteCreate,
-    AthleteResponse,
-)
+from .schemas import AthleteCreate, AthleteResponse, AthleteListResponse
 from .models import Athlete
 from src.auth.models import User
 from src.stats.models import Stat
@@ -30,11 +27,16 @@ async def create_athlete(
     return AthleteResponse.model_validate(athlete)
 
 
-async def get_athletes(db: AsyncSession, current_user: User) -> List[AthleteResponse]:
+async def get_athletes(
+    cursor: str | None, db: AsyncSession, current_user: User
+) -> AthleteListResponse:
     """Returns all athletes of current user ID"""
-    athletes = await athlete_repo.get_athletes_by_user_id(current_user.id, db)
-    # Validate and return the response
-    return [AthleteResponse.model_validate(athlete) for athlete in athletes]
+    athletes = await athlete_repo.get_athletes_by_user_id(cursor, current_user.id, db)
+    # Validate
+    # athlete_List = [AthleteResponse.model_validate(athlete) for athlete in athletes]
+    next_cursor = ""
+    response = AthleteListResponse(athlete_list=athletes, next_cursor=next_cursor)
+    return response
 
 
 async def delete_athlete(athlete_id: UUID, db: AsyncSession, current_user: User):

@@ -31,6 +31,11 @@ class AthleteResponse(AthleteBase):
     updated_at: Optional[datetime] = None
 
 
+class AthleteListResponse(BaseSchema):
+    athlete_list: list[AthleteResponse]
+    next_cursor: str | None
+
+
 # Nested stat structures
 class AttackStats(BaseSchema):
     kills: int = 0
