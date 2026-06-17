@@ -1,5 +1,6 @@
-from typing import List
-from fastapi import HTTPException, status
+from datetime import datetime
+from typing import Annotated, List, Optional
+from fastapi import HTTPException, Query, status
 from sqlalchemy import delete, select
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -28,13 +29,24 @@ async def create_athlete(
 
 
 async def get_athletes(
-    cursor: str | None, db: AsyncSession, current_user: User
+    db: AsyncSession,
+    current_user: User,
+    cursor: Optional[str],
+    limit: int,
 ) -> AthleteListResponse:
     """Returns all athletes of current user ID"""
-    athletes = await athlete_repo.get_athletes_by_user_id(cursor, current_user.id, db)
+    athletes = await athlete_repo.get_athletes_by_user_id(
+        current_user.id, db, cursor, limit
+    )
     # Validate
     # athlete_List = [AthleteResponse.model_validate(athlete) for athlete in athletes]
-    next_cursor = ""
+    has_next_page = len(athletes) > limit
+    athletes = athletes[:limit]
+    next_cursor = None
+    if has_next_page:
+        last_athlete = athletes[-1]
+        next_cursor = last_athlete.created_at.strftime("%Y-%m-%d %H:%M:%S")
+
     response = AthleteListResponse(athlete_list=athletes, next_cursor=next_cursor)
     return response
 

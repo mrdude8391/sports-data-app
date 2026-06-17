@@ -1,4 +1,5 @@
-from typing import List
+from datetime import datetime
+from typing import List, Optional
 from uuid import UUID
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import delete, select
@@ -13,20 +14,25 @@ async def create_new_athlete(new_athlete: Athlete, db: AsyncSession) -> Athlete:
 
 
 async def get_athletes_by_user_id(
-    cursor: str | None, userId: UUID, db: AsyncSession
+    userId: UUID, db: AsyncSession, cursor: Optional[str], limit: int
 ) -> List[Athlete]:
+
     if not cursor:
         results = await db.execute(
             select(Athlete)
             .where(Athlete.user_id == userId)
             .order_by(Athlete.created_at)
+            .limit(limit + 1)
         )
         return results.scalars().all()
     else:
+        print(cursor)
+        cursor_date = datetime.strptime(cursor, "%Y-%m-%d %H:%M:%S")
         results = await db.execute(
             select(Athlete)
-            .where(Athlete.user_id == userId, Athlete.created_at > cursor)
+            .where(Athlete.user_id == userId, Athlete.created_at > cursor_date)
             .order_by(Athlete.created_at)
+            .limit(limit + 1)
         )
         return results.scalars().all()
 

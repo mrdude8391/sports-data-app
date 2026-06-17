@@ -1,5 +1,7 @@
-from typing import List, Optional
+from datetime import datetime
+from typing import List, Optional, Annotated
 from fastapi import APIRouter, Depends
+from fastapi import Query
 from sqlalchemy.orm import Session
 from src.database import get_db
 from .schemas import AthleteCreate, AthleteResponse, AthleteListResponse
@@ -26,11 +28,14 @@ async def create_new_athlete(
 
 @router.get("/", response_model=AthleteListResponse)
 async def get_all_athletes(
-    db: DbSession, current_user: ValidUser, cursor: Optional[str] = None
+    db: DbSession,
+    current_user: ValidUser,
+    cursor: Annotated[str | None, Query()] = None,
+    limit: Annotated[int, Query(ge=1, le=100)] = 20,
 ):
     """Get all athletes"""
     print(cursor, type(cursor))
-    return await athlete_service.get_athletes(cursor, db, current_user)
+    return await athlete_service.get_athletes(db, current_user, cursor, limit)
 
 
 @router.delete("/{id}")

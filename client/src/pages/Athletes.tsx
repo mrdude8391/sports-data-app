@@ -24,7 +24,6 @@ const Athletes = () => {
     initialPageParam: "",
     getNextPageParam: (lastPage, pages) => lastPage.nextCursor,
   });
-
   if (status === "pending") return <Loader className="animate-spin" />;
   if (status === "error")
     return (
