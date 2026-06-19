@@ -22,7 +22,7 @@ const Athletes = () => {
     queryKey: ["athletes"],
     queryFn: getAthletes,
     initialPageParam: "",
-    getNextPageParam: (lastPage, pages) => lastPage.nextCursor,
+    getNextPageParam: (lastPage, _) => lastPage.nextCursor,
   });
   if (status === "pending") return <Loader className="animate-spin" />;
   if (status === "error")
@@ -45,11 +45,13 @@ const Athletes = () => {
           </Button>
         </div>
 
-        {data.pages.map((group, i) => (
+        <AthleteList isEdit={isEdit} pages={data.pages} />
+
+        {/* {data.pages.map((group, i) => (
           <React.Fragment key={i}>
-            <AthleteList isEdit={isEdit} athletes={group.athleteList} />
+            <AthleteList isEdit={isEdit} athletes={group.athleteList} pages={data.pages} />
           </React.Fragment>
-        ))}
+        ))} */}
         <div>
           <button
             onClick={() => fetchNextPage()}

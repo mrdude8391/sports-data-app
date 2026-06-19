@@ -22,8 +22,10 @@ export const getAthletes = async ({
 }: {
   pageParam: string | null;
 }): Promise<AthleteListResponse> => {
+  console.log(pageParam);
   const response = await api.get<AthleteListResponse>(
     `/athlete/?cursor=${pageParam}&limit=1`,
   );
+  console.log(response);
   return response.data;
 };
