@@ -21,8 +21,10 @@ const Athletes = () => {
   } = useInfiniteQuery({
     queryKey: ["athletes"],
     queryFn: getAthletes,
-    initialPageParam: "",
-    getNextPageParam: (lastPage, _) => lastPage.nextCursor,
+    initialPageParam: { cursor: "" },
+    getNextPageParam: (lastPage, _) => {
+      cursor: lastPage.nextCursor;
+    },
   });
   if (status === "pending") return <Loader className="animate-spin" />;
   if (status === "error")

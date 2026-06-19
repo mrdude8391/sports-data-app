@@ -16,15 +16,18 @@ export const deleteAthlete = async (id: string) => {
   await api.delete(`/athlete/${id}`);
 };
 
-// getAthlete API method
+interface PageParams {
+  cursor: string | null;
+}
 export const getAthletes = async ({
   pageParam,
 }: {
-  pageParam: string | null;
+  pageParam: PageParams;
 }): Promise<AthleteListResponse> => {
-  console.log(pageParam);
+  const { cursor } = pageParam;
+  console.log(cursor);
   const response = await api.get<AthleteListResponse>(
-    `/athlete/?cursor=${pageParam}&limit=1`,
+    `/athlete/?cursor=${cursor}&limit=1`,
   );
   console.log(response);
   return response.data;
