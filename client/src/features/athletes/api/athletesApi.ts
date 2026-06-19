@@ -3,6 +3,7 @@ import type {
   NewAthlete,
   Athlete,
   AthleteListResponse,
+  GetAthletePageParams,
 } from "../types/Athlete";
 
 export const createAthlete = async (athlete: NewAthlete): Promise<Athlete> => {
@@ -16,13 +17,10 @@ export const deleteAthlete = async (id: string) => {
   await api.delete(`/athlete/${id}`);
 };
 
-interface PageParams {
-  cursor: string | null;
-}
 export const getAthletes = async ({
   pageParam,
 }: {
-  pageParam: PageParams;
+  pageParam: GetAthletePageParams;
 }): Promise<AthleteListResponse> => {
   const { cursor } = pageParam;
   console.log(cursor);

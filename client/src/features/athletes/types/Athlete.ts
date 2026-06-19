@@ -11,3 +11,7 @@ export type AthleteListResponse = {
   athleteList: Athlete[];
   nextCursor: string | null;
 };
+
+export interface GetAthletePageParams {
+  cursor: string | null;
+}

@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import AthleteList from "../features/athletes/components/AthleteList";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { getAthletes } from "@/features/athletes/api/athletesApi";
-import React from "react";
+import type { GetAthletePageParams } from "@/features/athletes/types/Athlete";
 
 const Athletes = () => {
   const [isEdit, setIsEdit] = useState(false);
@@ -21,10 +21,10 @@ const Athletes = () => {
   } = useInfiniteQuery({
     queryKey: ["athletes"],
     queryFn: getAthletes,
-    initialPageParam: { cursor: "" },
-    getNextPageParam: (lastPage, _) => {
-      cursor: lastPage.nextCursor;
-    },
+    initialPageParam: { cursor: "" } as GetAthletePageParams,
+    getNextPageParam: (lastPage, _) => ({
+      cursor: lastPage.nextCursor,
+    }),
   });
   if (status === "pending") return <Loader className="animate-spin" />;
   if (status === "error")
