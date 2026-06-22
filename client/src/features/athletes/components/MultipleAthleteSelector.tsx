@@ -25,7 +25,7 @@ const AthleteSelector = (athleteSelectorProps: {
     isLoading,
     error,
   } = useQuery({
-    queryKey: ["athletes"],
+    queryKey: ["multipleAthletes"],
     queryFn: sportsDataService.getAthletes,
   });
 

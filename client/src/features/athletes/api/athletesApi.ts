@@ -17,7 +17,7 @@ export const deleteAthlete = async (id: string) => {
   await api.delete(`/athlete/${id}`);
 };
 
-export const getAthletes = async ({
+export const getAthletesPaginated = async ({
   pageParam,
 }: {
   pageParam: GetAthletePageParams;
