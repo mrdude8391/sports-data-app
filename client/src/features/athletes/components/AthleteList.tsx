@@ -31,7 +31,7 @@ const AthleteList = (athleteListProps: AthleteListProps) => {
           ))}
         </ul>
       ) : (
-        <p>No Athletes</p>
+        <p>No athletes yet. Please create your first athlete</p>
       )}
 
       {/* Athlete List implementation */}
