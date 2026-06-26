@@ -44,14 +44,14 @@ async def login_user(login_payload: LoginPayload, db: AsyncSession) -> UserWithT
 
     existing_user: User = await auth_repo.get_by_email(login_payload.email, db)
 
-    if not existing_user:
-        raise InvalidCredentialsException
     # Match the provided password with hashed password
     is_match = auth_utils.verify_password(
         login_payload.password, existing_user.password
     )
-    if not is_match:
+
+    if not existing_user or not is_match:
         raise InvalidCredentialsException
+
     # Generate token
     # access_token_expires = timedelta(hours=TOKEN_EXPIRE_TIME)
     token = auth_utils.create_access_token_for_user(existing_user)

@@ -1,5 +1,5 @@
 import uuid
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, EmailStr, ConfigDict
 
 
 # User Schemas
@@ -15,8 +15,7 @@ class RegisterPayload(UserBase):
 class UserResponse(UserBase):
     id: uuid.UUID
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 class UserWithToken(UserResponse):
