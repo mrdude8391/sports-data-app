@@ -1,28 +1,30 @@
-from operator import add
 import pytest
-from fastapi.testclient import TestClient
-from src.main import app
+from httpx import AsyncClient
+
+from tests.conftest import auth_header, create_test_user, login_user
+from src.athletes.schemas import AthleteListResponse
+
+# @pytest.mark.anyio
+# async def test_create_athlete_succeess(client:AsyncClient):
+#     user = await create_test_user(client)
+#     token = await login_user(client)
+#     headers = auth_header(token)
+
+#     response = await client.post(
+#         "/athlete"
+#     )
 
 
-def test_add():
-    assert add(2, 3) == 5
+@pytest.mark.anyio
+async def test_get_athletes(client: AsyncClient):
 
+    register_user = await create_test_user(client)
+    user = await login_user(client)
+    token = user["token"]
+    headers = auth_header(token)
 
-client = TestClient(app)
-
-@pytest.fixture(scope='session')
-def test_login():
-    response = client.post(
-        "/auth/login", json={"email": "jrcheehu@gmail.com", "password": "123"}
-    )
-
+    response = await client.get("/athlete/", headers=headers)
     assert response.status_code == 200
-    assert response.json()["email"] == "jrcheehu@gmail.com"
-
-
-def test_get_athletes():
-    response = client.get(
-        "/athlete/",
-    )
-    assert response.status_code == 200
-    assert response = 
+    data: AthleteListResponse = response.json()
+    print(data)
+    assert data["athleteList"] == []

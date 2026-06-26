@@ -34,7 +34,6 @@ async def get_all_athletes(
     limit: Annotated[int, Query(ge=1, le=100)] = 20,
 ):
     """Get all athletes"""
-    print(cursor, type(cursor))
     return await athlete_service.get_athletes(db, current_user, cursor, limit)
 
 
