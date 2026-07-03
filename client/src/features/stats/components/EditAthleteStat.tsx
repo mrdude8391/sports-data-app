@@ -227,15 +227,7 @@ const EditAthleteStat = (props: EditAthleteStatProps) => {
                             form[category][key as keyof NewStat[keyof NewStat]]
                           }
                           onChange={(e) =>
-<<<<<<< HEAD:client/src/features/stats/components/EditAthleteStat.tsx
                             handleChange(category, key, Number(e.target.value))
-=======
-                            handleChange(
-                              category as StatCategory,
-                              key as any,
-                              Number(e.target.value),
-                            )
->>>>>>> main:client/src/components/EditAthleteStat.tsx
                           }
                           className="border rounded p-2"
                         />
