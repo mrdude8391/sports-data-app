@@ -11,38 +11,37 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Alert, AlertTitle } from "@/components/ui/alert";
-import { Link, useNavigate } from "react-router-dom";
-import * as sportsDataService from "../services/sportsDataService";
-import { AlertCircleIcon, Volleyball } from "lucide-react";
-import { useAuth } from "@/context/AuthContext";
-import type { RegisterPayload } from "@/types/Auth";
+import { Link } from "react-router-dom";
+import { AlertCircleIcon, Loader, Volleyball } from "lucide-react";
+import { useAuth } from "@/context/AuthProvider";
+import type { RegisterPayload } from "../features/auth/types/Auth";
 
 const Register = () => {
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [showAlert, setShowAlert] = useState(false);
-  const [error, setError] = useState("");
 
-  const navigate = useNavigate();
+  const { useRegister } = useAuth();
 
-  const { login } = useAuth();
+  // const { isPending, mutate } = useMutation({
+  //   mutationFn: sportsDataService.register,
+  //   onSuccess: (userData) => {
+  //     setError("");
+  //     setShowAlert(true);
+  //     login(userData);
+  //     navigate("/profile");
+  //   },
+  //   onError: (error) => {
+  //     setError(error.message);
+  //   },
+  // });
+
+  const { isPending, error, mutate } = useRegister();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    try {
-      const registerPayload: RegisterPayload = { username, email, password };
-      const user = await sportsDataService.register(registerPayload);
-      if (user) {
-        setError("");
-        setShowAlert(true);
-        login(user);
-        navigate("/profile");
-      }
-      console.log(user);
-    } catch (err: any) {
-      setError(err.message);
-    }
+    const registerPayload: RegisterPayload = { username, email, password };
+    mutate(registerPayload);
   };
 
   return (
@@ -97,40 +96,31 @@ const Register = () => {
               </div>
             </form>
           </CardContent>
-          <CardFooter className="grid">
-            <div className="flex flex-col gap-2">
-              <Button
-                form="registerForm"
-                type="submit"
-                className="justify-center "
-              >
-                Register
+          <CardFooter className="flex-col gap-2 justify-between">
+            {isPending && <Loader className="animate-spin" />}
+            <Button
+              form="registerForm"
+              type="submit"
+              className="w-full"
+              disabled={isPending}
+            >
+              Register
+            </Button>
+            <Link to="/login" className="w-full">
+              <Button variant="outline" className="w-full">
+                Back to Login
               </Button>
-              <Link to="/login" className="w-full">
-                <Button variant="outline" className="w-full">
-                  Back to Login
-                </Button>
-              </Link>
-              {showAlert && (
-                <Alert>
-                  <AlertTitle className="text-center">
-                    Success! Your have registered your account
-                  </AlertTitle>
-                </Alert>
-              )}
-              {error && (
-                <Alert
-                  variant="destructive"
-                  className="flex justify-between items-center"
-                >
-                  <AlertCircleIcon />
-                  <AlertTitle className="text-center">{error}</AlertTitle>
-                  <Button variant="destructive" onClick={() => setError("")}>
-                    X
-                  </Button>
-                </Alert>
-              )}
-            </div>
+            </Link>
+            {error && (
+              <Alert
+                variant="destructive"
+                className="flex justify-between items-center"
+              >
+                <AlertCircleIcon />
+                <AlertTitle className="text-center">{error.message}</AlertTitle>
+                <Button variant="destructive">X</Button>
+              </Alert>
+            )}
           </CardFooter>
         </Card>
       </div>

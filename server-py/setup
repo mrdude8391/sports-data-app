@@ -1,0 +1,7 @@
+venv\scripts\activate && uvicorn src.main:app --reload
+##  Common Alembic Commands to Remember
+# alembic init alembic — Initialize Alembic in your project
+# alembic revision --autogenerate -m "message" — Generate migration script automatically
+# alembic upgrade head — Apply latest migrations
+# alembic downgrade -1 — Undo the last migration (go back one version)
+# alembic history — See migration history

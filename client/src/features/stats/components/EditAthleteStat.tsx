@@ -1,0 +1,265 @@
+import { Button } from "../../../components/ui/button";
+import { Label } from "../../../components/ui/label";
+import { Input } from "../../../components/ui/input";
+import { useEffect, useState } from "react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { STAT_LABEL_INDEX } from "@/constants";
+
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Alert, AlertTitle } from "../../../components/ui/alert";
+import { AlertCircleIcon } from "lucide-react";
+import * as React from "react";
+import { ChevronDownIcon } from "lucide-react";
+import { Calendar } from "@/components/ui/calendar";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import {
+  DEFAULT_STAT_FORM,
+  type Stat,
+  type StatCategory,
+  type NewStat,
+} from "../types/Stat";
+import { editStat } from "../api/statsApi";
+
+interface EditAthleteStatProps {
+  stat: Stat;
+  athleteId: string;
+}
+
+const EditAthleteStat = (props: EditAthleteStatProps) => {
+  const { stat, athleteId } = props;
+
+  const [form, setForm] = useState<NewStat>(DEFAULT_STAT_FORM);
+  const [open, setOpen] = React.useState(false);
+
+  const queryClient = useQueryClient();
+
+  const { isPending, error, mutate } = useMutation({
+    mutationFn: editStat,
+    onSuccess: () => {
+      // Invalidate and refetch
+      queryClient.invalidateQueries({ queryKey: ["stats", athleteId] });
+    },
+  });
+
+  const categories = Object.keys(STAT_LABEL_INDEX) as StatCategory[];
+
+  useEffect(() => {
+    if (stat) {
+      // console.log(stat);
+      // const prevStats = Object.fromEntries(
+      //   STAT_INDEX.map(({ category, labels }) => [
+      //     category,
+      //     Object.fromEntries(
+      //       labels.map((f) => [f.key, (stat as any)[category][f.key]]),
+      //     ),
+      //   ]),
+      // );
+
+      // console.log({ ...prevStats, recordedAt: stat.recordedAt });
+      setForm(stat);
+    }
+  }, []);
+
+  const handleChange = <C extends StatCategory>(
+    category: C,
+    key: string,
+    value: number,
+  ) => {
+    setForm((prev) => {
+      const updatedCategory = {
+        ...prev[category],
+        [key]: value,
+      };
+
+      // Auto-calculate hitting percentage
+      if (
+        category === "attack" &&
+        (key === "kills" || key === "total" || key === "errors")
+      ) {
+        const kills = key === "kills" ? value : updatedCategory.kills;
+        const total = key === "total" ? value : updatedCategory.total;
+        const errors = key === "errors" ? value : updatedCategory.errors;
+        const percentage = total > 0 ? (kills - errors) / total : 0;
+        updatedCategory.percentage = Math.round(percentage * 1000) / 1000;
+      }
+
+      // Auto-calculate serving percentage
+      if (
+        category === "serving" &&
+        (key === "attempts" || key === "errors" || key === "ratingTotal")
+      ) {
+        const attempts = key === "attempts" ? value : updatedCategory.attempts;
+        const errors = key === "errors" ? value : updatedCategory.errors;
+        const ratingTotal =
+          key === "ratingTotal" ? value : updatedCategory.ratingTotal;
+        const percentage = attempts > 0 ? (attempts - errors) / attempts : 0;
+        const rating = attempts > 0 ? ratingTotal / attempts : 0;
+
+        updatedCategory.rating = Math.round(rating * 10) / 10;
+        updatedCategory.percentage = Math.round(percentage * 1000) / 1000;
+      }
+
+      // Auto-calculate receiving rating
+      if (
+        category === "receiving" &&
+        (key === "ratingTotal" || key === "attempts")
+      ) {
+        const attempts = key === "attempts" ? value : updatedCategory.attempts;
+        const ratingTotal =
+          key === "ratingTotal" ? value : updatedCategory.ratingTotal;
+        const rating = attempts > 0 ? ratingTotal / attempts : 0;
+
+        updatedCategory.rating = Math.round(rating * 10) / 10;
+      }
+
+      // Auto-calculate defense rating
+      if (
+        category === "defense" &&
+        (key === "ratingTotal" || key === "attempts")
+      ) {
+        const attempts = key === "attempts" ? value : updatedCategory.attempts;
+        const ratingTotal =
+          key === "ratingTotal" ? value : updatedCategory.ratingTotal;
+        const rating = attempts > 0 ? ratingTotal / attempts : 0;
+
+        updatedCategory.rating = Math.round(rating * 10) / 10;
+      }
+
+      return {
+        ...prev,
+        [category]: updatedCategory,
+      };
+    });
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (stat.id && form != DEFAULT_STAT_FORM) {
+      console.log(form);
+      mutate({ statId: stat.id, form: form, date: form.recordedAt });
+    }
+  };
+
+  if (isPending) return <div>pending</div>;
+  return (
+    <div>
+      <Dialog>
+        <form id="editStatForm" className="space-y-6" onSubmit={handleSubmit}>
+          <DialogTrigger asChild>
+            <Button variant="outline" size="sm">
+              Edit
+            </Button>
+          </DialogTrigger>
+          <DialogContent className="max-h-11/12 flex flex-col overflow-hidden">
+            <DialogHeader className="sticky">
+              <DialogTitle>Create New Stats</DialogTitle>
+              <DialogDescription>
+                Add a new stats here. Click save when you&apos;re done.
+              </DialogDescription>
+            </DialogHeader>
+            <div className="overflow-y-auto space-y-4 p-4">
+              <div className="flex flex-col gap-3">
+                <Label htmlFor="date" className="px-1">
+                  Date
+                </Label>
+                <Popover open={open} onOpenChange={setOpen}>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant="outline"
+                      id="date"
+                      className="w-48 justify-between font-normal"
+                    >
+                      {form.recordedAt
+                        ? form.recordedAt.toLocaleDateString()
+                        : "Select date"}
+                      <ChevronDownIcon />
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent
+                    className="w-auto overflow-hidden p-0"
+                    align="start"
+                  >
+                    <Calendar
+                      mode="single"
+                      selected={form.recordedAt}
+                      captionLayout="dropdown"
+                      onSelect={(date) => {
+                        const now = new Date();
+                        const merged = new Date(date!);
+                        merged.setHours(
+                          now.getHours(),
+                          now.getMinutes(),
+                          now.getSeconds(),
+                          now.getMilliseconds(),
+                        );
+
+                        setForm((prev) => ({ ...prev, recordedAt: merged }));
+                        setOpen(false);
+                      }}
+                    />
+                  </PopoverContent>
+                </Popover>
+              </div>
+              {categories.map((category) => (
+                <fieldset key={category} className="border p-4 rounded-md ">
+                  <legend className="font-bold capitalize">{category}</legend>
+
+                  <div className="grid grid-cols-2 gap-4 mt-2">
+                    {STAT_LABEL_INDEX[category].map(({ key, label }) => (
+                      <Label key={key} className="flex flex-col">
+                        <span className="text-sm">{label}</span>
+                        <Input
+                          type="number"
+                          value={
+                            form[category][key as keyof NewStat[keyof NewStat]]
+                          }
+                          onChange={(e) =>
+                            handleChange(category, key, Number(e.target.value))
+                          }
+                          className="border rounded p-2"
+                        />
+                      </Label>
+                    ))}
+                  </div>
+                </fieldset>
+              ))}
+
+              {/* <pre>{JSON.stringify(form, null, 2)}</pre> */}
+            </div>
+
+            {error && (
+              <Alert variant="destructive" className="flex justify-start ">
+                <AlertCircleIcon />
+                <AlertTitle className="px-1">{error.message}</AlertTitle>
+              </Alert>
+            )}
+            <DialogFooter>
+              <DialogClose asChild>
+                <Button variant="outline">Cancel</Button>
+              </DialogClose>
+              <Button type="submit" form="editStatForm">
+                Save New Stats
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </form>
+      </Dialog>
+      <form></form>
+    </div>
+  );
+};
+
+export default EditAthleteStat;

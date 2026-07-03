@@ -1,14 +1,15 @@
 import { Button } from "@/components/ui/button";
-import { useAuth } from "@/context/AuthContext";
+import { useAuth } from "@/context/AuthProvider";
 import { useTheme } from "@/context/ThemeProvider";
 import { Link } from "react-router-dom";
 
 const Home = () => {
-  const { isLoggedIn } = useAuth();
+  const { user } = useAuth();
   const { theme } = useTheme();
+
   return (
     <div className="flex flex-col w-full h-svh items-center justify-start">
-      {isLoggedIn ? (
+      {user ? (
         <div className="card-container sm:w-2xl flex flex-col gap-4 justify-center">
           <h1>Welcome to your volleyball tracker!</h1>
 

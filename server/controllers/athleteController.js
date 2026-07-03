@@ -82,7 +82,7 @@ const createStatsBatch = async (req, res) => {
   }
 };
 
-const getStats = async (req, res) => {
+const getAthleteWithStats = async (req, res) => {
   try {
     const athleteId = req.params.id;
     console.log("get stats: find athlete");
@@ -141,7 +141,7 @@ module.exports = {
   createAthlete,
   getAthletes,
   deleteAthlete,
-  getStats,
+  getAthleteWithStats,
   createStat,
   createStatsBatch,
   deleteStat,

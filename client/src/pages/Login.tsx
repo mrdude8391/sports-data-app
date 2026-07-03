@@ -1,7 +1,6 @@
 import { Button } from "@/components/ui/button";
 import React, { useState } from "react";
-import * as sportsDataservice from "../services/sportsDataService";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import {
@@ -14,38 +13,39 @@ import {
 } from "@/components/ui/card";
 import { Alert, AlertTitle } from "@/components/ui/alert";
 import { AlertCircleIcon, Loader, Volleyball, X } from "lucide-react";
-import { useAuth } from "@/context/AuthContext";
-import type { LoginPayload } from "@/types/Auth";
+import { useAuth } from "@/context/AuthProvider";
+import type { LoginPayload } from "@/features/auth/types/Auth";
 
 const Login = () => {
-  const [form, setForm] = useState<LoginPayload>({
+  const [loginForm, setLoginForm] = useState<LoginPayload>({
     email: "",
     password: "",
   });
-  const [error, setError] = useState("");
-  const navigate = useNavigate();
-  const { login } = useAuth();
-  const [isLoading, setIsLoading] = useState(false);
+  const { useLogin } = useAuth();
 
-  const handleChange = (e: any) => {
+  // const { isPending, mutate } = useMutation({
+  //   mutationFn: sportsDataService.login,
+  //   onSuccess: (userData) => {
+  //     console.log("Login Successful");
+  //     login(userData);
+  //     navigate("/athletes");
+  //   },
+  //   onError: (error) => {
+  //     setError(error.message);
+  //     console.log(error);
+  //   },
+  // });
+
+  const { isPending, mutate, error } = useLogin();
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setForm((prev) => ({ ...prev, [name]: value }));
+    setLoginForm((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    try {
-      setIsLoading(true);
-      e.preventDefault();
-      const user = await sportsDataservice.login(form);
-      console.log("login Successful");
-      login(user);
-      navigate("/athletes");
-    } catch (err: any) {
-      setError(err.message);
-      console.log(err.message);
-    } finally {
-      setIsLoading(false);
-    }
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    mutate(loginForm);
   };
 
   return (
@@ -97,12 +97,12 @@ const Login = () => {
               </form>
             </CardContent>
             <CardFooter className="flex-col gap-2 justify-between">
-              {isLoading && <Loader className="animate-spin" />}
+              {isPending && <Loader className="animate-spin" />}
               <Button
-                className="w-full"
                 type="submit"
                 form="loginForm"
-                disabled={isLoading}
+                className="w-full"
+                disabled={isPending}
               >
                 Login
               </Button>
@@ -119,13 +119,10 @@ const Login = () => {
                   className="flex flex-row justify-between items-center"
                 >
                   <AlertCircleIcon className="mb-1" />
-                  <AlertTitle className="text-center">{error}</AlertTitle>
-                  <Button
-                    variant="destructive"
-                    size="icon"
-                    className="size-5"
-                    onClick={() => setError("")}
-                  >
+                  <AlertTitle className="text-center flex">
+                    {error.message}
+                  </AlertTitle>
+                  <Button variant="destructive" size="icon" className="size-5">
                     <X className="size-4" />
                   </Button>
                 </Alert>

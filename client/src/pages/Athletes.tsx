@@ -1,16 +1,43 @@
-import AthleteCard from "@/components/AthleteCard";
-import type { Athlete } from "@/types/Athlete";
-import * as sportsDataService from "../services/sportsDataService";
-import sampleImage from "../assets/circle-user-round.svg";
 import { EllipsisVertical, Loader } from "lucide-react";
-import { useQuery } from "@tanstack/react-query";
-import CreateAthlete from "@/components/CreateAthlete";
+import CreateAthlete from "@/features/athletes/components/CreateAthlete";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import DeleteAthlete from "@/components/DeleteAthlete";
+import AthleteList from "../features/athletes/components/AthleteList";
+import { useInfiniteQuery } from "@tanstack/react-query";
+import { getAthletesPaginated } from "@/features/athletes/api/athletesApi";
+import type { GetAthletePageParams } from "@/features/athletes/types/Athlete";
 
 const Athletes = () => {
   const [isEdit, setIsEdit] = useState(false);
+
+  const {
+    data,
+    error,
+    fetchNextPage,
+    hasNextPage,
+    isFetching,
+    isFetchingNextPage,
+    status,
+  } = useInfiniteQuery({
+    queryKey: ["athletes"],
+    queryFn: getAthletesPaginated,
+    initialPageParam: { cursor: "" } as GetAthletePageParams,
+    getNextPageParam: (lastPage, _) => {
+      if (lastPage.nextCursor) {
+        return {
+          cursor: lastPage.nextCursor,
+        };
+      }
+      return undefined;
+    },
+  });
+  if (status === "pending") return <Loader className="animate-spin" />;
+  if (status === "error")
+    return (
+      <p>
+        Error Loading Athletes <span>{error.message}</span>
+      </p>
+    );
 
   return (
     <div className="flex flex-col gap-6 w-full sm:w-lg items-center">
@@ -25,47 +52,29 @@ const Athletes = () => {
           </Button>
         </div>
 
-        <AthleteList isEdit={isEdit} />
+        <AthleteList isEdit={isEdit} pages={data.pages} />
+
+        {/* {data.pages.map((group, i) => (
+          <React.Fragment key={i}>
+            <AthleteList isEdit={isEdit} athletes={group.athleteList} pages={data.pages} />
+          </React.Fragment>
+        ))} */}
+        <div>
+          <button
+            onClick={() => fetchNextPage()}
+            disabled={!hasNextPage || isFetching}
+          >
+            {isFetchingNextPage
+              ? "Loading more..."
+              : hasNextPage
+                ? "Load More"
+                : "Nothing more to load"}
+          </button>
+        </div>
+        <div>{isFetching && !isFetchingNextPage ? "Fetching..." : null}</div>
       </div>
     </div>
   );
 };
 
 export default Athletes;
-
-interface AthleteListProps {
-  isEdit: boolean;
-}
-
-const AthleteList = (athleteListProps: AthleteListProps) => {
-  const { isEdit } = athleteListProps;
-
-  const {
-    data: athletes,
-    isLoading,
-    error,
-  } = useQuery({
-    queryKey: ["athletes"],
-    queryFn: sportsDataService.getAthletes,
-  });
-
-  if (isLoading) return <Loader className="animate-spin" />;
-  if (error) return <p>... No Athletes Found</p>;
-
-  return (
-    <div className="flex flex-col gap-1 w-full">
-      {athletes && athletes.length > 0 ? (
-        athletes.map((a: Athlete) => (
-          <div key={a._id} className="flex w-full flex-row items-center ">
-            <div className="w-full ">
-              <AthleteCard imageSrc={sampleImage} athlete={a} />{" "}
-            </div>
-            {isEdit && <DeleteAthlete id={a._id} />}
-          </div>
-        ))
-      ) : (
-        <p>No Athletes</p>
-      )}
-    </div>
-  );
-};

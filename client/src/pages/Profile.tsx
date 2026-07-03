@@ -1,14 +1,14 @@
 import sampleImage from "../assets/circle-user-round.svg";
 import { useEffect } from "react";
-import { useAuth } from "@/context/AuthContext";
+import { useAuth } from "@/context/AuthProvider";
 import { useNavigate } from "react-router-dom";
 
 const Profile = () => {
-  const { user, isLoggedIn } = useAuth();
+  const { user } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!isLoggedIn) navigate("/login");
+    if (!user) navigate("/login");
   }, []);
 
   return (

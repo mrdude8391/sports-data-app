@@ -1,0 +1,29 @@
+import { Link } from "react-router-dom";
+import type { Athlete } from "@/features/athletes/types/Athlete";
+
+interface AthleteCardProps {
+  imageSrc: string;
+  athlete: Athlete;
+}
+
+const AthleteListItem = (props: AthleteCardProps) => {
+  const { athlete } = props;
+  return (
+    <div className="w-full flex items-center justify-between gap-3 rounded-lg ">
+      <Link
+        to={`/stats/${athlete.id}`}
+        className="flex items-center w-full justify-start transition-all rounded-lg px-3 py-3 gap-3 hover:bg-accent dark:hover:bg-accent"
+      >
+        {/* <img
+          src={imageSrc}
+          height={48}
+          width={48}
+          className="border-1 rounded-full bg-white flex-shrink-0"
+        /> */}
+        <p>{athlete.name}</p>
+      </Link>
+    </div>
+  );
+};
+
+export default AthleteListItem;
