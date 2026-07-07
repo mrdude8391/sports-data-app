@@ -38,6 +38,8 @@ async def get_athletes(
     athletes = await athlete_repo.get_athletes_by_user_id(
         current_user.id, db, cursor, limit
     )
+    for athlete in athletes:
+        print(athlete.name)
     # Validate
     # athlete_List = [AthleteResponse.model_validate(athlete) for athlete in athletes]
     has_next_page = len(athletes) > limit
