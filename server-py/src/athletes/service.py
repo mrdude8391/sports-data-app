@@ -46,7 +46,7 @@ async def get_athletes(
     if has_next_page:
         last_athlete = athletes[-1]
         next_cursor = last_athlete.created_at.strftime("%Y-%m-%d %H:%M:%S")
-
+        print("next cursor: ", next_cursor)
     response = AthleteListResponse(athlete_list=athletes, next_cursor=next_cursor)
     return response
 
