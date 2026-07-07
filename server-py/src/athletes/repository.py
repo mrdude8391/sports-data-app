@@ -28,7 +28,7 @@ async def get_athletes_by_user_id(
         return results.scalars().all()
     else:
         print("Given cursor: ", cursor)
-        cursor_date = datetime.strptime(cursor, "%Y-%m-%d %H:%M:%S")
+        cursor_date: datetime = datetime.strptime(cursor, "%Y-%m-%d %H:%M:%S")
         results = await db.execute(
             select(Athlete)
             .where(Athlete.user_id == userId, Athlete.created_at > cursor_date)

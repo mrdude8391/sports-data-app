@@ -39,7 +39,7 @@ async def get_athletes(
         current_user.id, db, cursor, limit
     )
     for athlete in athletes:
-        print(athlete.name)
+        print(athlete.name, athlete.created_at)
     # Validate
     # athlete_List = [AthleteResponse.model_validate(athlete) for athlete in athletes]
     has_next_page = len(athletes) > limit
