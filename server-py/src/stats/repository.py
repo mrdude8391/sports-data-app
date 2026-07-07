@@ -19,7 +19,7 @@ async def get_all_stats_by_athlete_id(
     # Retrieve the Stats
     result = await db.execute(
         select(Stat)
-        .where(Stat.user_id == current_user_id, Stat.athlete_id == athlete_id)
+        .filter(Stat.user_id == current_user_id, Stat.athlete_id == athlete_id)
         .order_by(Stat.recorded_at)
     )
     return result.scalars().all()
