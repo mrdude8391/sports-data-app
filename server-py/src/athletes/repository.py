@@ -18,6 +18,7 @@ async def get_athletes_by_user_id(
 ) -> List[Athlete]:
 
     if not cursor:
+        print("blank cursor")
         results = await db.execute(
             select(Athlete)
             .where(Athlete.user_id == userId)
@@ -26,7 +27,7 @@ async def get_athletes_by_user_id(
         )
         return results.scalars().all()
     else:
-        print(cursor)
+        print("Given cursor: ", cursor)
         cursor_date = datetime.strptime(cursor, "%Y-%m-%d %H:%M:%S")
         results = await db.execute(
             select(Athlete)
