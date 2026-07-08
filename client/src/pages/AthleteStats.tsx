@@ -47,6 +47,8 @@ const AthleteStats = () => {
         name: "",
         age: 0,
         height: 0,
+        createdAt: new Date(),
+        updatedAt: new Date(),
       },
       stats: [],
     },
