@@ -3,6 +3,8 @@ export type Athlete = {
   name: string;
   age: number;
   height: number;
+  createdAt: Date;
+  updatedAt: Date;
 };
 
 export type NewAthlete = Omit<Athlete, "id">;
