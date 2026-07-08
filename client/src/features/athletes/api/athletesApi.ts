@@ -23,10 +23,10 @@ export const getAthletesPaginated = async ({
   pageParam: GetAthletePageParams;
 }): Promise<AthleteListResponse> => {
   const { cursor } = pageParam;
-  console.log(cursor);
+  console.log("Cursor: ", cursor);
   const response = await api.get<AthleteListResponse>(
     `/athlete/?cursor=${cursor}&limit=1`,
   );
-  console.log(response);
+  console.log("getAthletesPaginated: ", response);
   return response.data;
 };
