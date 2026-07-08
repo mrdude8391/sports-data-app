@@ -1,9 +1,12 @@
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import List, Optional
 from uuid import UUID
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import delete, select
+from sqlalchemy import delete, or_, and_, select
 from ..athletes.models import Athlete
+from .schemas import (
+    AthleteListResponseCursor,
+)
 
 
 async def create_new_athlete(new_athlete: Athlete, db: AsyncSession) -> Athlete:
@@ -14,7 +17,10 @@ async def create_new_athlete(new_athlete: Athlete, db: AsyncSession) -> Athlete:
 
 
 async def get_athletes_by_user_id(
-    userId: UUID, db: AsyncSession, cursor: Optional[str], limit: int
+    userId: UUID,
+    db: AsyncSession,
+    limit: int,
+    cursor: Optional[AthleteListResponseCursor],
 ) -> List[Athlete]:
 
     if not cursor:
@@ -22,18 +28,32 @@ async def get_athletes_by_user_id(
         results = await db.execute(
             select(Athlete)
             .where(Athlete.user_id == userId)
-            .order_by(Athlete.created_at)
+            .order_by(
+                Athlete.created_at.desc(),
+                Athlete.id.desc(),
+            )
             .limit(limit + 1)
         )
         return results.scalars().all()
     else:
         print("Given cursor: ", cursor)
-        cursor_date: datetime = datetime.strptime(cursor, "%Y-%m-%d %H:%M:%S")
-        print("cursor date: ", cursor_date)
+        print("cursor date: ", cursor.created_at)
         results = await db.execute(
             select(Athlete)
-            .where(Athlete.user_id == userId, Athlete.created_at > cursor_date)
-            .order_by(Athlete.created_at)
+            .where(
+                Athlete.user_id == userId,
+                or_(
+                    Athlete.created_at < cursor.created_at,
+                    and_(
+                        Athlete.created_at == cursor.created_at,
+                        Athlete.id < cursor.id,
+                    ),
+                ),
+            )
+            .order_by(
+                Athlete.created_at.desc(),
+                Athlete.id.desc(),
+            )
             .limit(limit + 1)
         )
         return results.scalars().all()

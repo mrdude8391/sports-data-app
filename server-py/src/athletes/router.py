@@ -30,11 +30,11 @@ async def create_new_athlete(
 async def get_all_athletes(
     db: DbSession,
     current_user: ValidUser,
-    cursor: Annotated[str | None, Query()] = None,
     limit: Annotated[int, Query(ge=1, le=100)] = 20,
+    cursor: Annotated[str | None, Query()] = None,
 ):
     """Get all athletes"""
-    return await athlete_service.get_athletes(db, current_user, cursor, limit)
+    return await athlete_service.get_athletes(db, current_user, limit, cursor)
 
 
 @router.delete("/{id}")

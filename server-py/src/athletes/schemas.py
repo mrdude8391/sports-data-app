@@ -31,6 +31,11 @@ class AthleteResponse(AthleteBase):
     updated_at: Optional[datetime] = None
 
 
+class AthleteListResponseCursor(BaseSchema):
+    created_at: datetime
+    id: uuid.UUID
+
+
 class AthleteListResponse(BaseSchema):
     athlete_list: list[AthleteResponse]
     next_cursor: str | None

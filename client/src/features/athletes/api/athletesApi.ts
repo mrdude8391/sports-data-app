@@ -24,9 +24,11 @@ export const getAthletesPaginated = async ({
 }): Promise<AthleteListResponse> => {
   const { cursor } = pageParam;
   console.log("Cursor: ", cursor);
-  const response = await api.get<AthleteListResponse>(
-    `/athlete/?cursor=${cursor}&limit=1`,
-  );
+  const limit = 2;
+  const params = cursor
+    ? `?limit=${limit}&cursor=${cursor}`
+    : `?limit=${limit}`;
+  const response = await api.get<AthleteListResponse>(`/athlete/${params}`);
   console.log("getAthletesPaginated: ", response);
   return response.data;
 };
