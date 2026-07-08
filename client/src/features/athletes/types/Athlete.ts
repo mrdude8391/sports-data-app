@@ -7,7 +7,7 @@ export type Athlete = {
   updatedAt: Date;
 };
 
-export type NewAthlete = Omit<Athlete, "id">;
+export type NewAthlete = Omit<Athlete, "id" | "createdAt" | "updatedAt">;
 
 export type AthleteListResponse = {
   athleteList: Athlete[];

@@ -66,8 +66,6 @@ const CreateAthlete = () => {
       name: form.name.trim(),
       age: Number(form.age),
       height: Number(form.height),
-      createdAt: new Date(),
-      updatedAt: new Date(),
     };
     mutate(athlete);
   };
