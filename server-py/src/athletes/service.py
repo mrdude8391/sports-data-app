@@ -30,7 +30,6 @@ async def create_athlete(
         height=athlete_info.height,
     )
     athlete = await athlete_repo.create_new_athlete(new_athlete, db)
-
     return AthleteResponse.model_validate(athlete)
 
 
