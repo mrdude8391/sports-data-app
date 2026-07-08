@@ -44,16 +44,6 @@ async def get_athletes(
     athletes = await athlete_repo.get_athletes_by_user_id(
         current_user.id, db, limit, decode_cursor(cursor) if cursor else cursor
     )
-    for athlete in athletes:
-        if cursor:
-            print(
-                athlete.name,
-                athlete.created_at,
-                decode_cursor(cursor).created_at,
-                athlete.created_at > decode_cursor(cursor).created_at,
-            )
-        else:
-            print(athlete.name, athlete.created_at)
     # Validate
     # athlete_List = [AthleteResponse.model_validate(athlete) for athlete in athletes]
     has_next_page = len(athletes) > limit
