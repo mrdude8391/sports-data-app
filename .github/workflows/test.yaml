@@ -8,6 +8,11 @@ on:
 jobs:
   tests:
     runs-on: ubuntu-latest
+    env:
+      SUPABASE_URI: ${{ secrets.TEST_DATABASE_URL }}
+      JWT_SECRET: ${{ secrets.JWT_SECRET }}
+      ALGORITHM: ${{ secrets.ALGORITHM }}
+      ACCESS_TOKEN_EXPIRE_MINUTES: ${{ vars.ACCESS_TOKEN_EXPIRE_MINUTES }}
     defaults:
       run:
         working-directory: server-py
