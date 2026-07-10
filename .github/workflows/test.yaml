@@ -27,9 +27,7 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Run tests
-        run: |
-          venv\scripts\activate
-          pytest
+        run: pytest
 
       - name: Stop PostgreSQL
         if: always()
