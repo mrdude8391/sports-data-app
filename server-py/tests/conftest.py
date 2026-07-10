@@ -1,7 +1,7 @@
 import pytest
 import os
 
-os.environ["DATABASE_URL"] = (
+os.environ["SUPABASE_URI"] = (
     "postgresql+asyncpg://testuser:testpass@localhost/sports-test"
 )
 from collections.abc import AsyncGenerator
@@ -31,7 +31,7 @@ def anyio_backend():
 
 @pytest.fixture(scope="session")
 def test_engine():
-    engine = create_async_engine(os.environ["DATABASE_URL"], poolclass=NullPool)
+    engine = create_async_engine(os.environ["SUPABASE_URI"], poolclass=NullPool)
     return engine
 
 
