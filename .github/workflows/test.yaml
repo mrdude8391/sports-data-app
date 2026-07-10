@@ -8,14 +8,15 @@ on:
 jobs:
   tests:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: server-py
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
       - name: Start PostgreSQL
-        run: |
-          cd server-py/tests 
-          docker compose -f docker-compose.test.yml up -d
+        run: docker compose -f docker-compose.test.yml up -d
 
       - name: Setup Python
         uses: actions/setup-python@v5
@@ -27,7 +28,6 @@ jobs:
 
       - name: Run tests
         run: |
-          cd server-py
           venv\scripts\activate
           pytest
 
