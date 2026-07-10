@@ -153,7 +153,7 @@ async def test_get_athletes_with_pagination(
 
     for i in range(5):
         now_time = (
-            datetime.now(timezone.utc) - timedelta(hours=1) + timedelta(minutes=1)
+            datetime.now(timezone.utc) - timedelta(hours=1) + timedelta(minutes=i)
         )
         new_athlete = Athlete(
             user_id=user["id"], name=f"Zaku{i}", age=3, height=300, created_at=now_time
