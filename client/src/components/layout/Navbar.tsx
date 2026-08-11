@@ -1,4 +1,4 @@
-import { NAV_LINKS_LOGGED_IN, NAV_LINKS_LOGGED_OUT } from "@/constants";
+import { NAV_LINKS_LOGGED_IN } from "@/constants";
 import { useAuth } from "@/context/AuthProvider";
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
@@ -31,39 +31,25 @@ const Navbar = () => {
 
           <ul className="hidden lg:flex h-full gap-6 items-center">
             {/* <ul className={!isOpen ? "nav-menu" : "nav-menu-open"}> */}
-            {user
-              ? NAV_LINKS_LOGGED_IN.map((link) => (
-                  <li
+            {user &&
+              NAV_LINKS_LOGGED_IN.map((link) => (
+                <li
+                  key={link.key}
+                  className={
+                    currentLocation == link.href
+                      ? "h-full flex items-center font-semibold border-b-2 border-primary "
+                      : "h-full flex items-center"
+                  }
+                >
+                  <Link
                     key={link.key}
-                    className={
-                      currentLocation == link.href
-                        ? "h-full flex items-center font-semibold border-b-2 border-primary "
-                        : "h-full flex items-center"
-                    }
+                    to={link.href}
+                    className="nav-link-button"
                   >
-                    <Link
-                      key={link.key}
-                      to={link.href}
-                      className="nav-link-button"
-                    >
-                      {link.label}
-                    </Link>
-                  </li>
-                ))
-              : NAV_LINKS_LOGGED_OUT.map((link) => (
-                  <li
-                    key={link.key}
-                    className={
-                      currentLocation == link.href
-                        ? "h-full flex items-center font-semibold border-b-2 border-primary "
-                        : "h-full flex items-center"
-                    }
-                  >
-                    <Link to={link.href} className="nav-link-button">
-                      {link.label}
-                    </Link>
-                  </li>
-                ))}
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
             {user ? (
               <li>
                 <Button onClick={logout}>Logout</Button>

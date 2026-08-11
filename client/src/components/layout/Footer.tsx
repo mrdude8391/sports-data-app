@@ -1,4 +1,4 @@
-import { NAV_LINKS_LOGGED_IN, NAV_LINKS_LOGGED_OUT } from "@/constants";
+import { NAV_LINKS_LOGGED_IN } from "@/constants";
 import { useAuth } from "@/context/AuthProvider";
 import { Link } from "react-router-dom";
 
@@ -33,25 +33,16 @@ const Footer = () => {
             <div className="flex flex-col gap-2 ">
               {/* <p className="font-bold mb-1">Menu</p> */}
               <ul className="h-full gap-3 flex ">
-                {user
-                  ? NAV_LINKS_LOGGED_IN.map((link) => (
-                      <Link
-                        to={link.href}
-                        key={link.key}
-                        className="text-sm flex transition-all hover:font-bold"
-                      >
-                        {link.label}
-                      </Link>
-                    ))
-                  : NAV_LINKS_LOGGED_OUT.map((link) => (
-                      <Link
-                        to={link.href}
-                        key={link.key}
-                        className="text-sm flex transition-all hover:font-bold"
-                      >
-                        {link.label}
-                      </Link>
-                    ))}
+                {user &&
+                  NAV_LINKS_LOGGED_IN.map((link) => (
+                    <Link
+                      to={link.href}
+                      key={link.key}
+                      className="text-sm flex transition-all hover:font-bold"
+                    >
+                      {link.label}
+                    </Link>
+                  ))}
               </ul>
             </div>
 

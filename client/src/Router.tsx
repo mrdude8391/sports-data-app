@@ -1,5 +1,3 @@
-import About from "./pages/About.tsx";
-import Home from "./pages/Home.tsx";
 import Login from "./pages/Login.tsx";
 
 import { Routes, Route, Navigate } from "react-router-dom";
