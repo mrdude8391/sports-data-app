@@ -16,4 +16,5 @@ export type AthleteListResponse = {
 
 export interface GetAthletePageParams {
   cursor: string | null;
+  limit: number;
 }

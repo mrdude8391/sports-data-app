@@ -33,14 +33,14 @@ async def create_athlete(
     return AthleteResponse.model_validate(athlete)
 
 
-async def get_athletes(
+async def get_athletes_paginated(
     db: AsyncSession,
     current_user: User,
     limit: int,
     cursor: Optional[str],
 ) -> AthleteListResponse:
     """Returns all athletes of current user ID"""
-    athletes = await athlete_repo.get_athletes_by_user_id(
+    athletes = await athlete_repo.get_athletes_by_user_id_paginated(
         current_user.id, db, limit, decode_cursor(cursor) if cursor else cursor
     )
     # Validate
@@ -53,6 +53,17 @@ async def get_athletes(
         next_cursor = encode_cursor(last_athlete.created_at, last_athlete.id)
     response = AthleteListResponse(athlete_list=athletes, next_cursor=next_cursor)
     return AthleteListResponse.model_validate(response)
+
+
+async def get_athletes(
+    db: AsyncSession,
+    current_user: User,
+) -> list[AthleteResponse]:
+    """Returns all athletes of current user ID"""
+    athletes = await athlete_repo.get_athletes_by_user_id(current_user.id, db)
+    # Validate
+    athlete_list = [AthleteResponse.model_validate(athlete) for athlete in athletes]
+    return athlete_list
 
 
 async def delete_athlete(athlete_id: UUID, db: AsyncSession, current_user: User):

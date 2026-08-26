@@ -21,11 +21,12 @@ const Athletes = () => {
   } = useInfiniteQuery({
     queryKey: ["athletes"],
     queryFn: getAthletesPaginated,
-    initialPageParam: { cursor: null } as GetAthletePageParams,
+    initialPageParam: { cursor: null, limit: 5 } as GetAthletePageParams,
     getNextPageParam: (lastPage, _) => {
       if (lastPage.nextCursor) {
         return {
           cursor: lastPage.nextCursor,
+          limit: 5,
         };
       }
       return undefined;

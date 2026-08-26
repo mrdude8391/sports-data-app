@@ -26,6 +26,15 @@ async def create_new_athlete(
     return await athlete_service.create_athlete(athlete_info, db, current_user)
 
 
+@router.get("/all", response_model=list[AthleteResponse])
+async def get_all_athletes(
+    db: DbSession,
+    current_user: ValidUser,
+):
+    """Get all athletes"""
+    return await athlete_service.get_athletes(db, current_user)
+
+
 @router.get("/", response_model=AthleteListResponse)
 async def get_all_athletes(
     db: DbSession,
@@ -33,8 +42,8 @@ async def get_all_athletes(
     limit: Annotated[int, Query(ge=1, le=100)] = 20,
     cursor: Annotated[str | None, Query()] = None,
 ):
-    """Get all athletes"""
-    return await athlete_service.get_athletes(db, current_user, limit, cursor)
+    """Get athletes cursor paginated"""
+    return await athlete_service.get_athletes_paginated(db, current_user, limit, cursor)
 
 
 @router.delete("/{id}")

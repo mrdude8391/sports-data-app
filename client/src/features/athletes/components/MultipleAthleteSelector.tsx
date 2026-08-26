@@ -1,4 +1,3 @@
-import * as sportsDataService from "../../../services/sportsDataService";
 import { Loader } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -14,6 +13,7 @@ import {
 import type { Athlete } from "@/features/athletes/types/Athlete";
 import CreateAthlete from "@/features/athletes/components/CreateAthlete";
 import { useQuery } from "@tanstack/react-query";
+import { getAthletes } from "@/features/athletes/api/athletesApi";
 
 const AthleteSelector = (athleteSelectorProps: {
   selectedAthletes: Set<Athlete>;
@@ -26,7 +26,7 @@ const AthleteSelector = (athleteSelectorProps: {
     error,
   } = useQuery({
     queryKey: ["multipleAthletes"],
-    queryFn: sportsDataService.getAthletes,
+    queryFn: getAthletes,
   });
 
   if (isLoading) return <Loader className="animate-spin" />;

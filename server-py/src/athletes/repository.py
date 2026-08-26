@@ -16,7 +16,7 @@ async def create_new_athlete(new_athlete: Athlete, db: AsyncSession) -> Athlete:
     return new_athlete
 
 
-async def get_athletes_by_user_id(
+async def get_athletes_by_user_id_paginated(
     userId: UUID,
     db: AsyncSession,
     limit: int,
@@ -54,6 +54,21 @@ async def get_athletes_by_user_id(
             .limit(limit + 1)
         )
         return results.scalars().all()
+
+
+async def get_athletes_by_user_id(
+    userId: UUID,
+    db: AsyncSession,
+) -> List[Athlete]:
+    results = await db.execute(
+        select(Athlete)
+        .where(Athlete.user_id == userId)
+        .order_by(
+            Athlete.created_at.desc(),
+            Athlete.id.desc(),
+        )
+    )
+    return results.scalars().all()
 
 
 async def get_valid_athlete_by_id(
