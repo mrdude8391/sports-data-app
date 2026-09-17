@@ -1,4 +1,5 @@
 {
   "python-envs.defaultEnvManager": "ms-python.python:venv",
-  "python.analysis.extraPaths": ["./server-py/repositories"]
+  "python.analysis.extraPaths": ["./server-py/repositories"],
+  "python-envs.workspaceSearchPaths": [".venv", "*/.venv", "venv", "*/venv"]
 }
