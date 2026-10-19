@@ -2,6 +2,10 @@
   "name": "server",
   "version": "0.0.0",
   "scripts": {
-    "server": "venv\\scripts\\activate && uvicorn src.main:app --reload"
+    "preserver": "venv\\scripts\\activate && pip install -r requirements.txt -q && echo 'Server dependencies installed'",
+    "server": "venv\\scripts\\activate && uvicorn src.main:app --reload",
+    "pretest": "docker compose -f docker-compose.test.yml up -d ",
+    "test": "venv\\scripts\\activate && pytest",
+    "posttest": "docker compose -f docker-compose.test.yml down"
   }
 }
