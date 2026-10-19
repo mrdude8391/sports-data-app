@@ -11,4 +11,4 @@ COPY . .
 # Expose the port the app runs on
 EXPOSE 8000
 # Command to run the application
-CMD ["uvicorn", "src.main:app", "--reload"]
+CMD ["uvicorn", "src.main:app", "--host", "0.0.0.0", "--reload", "--port", "8000"]
