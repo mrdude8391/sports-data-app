@@ -2,15 +2,17 @@
   "name": "server",
   "version": "0.0.0",
   "scripts": {
-    "preserver": "venv\\scripts\\activate && pip install -r requirements.txt -q && echo 'Server dependencies installed'",
+    "activate": "venv\\scripts\\activate",
+    "activate:mac": ". venv/bin/activate",
+    "preserver": "venv\\scripts\\activate && pip install -r requirements.txt -q",
     "server": "venv\\scripts\\activate && uvicorn src.main:app --reload",
-    "pretest": "docker compose -f docker-compose.test.yml up -d ",
+    "pretest": "docker compose -f docker-compose.test.yml up -d",
     "test": "venv\\scripts\\activate && pytest",
     "posttest": "docker compose -f docker-compose.test.yml down",
-    "preservermac": ". venv/bin/activate && pip install -r requirements.txt -q && echo 'Server dependencies installed'",
-    "servermac": ". venv/bin/activate && uvicorn src.main:app --reload",
-    "pretestmac": "docker compose -f docker-compose.test.yml up -d ",
-    "testmac": ". venv/bin/activate && pytest",
-    "posttestmac": "docker compose -f docker-compose.test.yml down"
+    "preserver:mac": ". venv/bin/activate && pip install -r requirements.txt -q",
+    "server:mac": ". venv/bin/activate && uvicorn src.main:app --reload",
+    "pretest:mac": "docker compose -f docker-compose.test.yml up -d",
+    "test:mac": ". venv/bin/activate && pytest",
+    "posttest:mac": "docker compose -f docker-compose.test.yml down"
   }
 }
