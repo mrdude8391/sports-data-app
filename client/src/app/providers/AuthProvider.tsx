@@ -5,7 +5,11 @@ import type {
 } from "@/features/auth/types/Auth";
 import { setLogoutCallback } from "@/lib/api";
 import { login, register } from "@/lib/auth";
-import { useMutation, type UseMutationResult } from "@tanstack/react-query";
+import {
+  useMutation,
+  type UseMutationResult,
+  useQueryClient,
+} from "@tanstack/react-query";
 import {
   createContext,
   useContext,
@@ -28,6 +32,7 @@ export const AuthContext = createContext<AuthProviderType | null>(null);
 const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const navigate = useNavigate();
+  const queryclient = useQueryClient();
 
   const useLogin = () =>
     useMutation({
@@ -57,6 +62,7 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
     logger.info("Client Logged Out.");
     localStorage.clear();
     setUser(null);
+    queryclient.clear();
     navigate("/login");
   };
 
