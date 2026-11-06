@@ -14,6 +14,7 @@ import {
   type ReactNode,
 } from "react";
 import { useNavigate } from "react-router-dom";
+import { logger } from "@/lib/logger";
 
 interface AuthProviderType {
   user: User | null;
@@ -32,10 +33,10 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
     useMutation({
       mutationFn: login,
       onSuccess: (user) => {
-        console.log("Login Successful");
+        logger.info("Login Successful.");
         localStorage.setItem("user", JSON.stringify(user));
         setUser(user);
-        console.log("Set current user context", user);
+        logger.info("Set current user context", user);
         navigate("/athletes");
       },
     });
@@ -44,16 +45,16 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
     useMutation({
       mutationFn: register,
       onSuccess: (user) => {
-        console.log("Register Successful");
+        logger.info("Register Successful.");
         localStorage.setItem("user", JSON.stringify(user));
         setUser(user);
-        console.log("Set current user context", user);
+        logger.info("Set current user context", user);
         navigate("/profile");
       },
     });
 
   const logout = () => {
-    console.log("Client Logout");
+    logger.info("Client Logged Out.");
     localStorage.clear();
     setUser(null);
     navigate("/login");
