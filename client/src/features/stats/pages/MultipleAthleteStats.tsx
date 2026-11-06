@@ -23,7 +23,7 @@ const GameLog = () => {
     new Map<string, NewStat>(),
   );
   // if i use a dictionary, i can have the ids : form
-  // add the new form whenver an athlete is added to the selection list
+  // add the new form whenever an athlete is added to the selection list
   // update the form by getting the form object through the dictionary
 
   const { confirm, ConfirmDialog, changeAlertAthleteName } = useConfirmBlank();
@@ -49,7 +49,7 @@ const GameLog = () => {
         return newMap;
       });
     } else {
-      // athelte is not currently in map
+      // athlete is not currently in map
       // add new athlete
       setSelectedAthletes((prev) => new Set<Athlete>(prev).add(athlete));
       // add form to form dictionary
@@ -204,7 +204,7 @@ const GameLog = () => {
       <div className="header w-full">
         <h1>Team Stats Entry</h1>
         <p>
-          Enter stats for multiple team memebers at once. Select the date the
+          Enter stats for multiple team members at once. Select the date the
           game was played and the athletes that you would like to stat.
         </p>
       </div>

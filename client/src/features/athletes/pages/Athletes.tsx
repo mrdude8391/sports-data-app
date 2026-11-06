@@ -2,7 +2,7 @@ import { EllipsisVertical, Loader } from "lucide-react";
 import CreateAthlete from "@/features/athletes/components/CreateAthlete";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import AthleteList from "../features/athletes/components/AthleteList";
+import AthleteList from "../components/AthleteList";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { getAthletesPaginated } from "@/features/athletes/api/athletesApi";
 import type { GetAthletePageParams } from "@/features/athletes/types/Athlete";

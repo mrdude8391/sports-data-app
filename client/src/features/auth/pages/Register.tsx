@@ -14,7 +14,7 @@ import { Alert, AlertTitle } from "@/components/ui/alert";
 import { Link } from "react-router-dom";
 import { AlertCircleIcon, Loader, Volleyball } from "lucide-react";
 import { useAuth } from "@/app/providers/AuthProvider";
-import type { RegisterPayload } from "../features/auth/types/Auth";
+import type { RegisterPayload } from "../types/Auth";
 
 const Register = () => {
   const [email, setEmail] = useState("");
