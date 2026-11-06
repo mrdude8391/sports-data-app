@@ -16,10 +16,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import type { DateRange } from "react-day-picker";
-import {
-  type AthleteStatResponse,
-  type Stat,
-} from "../features/stats/types/Stat";
+import { type AthleteStatResponse, type Stat } from "../../stats/types/Stat";
 import { getAthleteWithStats } from "@/features/stats/api/statsApi";
 
 type AthleteStatsParams = {

@@ -3,8 +3,8 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import type { Athlete } from "@/features/athletes/types/Athlete";
 
-import AthleteSelector from "../features/athletes/components/MultipleAthleteSelector";
-import AthleteStatForm from "../features/athletes/components/AthleteStatForm";
+import AthleteSelector from "../../athletes/components/MultipleAthleteSelector";
+import AthleteStatForm from "../../athletes/components/AthleteStatForm";
 import { Button } from "@/components/ui/button";
 import useConfirmBlank from "@/features/stats/hooks/useConfirmBlankStatForm";
 import {

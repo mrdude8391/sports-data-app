@@ -1,12 +1,12 @@
-import Login from "../pages/Login.tsx";
+import Login from "../features/auth/pages/Login.tsx";
 
 import { Routes, Route, Navigate } from "react-router-dom";
 import MainLayout from "../layouts/MainLayout.tsx";
 import Profile from "../pages/Profile.tsx";
 import Athletes from "../pages/Athletes.tsx";
 import Register from "../pages/Register.tsx";
-import AthleteStats from "../pages/AthleteStats.tsx";
-import GameLog from "../pages/MultipleAthleteStats.tsx";
+import AthleteStats from "../features/athletes/pages/AthleteStats.tsx";
+import GameLog from "../features/stats/pages/MultipleAthleteStats.tsx";
 import NotFound from "../pages/NotFound.tsx";
 import Test from "../pages/Test.tsx";
 
