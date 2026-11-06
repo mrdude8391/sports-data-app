@@ -16,12 +16,20 @@ const Navbar = () => {
   let location = useLocation();
   const currentLocation = "/" + location.pathname.split("/")[1];
 
+  const handleRedirect = () => {
+    if (user) {
+      return "/athletes";
+    } else {
+      return "/login";
+    }
+  };
+
   return (
     <>
       <nav className="sticky w-full h-16 top-0 left-0 z-30 shadow-sm bg-background ">
         <div className="flex items-center h-full justify-between max-container padding-container z-30 py-2">
           <Link
-            to="/athletes"
+            to={handleRedirect()}
             onClick={closeMenu}
             className="w-auto flex items-center py-3 px-3 font-semibold hover:font-bold"
           >
