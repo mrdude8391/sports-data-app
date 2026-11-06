@@ -1,5 +1,9 @@
 import type { User } from "@/features/auth/types/Auth";
-import axios, { AxiosError, type InternalAxiosRequestConfig } from "axios";
+import axios, {
+  AxiosError,
+  type AxiosInstance,
+  type InternalAxiosRequestConfig,
+} from "axios";
 import { logger } from "./logger";
 
 export interface ApiError {
@@ -10,7 +14,7 @@ export interface ApiError {
 
 const API_URL = import.meta.env.VITE_API_URL;
 
-export const api = axios.create({
+export const api: AxiosInstance = axios.create({
   baseURL: API_URL,
 });
 
