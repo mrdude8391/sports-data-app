@@ -1,8 +1,8 @@
 import { NAV_LINKS_LOGGED_IN } from "@/constants";
 import { Link } from "react-router-dom";
 import { Menu, SunMoon, X } from "lucide-react";
-import { useTheme } from "@/context/ThemeProvider";
-import { useAuth } from "@/context/AuthProvider";
+import { useTheme } from "@/app/providers/ThemeProvider";
+import { useAuth } from "@/app/providers/AuthProvider";
 import { Button } from "../ui/button";
 
 interface BurgerMenuProps {

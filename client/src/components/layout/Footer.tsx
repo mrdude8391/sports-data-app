@@ -1,5 +1,5 @@
 import { NAV_LINKS_LOGGED_IN } from "@/constants";
-import { useAuth } from "@/context/AuthProvider";
+import { useAuth } from "@/app/providers/AuthProvider";
 import { Link } from "react-router-dom";
 
 const Footer = () => {

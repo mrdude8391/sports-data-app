@@ -1,11 +1,11 @@
 import { NAV_LINKS_LOGGED_IN } from "@/constants";
-import { useAuth } from "@/context/AuthProvider";
+import { useAuth } from "@/app/providers/AuthProvider";
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "../ui/button";
 import { BurgerMenu } from "./BurgerMenu";
 import { SunMoon, Volleyball } from "lucide-react";
-import { useTheme } from "@/context/ThemeProvider";
+import { useTheme } from "@/app/providers/ThemeProvider";
 
 const Navbar = () => {
   // Nav bar links are configured in the NAV_LINKS list in the index.ts file

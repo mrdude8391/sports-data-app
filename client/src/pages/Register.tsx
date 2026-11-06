@@ -13,7 +13,7 @@ import { Input } from "@/components/ui/input";
 import { Alert, AlertTitle } from "@/components/ui/alert";
 import { Link } from "react-router-dom";
 import { AlertCircleIcon, Loader, Volleyball } from "lucide-react";
-import { useAuth } from "@/context/AuthProvider";
+import { useAuth } from "@/app/providers/AuthProvider";
 import type { RegisterPayload } from "../features/auth/types/Auth";
 
 const Register = () => {

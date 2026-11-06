@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
-import { useAuth } from "@/context/AuthProvider";
-import { useTheme } from "@/context/ThemeProvider";
+import { useAuth } from "@/app/providers/AuthProvider";
+import { useTheme } from "@/app/providers/ThemeProvider";
 import { Link } from "react-router-dom";
 
 const Home = () => {

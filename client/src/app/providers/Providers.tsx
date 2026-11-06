@@ -1,5 +1,5 @@
-import AuthProvider from "@/context/AuthProvider.tsx";
-import { ThemeProvider } from "@/context/ThemeProvider";
+import AuthProvider from "@/app/providers/AuthProvider";
+import { ThemeProvider } from "@/app/providers/ThemeProvider";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import type { ReactNode } from "react";
 

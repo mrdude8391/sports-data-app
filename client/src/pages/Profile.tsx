@@ -1,6 +1,6 @@
 import sampleImage from "../assets/circle-user-round.svg";
 import { useEffect } from "react";
-import { useAuth } from "@/context/AuthProvider";
+import { useAuth } from "@/app/providers/AuthProvider";
 import { useNavigate } from "react-router-dom";
 
 const Profile = () => {
