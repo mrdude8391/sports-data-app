@@ -35,6 +35,7 @@ import { useState } from "react";
 import type { Athlete } from "@/features/athletes/types/Athlete";
 import useConfirmBlankStatForm from "../hooks/useConfirmBlankStatForm";
 import { createStat } from "../api/statsApi";
+import { logger } from "@/lib/logger";
 
 interface createAthleteStatProps {
   athleteId: string;
@@ -57,7 +58,7 @@ const CreateAthleteStat = (props: createAthleteStatProps) => {
       // Invalidate and refetch
       queryClient.invalidateQueries({ queryKey: ["stats", athleteId] });
       setForm(DEFAULT_STAT_FORM);
-      console.log("created athlete", stat);
+      logger.info("[CreateAthleteStat.tsx]", stat);
     },
   });
 
@@ -177,7 +178,7 @@ const CreateAthleteStat = (props: createAthleteStatProps) => {
         submit();
       }
     } catch (error) {
-      console.log("Athlete Stats", error);
+      logger.error("[CreateAthleteStat.tsx]", error);
     }
   };
 

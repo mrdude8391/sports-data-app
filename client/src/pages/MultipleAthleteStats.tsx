@@ -13,6 +13,7 @@ import {
   DEFAULT_STAT_FORM,
 } from "@/features/stats/types/Stat";
 import { createStatsBatch } from "@/features/stats/api/statsApi";
+import { logger } from "@/lib/logger";
 
 const GameLog = () => {
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
@@ -30,7 +31,10 @@ const GameLog = () => {
   const queryClient = useQueryClient();
 
   const handleSelectAthlete = (athlete: Athlete) => {
-    // console.log("selected", athlete._id);
+    logger.debug(
+      "[MultipleAthleteStats.tsx::handleSelectAthlete]\nSelected an athlete.",
+      athlete,
+    );
     if (selectedAthletes.has(athlete)) {
       // delete already selected athlete
       setSelectedAthletes((prev) => {
@@ -174,7 +178,7 @@ const GameLog = () => {
 
   const handleSubmit = async () => {
     if (forms.size != 0) {
-      console.log("handle submit", forms);
+      logger.info("[MultipleAthleteStats.tsx::handleSubmit]", { forms });
       for (const athlete of selectedAthletes) {
         const form = forms.get(athlete.id);
         // Convert your loop to async

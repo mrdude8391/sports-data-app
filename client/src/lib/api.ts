@@ -1,5 +1,6 @@
 import type { User } from "@/features/auth/types/Auth";
 import axios, { AxiosError, type InternalAxiosRequestConfig } from "axios";
+import { logger } from "./logger";
 
 export interface ApiError {
   detail: string;
@@ -38,10 +39,10 @@ api.interceptors.response.use(
   },
   (error: AxiosError<ApiError>) => {
     if (error.response?.status === 401) {
-      // console.log("Error 401: Unauthorized token. Clearing local storage token")
       logoutCallback();
     }
-    console.log(error);
+    logger.error("[api.ts::api.interceptors.response]", error);
+
     const normalizedError = {
       message: error.response?.data?.detail ?? "Unknown error",
       error: error.response?.data?.error ?? "UNKNOWN_ERROR",

@@ -23,19 +23,6 @@ const Login = () => {
   });
   const { useLogin } = useAuth();
 
-  // const { isPending, mutate } = useMutation({
-  //   mutationFn: sportsDataService.login,
-  //   onSuccess: (userData) => {
-  //     console.log("Login Successful");
-  //     login(userData);
-  //     navigate("/athletes");
-  //   },
-  //   onError: (error) => {
-  //     setError(error.message);
-  //     console.log(error);
-  //   },
-  // });
-
   const { isPending, mutate, error } = useLogin();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {

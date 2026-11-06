@@ -5,6 +5,7 @@ import type {
   AthleteStatResponse,
   Stat,
 } from "../types/Stat";
+import { logger } from "@/lib/logger";
 
 export const createStat = async (newStat: NewStatPayload): Promise<Stat> => {
   const { athleteId, statForm } = newStat;
@@ -17,7 +18,7 @@ export const createStatsBatch = async ({
 }: {
   forms: Map<string, NewStat>;
 }) => {
-  // console.log("create stats batch")
+  logger.debug("[statsApi.ts::createStatsBatch]");
   const payload = Array.from(forms.entries()).map(([athleteId, form]) => ({
     ...form,
     athleteId: athleteId,
@@ -40,7 +41,7 @@ export const editStat = async (req: {
 export const getAthleteWithStats = async (
   id: string,
 ): Promise<AthleteStatResponse> => {
-  // console.log("Get Stats for: ", id)
+  logger.debug("[statsApi.ts::getAthleteWithStats]", { id });
   // Need to add a check for ID to be mongodb ObjectID
   const { data } = await api.get<AthleteStatResponse>(`/stats/${id}`);
   const stats: Stat[] = data.stats.map((stat) => ({
@@ -55,6 +56,6 @@ export const getAthleteWithStats = async (
 };
 
 export const deleteStat = async (statId: string) => {
-  // console.log("delete stat", statId)
+  logger.debug("[statsApi.ts::deleteStat]", { statId });
   await api.delete(`/stats/${statId}`);
 };
