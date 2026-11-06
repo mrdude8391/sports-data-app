@@ -28,9 +28,6 @@ export const setLogoutCallback = (cb: () => void) => {
 };
 
 api.interceptors.request.use((config: InternalAxiosRequestConfig) => {
-  if (config.headers) {
-    config.headers.Accept = "application/json";
-  }
   config.withCredentials = true;
   const savedUser = localStorage.getItem("user");
   if (savedUser) {
