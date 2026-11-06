@@ -45,7 +45,7 @@ api.interceptors.response.use(
     if (error.response?.status === 401) {
       logoutCallback();
     }
-    logger.error("[api.ts::api.interceptors.response]", error);
+    logger.info("[api.ts::api.interceptors.response]", { error });
 
     const normalizedError = {
       message: error.response?.data?.detail ?? "Unknown error",
