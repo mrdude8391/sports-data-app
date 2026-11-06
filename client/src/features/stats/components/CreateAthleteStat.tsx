@@ -58,7 +58,10 @@ const CreateAthleteStat = (props: createAthleteStatProps) => {
       // Invalidate and refetch
       queryClient.invalidateQueries({ queryKey: ["stats", athleteId] });
       setForm(DEFAULT_STAT_FORM);
-      logger.info("[CreateAthleteStat.tsx]", stat);
+      logger.info(
+        "[CreateAthleteStat.tsx::onSuccess]\nSuccessfully created new stat.",
+        { stat },
+      );
     },
   });
 
