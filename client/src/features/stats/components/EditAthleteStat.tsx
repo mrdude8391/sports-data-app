@@ -4,6 +4,7 @@ import { Input } from "../../../components/ui/input";
 import { useEffect, useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { STAT_LABEL_INDEX } from "@/constants";
+import { logger } from "@/lib/logger";
 
 import {
   Dialog,
@@ -58,17 +59,6 @@ const EditAthleteStat = (props: EditAthleteStatProps) => {
 
   useEffect(() => {
     if (stat) {
-      // console.log(stat);
-      // const prevStats = Object.fromEntries(
-      //   STAT_INDEX.map(({ category, labels }) => [
-      //     category,
-      //     Object.fromEntries(
-      //       labels.map((f) => [f.key, (stat as any)[category][f.key]]),
-      //     ),
-      //   ]),
-      // );
-
-      // console.log({ ...prevStats, recordedAt: stat.recordedAt });
       setForm(stat);
     }
   }, []);
@@ -148,7 +138,7 @@ const EditAthleteStat = (props: EditAthleteStatProps) => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (stat.id && form != DEFAULT_STAT_FORM) {
-      console.log(form);
+      logger.info("[EditAthleteStat.tsx::handleSubmit]\nSubmit Form", form);
       mutate({ statId: stat.id, form: form, date: form.recordedAt });
     }
   };

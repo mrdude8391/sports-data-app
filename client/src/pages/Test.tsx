@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { test } from "../services/sportsDataService";
 import { useState } from "react";
+import { logger } from "@/lib/logger";
 
 const Test = () => {
   const [status, setStatus] = useState<number | null>(null);
@@ -14,10 +15,10 @@ const Test = () => {
           onClick={async () => {
             try {
               const res = await test();
-              console.log("Home test button response", res);
+              logger.info("[Test.tsx]\nHome test button response", { res });
               setStatus(res.status);
             } catch (error: any) {
-              console.log(error);
+              logger.error("[Test.tsx]", error);
             }
           }}
         >

@@ -12,13 +12,14 @@ import type {
   Stat,
 } from "@/features/stats/types/Stat";
 import { api } from "@/lib/api";
+import { logger } from "@/lib/logger";
 
 export const test = async () => {
   try {
     const res = await api.get("/test");
     return res;
   } catch (error: any) {
-    console.log("API Test Service", error);
+    logger.error("[sportsDataService.ts::test]\nAPI Test Service", error);
     throw new Error(error.response?.data?.detail || "Test Failed");
   }
 };
@@ -46,13 +47,13 @@ export const getAthletes = async (): Promise<Athlete[]> => {
 };
 
 export const createAthlete = async (athlete: NewAthlete): Promise<Athlete> => {
-  // console.log("Create athlete", athlete)
+  logger.debug("[sportsDataService::createAthlete]", athlete);
   const response = await api.post<Athlete>("/athlete/create", athlete);
   return response.data;
 };
 
 export const deleteAthlete = async (id: string) => {
-  // console.log("Delete athlete", {id})
+  logger.debug("[sportsDataService::deleteAthlete]", { id });
   await api.delete(`/athlete/${id}`);
 };
 
@@ -66,7 +67,8 @@ export const createStatsBatch = async ({
 }: {
   forms: Map<string, NewStat>;
 }) => {
-  // console.log("create stats batch")
+  logger.debug("[sportsDataService::createStatsBatch]", { forms });
+
   const payload = Array.from(forms.entries()).map(([_, form]) => ({
     ...form,
   }));
@@ -88,7 +90,8 @@ export const editStat = async (req: {
 export const getAthleteWithStats = async (
   id: string,
 ): Promise<AthleteStatResponse> => {
-  // console.log("Get Stats for: ", id)
+  logger.debug("[sportsDataService::getAthleteWithStats]", { id });
+
   // Need to add a check for ID to be mongodb ObjectID
   const { data } = await api.get<AthleteStatResponse>(`/athlete/${id}/stats`);
   const stats: Stat[] = data.stats.map((stat) => ({
@@ -103,6 +106,6 @@ export const getAthleteWithStats = async (
 };
 
 export const deleteStat = async (statId: string) => {
-  // console.log("delete stat", statId)
+  logger.debug("[sportsDataService::deleteStat]", { statId });
   await api.delete(`/athlete/${statId}/stats`);
 };

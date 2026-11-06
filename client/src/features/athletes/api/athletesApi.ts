@@ -5,15 +5,16 @@ import type {
   AthleteListResponse,
   GetAthletePageParams,
 } from "../types/Athlete";
+import { logger } from "@/lib/logger";
 
 export const createAthlete = async (athlete: NewAthlete): Promise<Athlete> => {
-  // console.log("Create athlete", athlete)
+  logger.debug("[athletesAPI.ts::createAthlete]", athlete);
   const response = await api.post<Athlete>("/athlete/create", athlete);
   return response.data;
 };
 
 export const deleteAthlete = async (id: string) => {
-  // console.log("Delete athlete", {id})
+  logger.debug("[athletesAPI.ts::deleteAthlete]", { id });
   await api.delete(`/athlete/${id}`);
 };
 
@@ -23,12 +24,12 @@ export const getAthletesPaginated = async ({
   pageParam: GetAthletePageParams;
 }): Promise<AthleteListResponse> => {
   const { cursor, limit } = pageParam;
-  console.log("Cursor: ", cursor);
+  logger.debug("[athletesAPI.ts::GetAthletePageParams]", { cursor });
   const params = cursor
     ? `?limit=${limit}&cursor=${cursor}`
     : `?limit=${limit}`;
   const response = await api.get<AthleteListResponse>(`/athlete/${params}`);
-  console.log("getAthletesPaginated: ", response);
+  logger.debug("[athletesAPI.ts::GetAthletePageParams]", { response });
   return response.data;
 };
 
