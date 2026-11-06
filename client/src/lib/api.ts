@@ -16,6 +16,9 @@ const API_URL = import.meta.env.VITE_API_URL;
 
 export const api: AxiosInstance = axios.create({
   baseURL: API_URL,
+  headers: {
+    Accept: "application/json",
+  },
 });
 
 let logoutCallback: () => void | null;
