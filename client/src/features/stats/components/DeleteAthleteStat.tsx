@@ -1,20 +1,12 @@
 import { Button } from "../../../components/ui/button";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { deleteStat } from "../api/statsApi";
+import { useDeleteStat } from "../hooks/useDeleteStat";
 
 interface DeleteAthleteStatProps {
   statId?: string;
 }
 
 const DeleteAthleteStat = (props: DeleteAthleteStatProps) => {
-  const queryClient = useQueryClient();
-
-  const { isPending, error, mutate } = useMutation({
-    mutationFn: deleteStat,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["stats"] });
-    },
-  });
+  const { isPending, error, mutate } = useDeleteStat();
   const { statId } = props;
 
   const handleDelete = () => {
