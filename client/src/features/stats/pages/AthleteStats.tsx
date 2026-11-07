@@ -54,9 +54,13 @@ const AthleteStats = () => {
 
   if (isFetching && athlete.name == "")
     return <Loader className="animate-spin" />;
+
   if (isLoading) return <Loader className="animate-spin" />;
+
   if (error) return <p>Error: No athlete exists {error.message}</p>;
+
   if (!athleteId) return <p>Error: No athlete exists</p>;
+
   if (stats.length == 0)
     return (
       <div className="flex flex-col gap-6 w-full max-w-6xl py-3">
