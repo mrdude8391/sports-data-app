@@ -1,8 +1,6 @@
 import { Loader } from "lucide-react";
-
 import CreateAthleteStat from "@/features/stats/components/CreateAthleteStat";
 import AthleteStatRadial from "@/features/stats/components/AthleteStatRadar";
-
 import { useAthleteStats } from "../hooks/useAthleteStats";
 import { useParams } from "react-router-dom";
 import AthleteStatDashboard from "../components/AthleteStatDashboard";
@@ -10,6 +8,7 @@ import AthleteStatDashboard from "../components/AthleteStatDashboard";
 type AthleteStatsParams = {
   athleteId: string;
 };
+
 export const getAthleteIdFromParams = () => {
   const { athleteId } = useParams<AthleteStatsParams>();
   return athleteId ?? "";

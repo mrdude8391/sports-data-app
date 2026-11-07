@@ -25,16 +25,13 @@ import {
   DEFAULT_STAT_FORM,
   type NewStat,
   type NewStatPayload,
-  type Stat,
   type StatCategory,
   type StatFieldKey,
   type StatFields,
 } from "../types/Stat";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import type { Athlete } from "@/features/athletes/types/Athlete";
 import useConfirmBlankStatForm from "../hooks/useConfirmBlankStatForm";
-import { createStat } from "../api/statsApi";
 import { logger } from "@/lib/logger";
 import { useCreateStat } from "../hooks/useCreateStat";
 
