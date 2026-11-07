@@ -3,9 +3,7 @@ import CreateAthlete from "@/features/athletes/components/CreateAthlete";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import AthleteList from "../components/AthleteList";
-import { useInfiniteQuery } from "@tanstack/react-query";
-import { getAthletesPaginated } from "@/features/athletes/api/athletesApi";
-import type { GetAthletePageParams } from "@/features/athletes/types/Athlete";
+import { useAthletes } from "../hooks/useAthletes";
 
 const Athletes = () => {
   const [isEdit, setIsEdit] = useState(false);
@@ -18,20 +16,8 @@ const Athletes = () => {
     isFetching,
     isFetchingNextPage,
     status,
-  } = useInfiniteQuery({
-    queryKey: ["athletes"],
-    queryFn: getAthletesPaginated,
-    initialPageParam: { cursor: null, limit: 5 } as GetAthletePageParams,
-    getNextPageParam: (lastPage, _) => {
-      if (lastPage.nextCursor) {
-        return {
-          cursor: lastPage.nextCursor,
-          limit: 5,
-        };
-      }
-      return undefined;
-    },
-  });
+  } = useAthletes();
+
   if (status === "pending") return <Loader className="animate-spin" />;
   if (status === "error")
     return (
