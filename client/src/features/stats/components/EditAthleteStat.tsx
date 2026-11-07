@@ -2,7 +2,6 @@ import { Button } from "../../../components/ui/button";
 import { Label } from "../../../components/ui/label";
 import { Input } from "../../../components/ui/input";
 import { useEffect, useState } from "react";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { STAT_LABEL_INDEX } from "@/constants";
 import { logger } from "@/lib/logger";
 
@@ -32,7 +31,7 @@ import {
   type StatCategory,
   type NewStat,
 } from "../types/Stat";
-import { editStat } from "../api/statsApi";
+import { useEditStat } from "../hooks/useEditStat";
 
 interface EditAthleteStatProps {
   stat: Stat;
@@ -45,15 +44,7 @@ const EditAthleteStat = (props: EditAthleteStatProps) => {
   const [form, setForm] = useState<NewStat>(DEFAULT_STAT_FORM);
   const [open, setOpen] = React.useState(false);
 
-  const queryClient = useQueryClient();
-
-  const { isPending, error, mutate } = useMutation({
-    mutationFn: editStat,
-    onSuccess: () => {
-      // Invalidate and refetch
-      queryClient.invalidateQueries({ queryKey: ["stats", athleteId] });
-    },
-  });
+  const { isPending, error, mutate } = useEditStat({ athleteId });
 
   const categories = Object.keys(STAT_LABEL_INDEX) as StatCategory[];
 
