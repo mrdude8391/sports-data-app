@@ -15,6 +15,7 @@ const DeleteAthleteStat = (props: DeleteAthleteStatProps) => {
   };
 
   if (isPending) return <p>...Deleting</p>;
+
   if (error) return <p>{error.message}</p>;
 
   return (
