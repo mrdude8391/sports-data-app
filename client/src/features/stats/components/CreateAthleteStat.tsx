@@ -36,6 +36,7 @@ import type { Athlete } from "@/features/athletes/types/Athlete";
 import useConfirmBlankStatForm from "../hooks/useConfirmBlankStatForm";
 import { createStat } from "../api/statsApi";
 import { logger } from "@/lib/logger";
+import { useCreateStat } from "../hooks/useCreateStat";
 
 interface createAthleteStatProps {
   athleteId: string;
@@ -51,19 +52,11 @@ const CreateAthleteStat = (props: createAthleteStatProps) => {
   const { confirm, ConfirmDialog, changeAlertAthleteName } =
     useConfirmBlankStatForm();
 
-  const queryClient = useQueryClient();
-  const { isPending, error, mutate } = useMutation({
-    mutationFn: createStat,
-    onSuccess: (stat: Stat) => {
-      // Invalidate and refetch
-      queryClient.invalidateQueries({ queryKey: ["stats", athleteId] });
-      setForm(DEFAULT_STAT_FORM);
-      logger.info(
-        "[CreateAthleteStat.tsx::onSuccess]\nSuccessfully created new stat.",
-        { stat },
-      );
-    },
-  });
+  const resetForm = () => {
+    setForm(DEFAULT_STAT_FORM);
+  };
+
+  const { isPending, error, mutate } = useCreateStat({ athleteId, resetForm });
 
   const handleChangeDate = (date: Date | undefined) => {
     if (!date) return;
