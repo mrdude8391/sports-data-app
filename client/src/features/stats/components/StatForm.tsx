@@ -131,7 +131,28 @@ const StatForm = (props: { athleteId: string; athlete: Athlete }) => {
     ),
     Dig: (
       <>
-        dig
+        <fieldset className="border p-4 rounded-md ">
+          <legend className="font-bold capitalize">Dig</legend>
+
+          <div className="grid grid-cols-2 gap-4 mt-2">
+            <Label className="flex flex-col">
+              <span className="text-sm">Rating</span>
+              <Input type="number" className="border rounded p-2" />
+            </Label>
+            <Label className="flex flex-col">
+              <span className="text-sm">Errors</span>
+              <Input type="number" className="border rounded p-2" />
+            </Label>
+            <Label className="flex flex-col">
+              <span className="text-sm">Attempts</span>
+              <Input type="number" className="border rounded p-2" />
+            </Label>
+            <Label className="flex flex-col">
+              <span className="text-sm">Percentage</span>
+              <Input type="number" disabled className="border rounded p-2" />
+            </Label>
+          </div>
+        </fieldset>
         <Button type="button" onClick={() => updateCategory("Base")}>
           Back
         </Button>
@@ -139,7 +160,28 @@ const StatForm = (props: { athleteId: string; athlete: Athlete }) => {
     ),
     Serve: (
       <>
-        Serve
+        <fieldset className="border p-4 rounded-md ">
+          <legend className="font-bold capitalize">Serve</legend>
+
+          <div className="grid grid-cols-2 gap-4 mt-2">
+            <Label className="flex flex-col">
+              <span className="text-sm">Rating</span>
+              <Input type="number" className="border rounded p-2" />
+            </Label>
+            <Label className="flex flex-col">
+              <span className="text-sm">Errors</span>
+              <Input type="number" className="border rounded p-2" />
+            </Label>
+            <Label className="flex flex-col">
+              <span className="text-sm">Attempts</span>
+              <Input type="number" className="border rounded p-2" />
+            </Label>
+            <Label className="flex flex-col">
+              <span className="text-sm">Percentage</span>
+              <Input type="number" disabled className="border rounded p-2" />
+            </Label>
+          </div>
+        </fieldset>
         <Button type="button" onClick={() => updateCategory("Base")}>
           Back
         </Button>
@@ -147,7 +189,28 @@ const StatForm = (props: { athleteId: string; athlete: Athlete }) => {
     ),
     Set: (
       <>
-        Set
+        <fieldset className="border p-4 rounded-md ">
+          <legend className="font-bold capitalize">Setting</legend>
+
+          <div className="grid grid-cols-2 gap-4 mt-2">
+            <Label className="flex flex-col">
+              <span className="text-sm">Rating</span>
+              <Input type="number" className="border rounded p-2" />
+            </Label>
+            <Label className="flex flex-col">
+              <span className="text-sm">Errors</span>
+              <Input type="number" className="border rounded p-2" />
+            </Label>
+            <Label className="flex flex-col">
+              <span className="text-sm">Attempts</span>
+              <Input type="number" className="border rounded p-2" />
+            </Label>
+            <Label className="flex flex-col">
+              <span className="text-sm">Percentage</span>
+              <Input type="number" disabled className="border rounded p-2" />
+            </Label>
+          </div>
+        </fieldset>
         <Button type="button" onClick={() => updateCategory("Base")}>
           Back
         </Button>
@@ -155,7 +218,32 @@ const StatForm = (props: { athleteId: string; athlete: Athlete }) => {
     ),
     Block: (
       <>
-        Block
+        <fieldset className="border p-4 rounded-md ">
+          <legend className="font-bold capitalize">Block</legend>
+
+          <div className="grid grid-cols-2 gap-4 mt-2">
+            <Label className="flex flex-col">
+              <span className="text-sm">Kills</span>
+              <Input type="number" className="border rounded p-2" />
+            </Label>
+            <Label className="flex flex-col">
+              <span className="text-sm">Assists</span>
+              <Input type="number" className="border rounded p-2" />
+            </Label>
+            <Label className="flex flex-col">
+              <span className="text-sm">Errors</span>
+              <Input type="number" className="border rounded p-2" />
+            </Label>
+            <Label className="flex flex-col">
+              <span className="text-sm">Attempts</span>
+              <Input type="number" className="border rounded p-2" />
+            </Label>
+            <Label className="flex flex-col">
+              <span className="text-sm">Percentage</span>
+              <Input type="number" disabled className="border rounded p-2" />
+            </Label>
+          </div>
+        </fieldset>
         <Button type="button" onClick={() => updateCategory("Base")}>
           Back
         </Button>
