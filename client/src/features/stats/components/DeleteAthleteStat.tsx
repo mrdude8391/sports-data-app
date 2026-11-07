@@ -6,8 +6,9 @@ interface DeleteAthleteStatProps {
 }
 
 const DeleteAthleteStat = (props: DeleteAthleteStatProps) => {
-  const { isPending, error, mutate } = useDeleteStat();
   const { statId } = props;
+
+  const { isPending, error, mutate } = useDeleteStat();
 
   const handleDelete = () => {
     if (statId) mutate(statId);
