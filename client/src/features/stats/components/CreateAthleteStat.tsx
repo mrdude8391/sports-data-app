@@ -159,7 +159,7 @@ const CreateAthleteStat = (props: createAthleteStatProps) => {
       mutate(newStat);
     };
     try {
-      if (form === DEFAULT_STAT_FORM) {
+      if (form == DEFAULT_STAT_FORM) {
         changeAlertAthleteName(athlete.name);
         const shouldContinue = await confirm();
         // this async await means that the method handle submit will wait for confirm() to finish
@@ -199,8 +199,9 @@ const CreateAthleteStat = (props: createAthleteStatProps) => {
             Add New Game Stats
           </Button>
         </DialogTrigger>
-        <DialogContent className="max-h-11/12 flex flex-col overflow-hidden ">
-          <DialogHeader className="sticky">
+
+        <DialogContent className="max-h-11/12 flex flex-col">
+          <DialogHeader>
             <DialogTitle>Create New Stats</DialogTitle>
             <DialogDescription>
               Add a new stats here. Click save when you&apos;re done.
@@ -211,8 +212,10 @@ const CreateAthleteStat = (props: createAthleteStatProps) => {
             className="overflow-y-auto "
             onSubmit={handleSubmit}
           >
+            {/* Stat Area */}
             <div className="space-y-4 p-4">
-              <div className="flex flex-col gap-3">
+              {/* Date Picker */}
+              <div className=" flex flex-col gap-3">
                 <Label htmlFor="date" className="px-1">
                   Date
                 </Label>
@@ -244,6 +247,8 @@ const CreateAthleteStat = (props: createAthleteStatProps) => {
                   </PopoverContent>
                 </Popover>
               </div>
+
+              {/* Stat Categories */}
               {categories.map((category) => (
                 <fieldset key={category} className="border p-4 rounded-md ">
                   <legend className="font-bold capitalize">{category}</legend>
