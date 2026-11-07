@@ -1,6 +1,4 @@
 import { useMemo, useState } from "react";
-import { useParams } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
 import { ChevronDownIcon, Loader } from "lucide-react";
 
 import AthleteStatsList from "@/features/stats/components/AthleteStatsList";
@@ -16,15 +14,20 @@ import {
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import type { DateRange } from "react-day-picker";
-import { type AthleteStatResponse, type Stat } from "../../stats/types/Stat";
-import { getAthleteWithStats } from "@/features/stats/api/statsApi";
+import { useAthleteStats } from "../hooks/useAthleteStats";
+import type { Stat } from "../types/Stat";
+import { useParams } from "react-router-dom";
 
 type AthleteStatsParams = {
   athleteId: string;
 };
+export const getAthleteIdFromParams = () => {
+  const { athleteId } = useParams<AthleteStatsParams>();
+  return athleteId ?? "";
+};
 
 const AthleteStats = () => {
-  const { athleteId } = useParams<AthleteStatsParams>();
+  const athleteId = getAthleteIdFromParams();
 
   const [open, setOpen] = useState(false);
   const [date, setDate] = useState<DateRange | undefined>();
@@ -34,22 +37,7 @@ const AthleteStats = () => {
     isLoading,
     isFetching,
     error,
-  } = useQuery<AthleteStatResponse>({
-    queryKey: ["stats", athleteId],
-    queryFn: () => getAthleteWithStats(athleteId!),
-    enabled: !!athleteId,
-    initialData: {
-      athlete: {
-        id: "",
-        name: "",
-        age: 0,
-        height: 0,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      },
-      stats: [],
-    },
-  });
+  } = useAthleteStats({ athleteId });
 
   const filteredStats = useMemo<Stat[]>(() => {
     if (stats && !date) {
