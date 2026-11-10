@@ -127,11 +127,11 @@ export const DEFAULT_STAT_FORM: NewStat = {
   updatedAt: new Date(),
 };
 
-export type StatCategory = keyof BaseStatData;
+export type StatCategory = keyof BaseStatData; // "attack | receive ..."
 
-export type StatFields<C extends StatCategory> = BaseStatData[C];
+export type StatFields<C extends StatCategory> = BaseStatData[C]; // "AttackStats"
 
-export type StatFieldKey<C extends StatCategory> = keyof StatFields<C>;
+export type StatFieldKey<C extends StatCategory> = keyof StatFields<C>; // "kills"
 
 //eg. want the labels of "attack" or labels of "receiving"
 export type StatLabel<C extends StatCategory> = {

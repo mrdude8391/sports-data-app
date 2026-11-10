@@ -9,8 +9,13 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { AlertCircleIcon, ChevronDownIcon, Loader } from "lucide-react";
-import { useState } from "react";
+import {
+  AlertCircleIcon,
+  ChevronDownIcon,
+  Loader,
+  Undo2Icon,
+} from "lucide-react";
+import { act, useState } from "react";
 import {
   type NewStat,
   type NewStatPayload,
@@ -23,18 +28,14 @@ import useConfirmBlankStatForm from "../hooks/useConfirmBlankStatForm";
 import type { Athlete } from "@/features/athletes/types/Athlete";
 import { useCreateStat } from "../hooks/useCreateStat";
 import { logger } from "@/lib/logger";
-
-type CategoryState =
-  | "Base"
-  | "Attack"
-  | "Dig"
-  | "Serve"
-  | "Receive"
-  | "Dig"
-  | "Set"
-  | "Block";
+import { CATEGORY_ORDER, STAT_CONFIG } from "../config/statConfig";
 
 const StatForm = (props: { athleteId: string; athlete: Athlete }) => {
+  // I see my athlete do a skill.
+  // I tap on the skill they did.
+  // I tap the result of the skill they did.
+  // After the game I total all the skill results up.
+
   const { athleteId, athlete } = props;
   const [form, setForm] = useState<NewStat>(DEFAULT_STAT_FORM);
 
@@ -47,214 +48,6 @@ const StatForm = (props: { athleteId: string; athlete: Athlete }) => {
   };
 
   const { isPending, error, mutate } = useCreateStat({ athleteId, resetForm });
-  const STAT_COMPONENTS = {
-    Base: (
-      <ul>
-        <Button type="button" onClick={() => updateCategory("Attack")}>
-          Attack
-        </Button>
-        <Button type="button" onClick={() => updateCategory("Receive")}>
-          Serve Receive
-        </Button>
-        <Button type="button" onClick={() => updateCategory("Dig")}>
-          Dig
-        </Button>
-        <Button type="button" onClick={() => updateCategory("Serve")}>
-          Serve
-        </Button>
-        <Button type="button" onClick={() => updateCategory("Set")}>
-          Set
-        </Button>
-        <Button type="button" onClick={() => updateCategory("Block")}>
-          Block
-        </Button>
-      </ul>
-    ),
-    Attack: (
-      <>
-        <fieldset className="border p-4 rounded-md ">
-          <legend className="font-bold capitalize">Attack</legend>
-
-          <div className="grid grid-cols-2 gap-4 mt-2">
-            <Label className="flex flex-col">
-              <span className="text-sm">Kills</span>
-              <Input type="number" className="border rounded p-2" />
-            </Label>
-            <Label className="flex flex-col">
-              <span className="text-sm">Errors</span>
-              <Input type="number" className="border rounded p-2" />
-            </Label>
-            <Label className="flex flex-col">
-              <span className="text-sm">Attempts</span>
-              <Input type="number" className="border rounded p-2" />
-            </Label>
-            <Label className="flex flex-col">
-              <span className="text-sm">Percentage</span>
-              <Input type="number" disabled className="border rounded p-2" />
-            </Label>
-          </div>
-        </fieldset>
-
-        <Button type="button" onClick={() => updateCategory("Base")}>
-          Back
-        </Button>
-      </>
-    ),
-    Receive: (
-      <>
-        <fieldset className="border p-4 rounded-md ">
-          <legend className="font-bold capitalize">Receive</legend>
-
-          <div className="grid grid-cols-2 gap-4 mt-2">
-            <Label className="flex flex-col">
-              <span className="text-sm">Rating</span>
-              <Input type="number" className="border rounded p-2" />
-            </Label>
-            <Label className="flex flex-col">
-              <span className="text-sm">Errors</span>
-              <Input type="number" className="border rounded p-2" />
-            </Label>
-            <Label className="flex flex-col">
-              <span className="text-sm">Attempts</span>
-              <Input type="number" className="border rounded p-2" />
-            </Label>
-            <Label className="flex flex-col">
-              <span className="text-sm">Percentage</span>
-              <Input type="number" disabled className="border rounded p-2" />
-            </Label>
-          </div>
-        </fieldset>
-        <Button type="button" onClick={() => updateCategory("Base")}>
-          Back
-        </Button>
-      </>
-    ),
-    Dig: (
-      <>
-        <fieldset className="border p-4 rounded-md ">
-          <legend className="font-bold capitalize">Dig</legend>
-
-          <div className="grid grid-cols-2 gap-4 mt-2">
-            <Label className="flex flex-col">
-              <span className="text-sm">Rating</span>
-              <Input type="number" className="border rounded p-2" />
-            </Label>
-            <Label className="flex flex-col">
-              <span className="text-sm">Errors</span>
-              <Input type="number" className="border rounded p-2" />
-            </Label>
-            <Label className="flex flex-col">
-              <span className="text-sm">Attempts</span>
-              <Input type="number" className="border rounded p-2" />
-            </Label>
-            <Label className="flex flex-col">
-              <span className="text-sm">Percentage</span>
-              <Input type="number" disabled className="border rounded p-2" />
-            </Label>
-          </div>
-        </fieldset>
-        <Button type="button" onClick={() => updateCategory("Base")}>
-          Back
-        </Button>
-      </>
-    ),
-    Serve: (
-      <>
-        <fieldset className="border p-4 rounded-md ">
-          <legend className="font-bold capitalize">Serve</legend>
-
-          <div className="grid grid-cols-2 gap-4 mt-2">
-            <Label className="flex flex-col">
-              <span className="text-sm">Rating</span>
-              <Input type="number" className="border rounded p-2" />
-            </Label>
-            <Label className="flex flex-col">
-              <span className="text-sm">Errors</span>
-              <Input type="number" className="border rounded p-2" />
-            </Label>
-            <Label className="flex flex-col">
-              <span className="text-sm">Attempts</span>
-              <Input type="number" className="border rounded p-2" />
-            </Label>
-            <Label className="flex flex-col">
-              <span className="text-sm">Percentage</span>
-              <Input type="number" disabled className="border rounded p-2" />
-            </Label>
-          </div>
-        </fieldset>
-        <Button type="button" onClick={() => updateCategory("Base")}>
-          Back
-        </Button>
-      </>
-    ),
-    Set: (
-      <>
-        <fieldset className="border p-4 rounded-md ">
-          <legend className="font-bold capitalize">Setting</legend>
-
-          <div className="grid grid-cols-2 gap-4 mt-2">
-            <Label className="flex flex-col">
-              <span className="text-sm">Rating</span>
-              <Input type="number" className="border rounded p-2" />
-            </Label>
-            <Label className="flex flex-col">
-              <span className="text-sm">Errors</span>
-              <Input type="number" className="border rounded p-2" />
-            </Label>
-            <Label className="flex flex-col">
-              <span className="text-sm">Attempts</span>
-              <Input type="number" className="border rounded p-2" />
-            </Label>
-            <Label className="flex flex-col">
-              <span className="text-sm">Percentage</span>
-              <Input type="number" disabled className="border rounded p-2" />
-            </Label>
-          </div>
-        </fieldset>
-        <Button type="button" onClick={() => updateCategory("Base")}>
-          Back
-        </Button>
-      </>
-    ),
-    Block: (
-      <>
-        <fieldset className="border p-4 rounded-md ">
-          <legend className="font-bold capitalize">Block</legend>
-
-          <div className="grid grid-cols-2 gap-4 mt-2">
-            <Label className="flex flex-col">
-              <span className="text-sm">Kills</span>
-              <Input type="number" className="border rounded p-2" />
-            </Label>
-            <Label className="flex flex-col">
-              <span className="text-sm">Assists</span>
-              <Input type="number" className="border rounded p-2" />
-            </Label>
-            <Label className="flex flex-col">
-              <span className="text-sm">Errors</span>
-              <Input type="number" className="border rounded p-2" />
-            </Label>
-            <Label className="flex flex-col">
-              <span className="text-sm">Attempts</span>
-              <Input type="number" className="border rounded p-2" />
-            </Label>
-            <Label className="flex flex-col">
-              <span className="text-sm">Percentage</span>
-              <Input type="number" disabled className="border rounded p-2" />
-            </Label>
-          </div>
-        </fieldset>
-        <Button type="button" onClick={() => updateCategory("Base")}>
-          Back
-        </Button>
-      </>
-    ),
-  };
-  function updateCategory(category: CategoryState) {
-    setCategoryState(category);
-  }
-
-  const [categoryState, setCategoryState] = useState<CategoryState>("Base");
 
   const handleChangeDate = (date: Date | undefined) => {
     if (!date) return;
@@ -376,6 +169,33 @@ const StatForm = (props: { athleteId: string; athlete: Athlete }) => {
     }
   };
 
+  type StatEvent = {
+    category: StatCategory;
+    action: string;
+    label: string;
+  };
+
+  const [events, setEvents] = useState<StatEvent[]>([]);
+  const [active, setActive] = useState<StatCategory | null>(null);
+
+  const record = (category: StatCategory, action: string, label: string) => {
+    setEvents((ev) => [...ev, { category, action, label }]);
+    setActive(null);
+  };
+
+  const attackEvents = events.filter((e) => e.category === "attack");
+  const receivingEvents = events.filter((e) => e.category === "receiving");
+
+  const kills = attackEvents.filter((e) => e.action === "kill").length;
+  const errors = attackEvents.filter((e) => e.action === "error").length;
+  const total = attackEvents.filter((e) =>
+    ["kill", "error"].includes(e.action),
+  ).length;
+  const pct = total > 0 ? (kills - errors) / total : 0;
+
+  const undo = () => setEvents((ev) => ev.slice(0, -1));
+  const lastEvent = events.at(-1);
+
   //  when the form is submitted the ui goes to pending, which closes the dialog.
   if (isPending)
     return (
@@ -424,11 +244,51 @@ const StatForm = (props: { athleteId: string; athlete: Athlete }) => {
               </PopoverContent>
             </Popover>
           </div>
-          <div>{categoryState}</div>
+
+          {/* Last action + Undo */}
+          <div className="flex items-center justify-between rounded-md border px-3 py-2 text-sm">
+            <span className="truncate">
+              {lastEvent
+                ? `Last: ${lastEvent.label}`
+                : "Tap a category to start"}
+              <span className="ml-2 text-muted-foreground">
+                ({events.length})
+              </span>
+            </span>
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
+              onClick={undo}
+              disabled={!lastEvent}
+            >
+              <Undo2Icon /> Undo
+            </Button>
+          </div>
+
           {/* Entry Section */}
           <div className="stat-container">
-            {/* Stat Categories */}
-            {STAT_COMPONENTS[categoryState]}
+            {active === null ? (
+              CATEGORY_ORDER.map((cat) => (
+                <Button key={cat} onClick={() => setActive(cat)}>
+                  {STAT_CONFIG[cat].label}
+                </Button>
+              ))
+            ) : (
+              <div>
+                {STAT_CONFIG[active].actions.map((a) => (
+                  <Button
+                    key={a.id}
+                    onClick={() => record(active, a.id, active)}
+                  >
+                    {a.label}
+                  </Button>
+                ))}
+                <Button key="back" onClick={() => setActive(null)}>
+                  Back
+                </Button>
+              </div>
+            )}
           </div>
         </div>
       </form>
