@@ -49,7 +49,7 @@ const StatForm = (props: { athleteId: string; athlete: Athlete }) => {
   const { isPending, error, mutate } = useCreateStat({ athleteId, resetForm });
   const STAT_COMPONENTS = {
     Base: (
-      <>
+      <ul>
         <Button type="button" onClick={() => updateCategory("Attack")}>
           Attack
         </Button>
@@ -68,7 +68,7 @@ const StatForm = (props: { athleteId: string; athlete: Athlete }) => {
         <Button type="button" onClick={() => updateCategory("Block")}>
           Block
         </Button>
-      </>
+      </ul>
     ),
     Attack: (
       <>
@@ -425,8 +425,11 @@ const StatForm = (props: { athleteId: string; athlete: Athlete }) => {
             </Popover>
           </div>
           <div>{categoryState}</div>
-          {/* Stat Categories */}
-          <div>{STAT_COMPONENTS[categoryState]}</div>
+          {/* Entry Section */}
+          <div className="stat-container">
+            {/* Stat Categories */}
+            {STAT_COMPONENTS[categoryState]}
+          </div>
         </div>
       </form>
       {error && (
