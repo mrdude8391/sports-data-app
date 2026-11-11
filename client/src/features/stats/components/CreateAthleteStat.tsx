@@ -1,37 +1,13 @@
-import { Button } from "../../../components/ui/button";
-import { Label } from "../../../components/ui/label";
-import { Input } from "../../../components/ui/input";
-import { Calendar } from "@/components/ui/calendar";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
-  DialogClose,
   DialogContent,
   DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Alert, AlertTitle } from "../../../components/ui/alert";
-import { AlertCircleIcon, ChevronDownIcon, Loader } from "lucide-react";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import {
-  type NewStat,
-  type NewStatPayload,
-  type StatCategory,
-  type StatFieldKey,
-  type StatFields,
-} from "../types/Stat";
-import { useState } from "react";
 import type { Athlete } from "@/features/athletes/types/Athlete";
-import useConfirmBlankStatForm from "../hooks/useConfirmBlankStatForm";
-import { logger } from "@/lib/logger";
-import { useCreateStat } from "../hooks/useCreateStat";
-import { STAT_LABEL_INDEX } from "@/constants";
 import StatForm from "./StatForm";
 
 interface createAthleteStatProps {
