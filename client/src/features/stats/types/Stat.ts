@@ -64,7 +64,13 @@ export type Stat = BaseStatData & {
   updatedAt: Date;
 };
 
-export type NewStat = Omit<Stat, "id">;
+/**
+ * The fields the client sends when creating or editing a stat.
+ * id, userId, athleteId and the timestamps are set by the server / URL.
+ */
+export type NewStat = BaseStatData & {
+  recordedAt: Date;
+};
 
 export type NewStatPayload = {
   athleteId: string;
@@ -77,11 +83,11 @@ export type AthleteStatResponse = {
 };
 
 /**
- * A blank stat form with all stats set to 0.
+ * Returns a fresh blank stat form with all stats set to 0.
+ * Always call this instead of sharing one object, so forms never share
+ * nested category objects and recordedAt is "now" at creation time.
  */
-export const DEFAULT_STAT_FORM: NewStat = {
-  userId: "",
-  athleteId: "",
+export const createEmptyStatForm = (): NewStat => ({
   attack: {
     kills: 0,
     errors: 0,
@@ -122,10 +128,25 @@ export const DEFAULT_STAT_FORM: NewStat = {
     attempts: 0,
     errors: 0,
   },
-  createdAt: new Date(),
   recordedAt: new Date(),
-  updatedAt: new Date(),
-};
+});
+
+/**
+ * True when every stat in every category is 0 (recordedAt is ignored).
+ */
+export const isBlankStatForm = (form: BaseStatData): boolean =>
+  STAT_CATEGORIES.every((category) =>
+    Object.values(form[category]).every((value) => value === 0),
+  );
+
+const STAT_CATEGORIES: StatCategory[] = [
+  "attack",
+  "setting",
+  "serving",
+  "receiving",
+  "defense",
+  "blocking",
+];
 
 export type StatCategory = keyof BaseStatData; // "attack | receive ..."
 
@@ -138,9 +159,3 @@ export type StatLabel<C extends StatCategory> = {
   key: StatFieldKey<C> & string;
   label: string;
 };
-
-// // eg. want the labels of "attack" or labels of "receiving"
-// export type StatLabel<StatField extends BaseStatData[StatCategory]> = {
-//   key: keyof StatField & string;
-//   label: string;
-// };
