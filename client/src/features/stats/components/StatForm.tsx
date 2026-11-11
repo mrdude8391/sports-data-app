@@ -2,33 +2,46 @@ import { Alert, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { DialogClose, DialogFooter } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { cn } from "@/lib/utils";
 import {
   AlertCircleIcon,
+  ArrowLeftIcon,
   ChevronDownIcon,
   Loader,
   Undo2Icon,
 } from "lucide-react";
-import { act, useState } from "react";
+import { useMemo, useState } from "react";
 import {
-  type NewStat,
   type NewStatPayload,
   type StatCategory,
-  type StatFieldKey,
-  type StatFields,
-  DEFAULT_STAT_FORM,
+  createEmptyStatForm,
 } from "../types/Stat";
 import useConfirmBlankStatForm from "../hooks/useConfirmBlankStatForm";
 import type { Athlete } from "@/features/athletes/types/Athlete";
 import { useCreateStat } from "../hooks/useCreateStat";
 import { logger } from "@/lib/logger";
-import { CATEGORY_ORDER, STAT_CONFIG } from "../config/statConfig";
+import {
+  type ActionButton,
+  type ActionTone,
+  type StatEvent,
+  aggregateEvents,
+  CATEGORY_ORDER,
+  getActions,
+  getSummary,
+  STAT_CONFIG,
+} from "../config/statConfig";
+
+const TONE_CLASSES: Record<ActionTone, string> = {
+  good: "bg-green-600 text-white hover:bg-green-700",
+  bad: "bg-red-600 text-white hover:bg-red-700",
+  neutral: "bg-secondary text-secondary-foreground hover:bg-secondary/80",
+};
 
 const StatForm = (props: { athleteId: string; athlete: Athlete }) => {
   // I see my athlete do a skill.
@@ -37,17 +50,33 @@ const StatForm = (props: { athleteId: string; athlete: Athlete }) => {
   // After the game I total all the skill results up.
 
   const { athleteId, athlete } = props;
-  const [form, setForm] = useState<NewStat>(DEFAULT_STAT_FORM);
+  const [recordedAt, setRecordedAt] = useState<Date>(() => new Date());
+  const [events, setEvents] = useState<StatEvent[]>([]);
+  const [active, setActive] = useState<StatCategory | null>(null);
+
+  const totals = useMemo(() => aggregateEvents(events), [events]);
+  const lastEvent = events.at(-1);
 
   // custom hook to handle when a user tries to create a blank stat form
   const { confirm, ConfirmDialog, changeAlertAthleteName } =
     useConfirmBlankStatForm();
 
   const resetForm = () => {
-    setForm(DEFAULT_STAT_FORM);
+    setEvents([]);
+    setRecordedAt(new Date());
+    setActive(null);
   };
 
+  const undo = () => setEvents((ev) => ev.slice(0, -1));
+
   const { isPending, error, mutate } = useCreateStat({ athleteId, resetForm });
+
+  // Tap 2: record the action and jump straight back to the category grid.
+  const record = (category: StatCategory, action: ActionButton) => {
+    const label = `${STAT_CONFIG[category].label} – ${action.label}`;
+    setEvents((ev) => [...ev, { category, action: action.id, label }]);
+    setActive(null);
+  };
 
   const handleChangeDate = (date: Date | undefined) => {
     if (!date) return;
@@ -60,141 +89,29 @@ const StatForm = (props: { athleteId: string; athlete: Athlete }) => {
       now.getSeconds(),
       now.getMilliseconds(),
     );
-    setForm((prev) => ({ ...prev, recordedAt: merged }));
+    setRecordedAt(merged);
   };
-
-  const updateStatFormFieldsByCategory = <
-    C extends StatCategory,
-    K extends StatFieldKey<C>,
-  >(
-    category: C,
-    key: K,
-    prevForm: NewStat,
-    value: number,
-  ) => {
-    const updatedCategory = {
-      ...prevForm[category],
-      [key]: value,
-    } as StatFields<C>;
-
-    switch (category) {
-      case "attack": {
-        // Auto-calculate hitting percentage
-        const attack = updatedCategory as NewStat["attack"];
-        const kills = key === "kills" ? value : attack.kills;
-        const total = key === "total" ? value : attack.total;
-        const errors = key === "errors" ? value : attack.errors;
-        const percentage = total > 0 ? (kills - errors) / total : 0;
-        attack.percentage = Math.round(percentage * 1000) / 1000;
-        break;
-      }
-      case "serving": {
-        // Auto-calculate serving percentage
-        const serving = updatedCategory as NewStat["serving"];
-        const attempts = key === "attempts" ? value : serving.attempts;
-        const errors = key === "errors" ? value : serving.errors;
-        const ratingTotal = key === "ratingTotal" ? value : serving.ratingTotal;
-        const percentage = attempts > 0 ? (attempts - errors) / attempts : 0;
-        const rating = attempts > 0 ? ratingTotal / attempts : 0;
-
-        serving.rating = Math.round(rating * 10) / 10;
-        serving.percentage = Math.round(percentage * 1000) / 1000;
-        break;
-      }
-      case "receiving": {
-        // Auto-calculate receiving rating
-        const receiving = updatedCategory as NewStat["receiving"];
-        const attempts = key === "attempts" ? value : receiving.attempts;
-        const ratingTotal =
-          key === "ratingTotal" ? value : receiving.ratingTotal;
-        const rating = attempts > 0 ? ratingTotal / attempts : 0;
-
-        receiving.rating = Math.round(rating * 10) / 10;
-        break;
-      }
-      case "defense": {
-        // Auto-calculate defense rating
-        const defense = updatedCategory as NewStat["defense"];
-        const attempts = key === "attempts" ? value : defense.attempts;
-        const ratingTotal = key === "ratingTotal" ? value : defense.ratingTotal;
-        const rating = attempts > 0 ? ratingTotal / attempts : 0;
-
-        defense.rating = Math.round(rating * 10) / 10;
-        break;
-      }
-    }
-    return updatedCategory;
-  };
-
-  const handleChange =
-    <C extends StatCategory, K extends StatFieldKey<C>>(category: C, key: K) =>
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      const value = e.target.valueAsNumber;
-
-      setForm((prevForm) => {
-        const updatedCategory = updateStatFormFieldsByCategory(
-          category,
-          key,
-          prevForm,
-          value,
-        );
-
-        return {
-          ...prevForm,
-          [category]: updatedCategory,
-        };
-      });
-    };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const submit = () => {
-      const newStat: NewStatPayload = { athleteId, statForm: form };
+      const newStat: NewStatPayload = {
+        athleteId,
+        statForm: { ...createEmptyStatForm(), ...totals, recordedAt },
+      };
       mutate(newStat);
     };
     try {
-      if (form == DEFAULT_STAT_FORM) {
+      if (events.length === 0) {
         changeAlertAthleteName(athlete.name);
         const shouldContinue = await confirm();
-        // this async await means that the method handle submit will wait for confirm() to finish
-        // go read confirm
         if (!shouldContinue) return;
-        submit();
-      } else {
-        // form != initial form (user changed the form)
-        submit();
       }
+      submit();
     } catch (error) {
-      logger.error("[CreateAthleteStat.tsx]", error);
+      logger.error("[StatForm.tsx]", error);
     }
   };
-
-  type StatEvent = {
-    category: StatCategory;
-    action: string;
-    label: string;
-  };
-
-  const [events, setEvents] = useState<StatEvent[]>([]);
-  const [active, setActive] = useState<StatCategory | null>(null);
-
-  const record = (category: StatCategory, action: string, label: string) => {
-    setEvents((ev) => [...ev, { category, action, label }]);
-    setActive(null);
-  };
-
-  const attackEvents = events.filter((e) => e.category === "attack");
-  const receivingEvents = events.filter((e) => e.category === "receiving");
-
-  const kills = attackEvents.filter((e) => e.action === "kill").length;
-  const errors = attackEvents.filter((e) => e.action === "error").length;
-  const total = attackEvents.filter((e) =>
-    ["kill", "error"].includes(e.action),
-  ).length;
-  const pct = total > 0 ? (kills - errors) / total : 0;
-
-  const undo = () => setEvents((ev) => ev.slice(0, -1));
-  const lastEvent = events.at(-1);
 
   //  when the form is submitted the ui goes to pending, which closes the dialog.
   if (isPending)
@@ -208,24 +125,22 @@ const StatForm = (props: { athleteId: string; athlete: Athlete }) => {
   return (
     <>
       <ConfirmDialog />
-      <form id="statForm" className="overflow-y-auto " onSubmit={handleSubmit}>
-        {/* Stat Area */}
+      <form id="statForm" className="overflow-y-auto" onSubmit={handleSubmit}>
         <div className="space-y-4 p-4">
           {/* Date Picker */}
-          <div className=" flex flex-col gap-3">
+          <div className="flex flex-col gap-3">
             <Label htmlFor="date" className="px-1">
               Date
             </Label>
             <Popover>
               <PopoverTrigger asChild>
                 <Button
+                  type="button"
                   variant="outline"
                   id="date"
                   className="w-48 justify-between font-normal"
                 >
-                  {form.recordedAt
-                    ? form.recordedAt.toLocaleDateString()
-                    : "Select date"}
+                  {recordedAt.toLocaleDateString()}
                   <ChevronDownIcon />
                 </Button>
               </PopoverTrigger>
@@ -235,11 +150,9 @@ const StatForm = (props: { athleteId: string; athlete: Athlete }) => {
               >
                 <Calendar
                   mode="single"
-                  selected={form.recordedAt}
+                  selected={recordedAt}
                   captionLayout="dropdown"
-                  onSelect={(date) => {
-                    handleChangeDate(date);
-                  }}
+                  onSelect={handleChangeDate}
                 />
               </PopoverContent>
             </Popover>
@@ -267,33 +180,61 @@ const StatForm = (props: { athleteId: string; athlete: Athlete }) => {
           </div>
 
           {/* Entry Section */}
-          <div className="stat-container">
-            {active === null ? (
-              CATEGORY_ORDER.map((cat) => (
-                <Button key={cat} onClick={() => setActive(cat)}>
-                  {STAT_CONFIG[cat].label}
+          {active === null ? (
+            // Tap 1: category
+            <div className="grid grid-cols-2 gap-3">
+              {CATEGORY_ORDER.map((category) => (
+                <Button
+                  key={category}
+                  type="button"
+                  variant="outline"
+                  className="h-20 flex-col gap-1"
+                  onClick={() => setActive(category)}
+                >
+                  <span className="text-base font-semibold">
+                    {STAT_CONFIG[category].label}
+                  </span>
+                  <span className="text-xs text-muted-foreground">
+                    {getSummary(category, totals)}
+                  </span>
                 </Button>
-              ))
-            ) : (
-              <div>
-                {STAT_CONFIG[active].actions.map((a) => (
-                  <Button
-                    key={a.id}
-                    onClick={() => record(active, a.id, active)}
-                  >
-                    {a.label}
-                  </Button>
-                ))}
-                <Button key="back" onClick={() => setActive(null)}>
-                  Back
+              ))}
+            </div>
+          ) : (
+            // Tap 2: result
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <h3 className="font-semibold">{STAT_CONFIG[active].label}</h3>
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => setActive(null)}
+                >
+                  <ArrowLeftIcon /> Back
                 </Button>
               </div>
-            )}
-          </div>
+              <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+                {getActions(active).map((action) => (
+                  <Button
+                    key={action.id}
+                    type="button"
+                    className={cn(
+                      "h-20 text-lg font-semibold",
+                      TONE_CLASSES[action.tone],
+                    )}
+                    onClick={() => record(active, action)}
+                  >
+                    {action.label}
+                  </Button>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       </form>
       {error && (
-        <Alert variant="destructive" className="flex justify-start ">
+        <Alert variant="destructive" className="flex justify-start">
           <AlertCircleIcon />
           <AlertTitle className="px-1">{error.message}</AlertTitle>
         </Alert>
