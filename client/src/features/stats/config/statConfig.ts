@@ -221,12 +221,6 @@ export const STAT_CONFIG: StatConfig = {
         }),
       },
       {
-        id: "tooled",
-        label: "Tooled",
-        tone: "bad",
-        apply: (s) => ({ ...s, attempts: s.attempts + 1 }),
-      },
-      {
         id: "error",
         label: "Error",
         tone: "bad",
