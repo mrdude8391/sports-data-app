@@ -8,6 +8,14 @@ from .exception_handlers import register_exception_handlers
 
 from .api import api_router
 
+from dotenv import load_dotenv
+
+# Load environment variables from .env
+load_dotenv()
+import os
+
+LOCAL_CLIENT_ORIGIN = os.getenv("LOCAL_CLIENT_ORIGIN")
+
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -23,6 +31,7 @@ app = FastAPI(lifespan=lifespan)
 
 origins = [
     "http://localhost:5173",
+    LOCAL_CLIENT_ORIGIN,
     "https://sports-data-app-py.vercel.app",
     "https://sports-data-app.vercel.app",
 ]
