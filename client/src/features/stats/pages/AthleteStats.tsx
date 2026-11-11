@@ -9,12 +9,11 @@ type AthleteStatsParams = {
   athleteId: string;
 };
 
-export const getAthleteIdFromParams = () => {
-  const { athleteId } = useParams<AthleteStatsParams>();
-  return athleteId ?? "";
-};
-
 const AthleteStats = () => {
+  const getAthleteIdFromParams = () => {
+    const { athleteId } = useParams<AthleteStatsParams>();
+    return athleteId ?? "";
+  };
   const athleteId = getAthleteIdFromParams();
 
   const {
