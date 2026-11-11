@@ -10,7 +10,8 @@ import useConfirmBlank from "@/features/stats/hooks/useConfirmBlankStatForm";
 import {
   type NewStat,
   type StatCategory,
-  DEFAULT_STAT_FORM,
+  createEmptyStatForm,
+  isBlankStatForm,
 } from "@/features/stats/types/Stat";
 import { createStatsBatch } from "@/features/stats/api/statsApi";
 import { logger } from "@/lib/logger";
@@ -54,9 +55,8 @@ const GameLog = () => {
       setSelectedAthletes((prev) => new Set<Athlete>(prev).add(athlete));
       // add form to form dictionary
       // need to update the selected date from the default if the selected date is not default.
-      const newForm = DEFAULT_STAT_FORM;
-      newForm.recordedAt = selectedDate;
-      setForms((prev) => prev.set(athlete.id, newForm));
+      const newForm = { ...createEmptyStatForm(), recordedAt: selectedDate };
+      setForms((prev) => new Map<string, NewStat>(prev).set(athlete.id, newForm));
     }
   };
 
@@ -186,7 +186,7 @@ const GameLog = () => {
         // Return a Promise
         // Resolve the Promise when the user clicks Continue or Cancel
         // await the Promise in the loop
-        if (form === DEFAULT_STAT_FORM) {
+        if (form && isBlankStatForm(form)) {
           changeAlertAthleteName(athlete.name);
           const shouldContinue = await confirm();
           // this async await means that the method handle submit will wait for confirm() to finish
