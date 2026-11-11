@@ -1,5 +1,6 @@
 import { Alert, AlertTitle } from "@/components/ui/alert";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
+import type { VariantProps } from "class-variance-authority";
 import { Calendar } from "@/components/ui/calendar";
 import { DialogClose, DialogFooter } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
@@ -37,11 +38,21 @@ import {
   STAT_CONFIG,
 } from "../config/statConfig";
 
-const TONE_CLASSES: Record<ActionTone, string> = {
-  good: "bg-green-600 text-white hover:bg-green-700",
-  bad: "bg-red-600 text-white hover:bg-red-700",
-  neutral: "bg-secondary text-secondary-foreground hover:bg-secondary/80",
+// Each result tone maps to a shadcn Button variant, so hover, focus ring,
+// disabled and dark-mode styles all come from the shared button component.
+const TONE_VARIANT: Record<
+  ActionTone,
+  NonNullable<VariantProps<typeof buttonVariants>["variant"]>
+> = {
+  good: "success",
+  bad: "destructive",
+  neutral: "outline",
 };
+
+// Lifts a button off the dialog: card surface + border + shadow, with a
+// slightly deeper shadow on hover and a small press-down on click.
+const RAISED =
+  "bg-card dark:bg-card border shadow-sm hover:shadow-md active:translate-y-px active:shadow-xs";
 
 const StatForm = (props: { athleteId: string; athlete: Athlete }) => {
   // I see my athlete do a skill.
@@ -192,7 +203,7 @@ const StatForm = (props: { athleteId: string; athlete: Athlete }) => {
                   key={category}
                   type="button"
                   variant="outline"
-                  className="h-20 flex-col gap-1"
+                  className={cn("h-20 flex-col gap-1", RAISED)}
                   onClick={() => setActive(category)}
                 >
                   <span className="text-base font-semibold">
@@ -223,9 +234,11 @@ const StatForm = (props: { athleteId: string; athlete: Athlete }) => {
                   <Button
                     key={action.id}
                     type="button"
+                    variant={TONE_VARIANT[action.tone]}
+                    size="xl"
                     className={cn(
-                      "h-20 text-lg font-semibold",
-                      TONE_CLASSES[action.tone],
+                      "h-20 text-lg font-semibold shadow-sm hover:shadow-md active:translate-y-px active:shadow-xs",
+                      action.tone === "neutral" && RAISED,
                     )}
                     onClick={() => record(active, action)}
                   >
