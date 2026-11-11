@@ -1,7 +1,7 @@
 import { Button } from "../../../components/ui/button";
 import { Label } from "../../../components/ui/label";
 import { Input } from "../../../components/ui/input";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { STAT_LABEL_INDEX } from "@/constants";
 import { logger } from "@/lib/logger";
 
@@ -26,7 +26,6 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import {
-  DEFAULT_STAT_FORM,
   type Stat,
   type StatCategory,
   type NewStat,
@@ -41,18 +40,21 @@ interface EditAthleteStatProps {
 const EditAthleteStat = (props: EditAthleteStatProps) => {
   const { stat, athleteId } = props;
 
-  const [form, setForm] = useState<NewStat>(DEFAULT_STAT_FORM);
+  // Seed the form from the stat being edited, keeping only the editable fields.
+  const [form, setForm] = useState<NewStat>(() => ({
+    attack: stat.attack,
+    setting: stat.setting,
+    serving: stat.serving,
+    receiving: stat.receiving,
+    defense: stat.defense,
+    blocking: stat.blocking,
+    recordedAt: stat.recordedAt,
+  }));
   const [open, setOpen] = React.useState(false);
 
   const { isPending, error, mutate } = useEditStat({ athleteId });
 
   const categories = Object.keys(STAT_LABEL_INDEX) as StatCategory[];
-
-  useEffect(() => {
-    if (stat) {
-      setForm(stat);
-    }
-  }, []);
 
   const handleChange = <C extends StatCategory>(
     category: C,
@@ -128,7 +130,7 @@ const EditAthleteStat = (props: EditAthleteStatProps) => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (stat.id && form != DEFAULT_STAT_FORM) {
+    if (stat.id) {
       logger.info("[EditAthleteStat.tsx::handleSubmit]\nSubmit Form", form);
       mutate({ statId: stat.id, form: form, date: form.recordedAt });
     }
