@@ -20,7 +20,6 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import {
-  DEFAULT_STAT_FORM,
   type NewStat,
   type NewStatPayload,
   type StatCategory,
