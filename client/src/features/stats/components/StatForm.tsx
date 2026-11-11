@@ -125,37 +125,41 @@ const StatForm = (props: { athleteId: string; athlete: Athlete }) => {
   return (
     <>
       <ConfirmDialog />
-      <form id="statForm" className="overflow-y-auto" onSubmit={handleSubmit}>
-        <div className="space-y-4 p-4">
+      <form
+        id="statForm"
+        className="h-auto overflow-auto"
+        onSubmit={handleSubmit}
+      >
+        <div className="space-y-4 ">
           {/* Date Picker */}
-          <div className="flex flex-col gap-3">
-            <Label htmlFor="date" className="px-1">
-              Date
-            </Label>
-            <Popover>
-              <PopoverTrigger asChild>
-                <Button
-                  type="button"
-                  variant="outline"
-                  id="date"
-                  className="w-48 justify-between font-normal"
+          <div className="flex flex-row gap-4 ">
+            <Label htmlFor="date">Date</Label>
+            <div className="w-full">
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    id="date"
+                    className="w-48 justify-between font-normal"
+                  >
+                    {recordedAt.toLocaleDateString()}
+                    <ChevronDownIcon />
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent
+                  className="w-auto overflow-hidden p-0"
+                  align="center"
                 >
-                  {recordedAt.toLocaleDateString()}
-                  <ChevronDownIcon />
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent
-                className="w-auto overflow-hidden p-0"
-                align="start"
-              >
-                <Calendar
-                  mode="single"
-                  selected={recordedAt}
-                  captionLayout="dropdown"
-                  onSelect={handleChangeDate}
-                />
-              </PopoverContent>
-            </Popover>
+                  <Calendar
+                    mode="single"
+                    selected={recordedAt}
+                    captionLayout="dropdown"
+                    onSelect={handleChangeDate}
+                  />
+                </PopoverContent>
+              </Popover>
+            </div>
           </div>
 
           {/* Last action + Undo */}

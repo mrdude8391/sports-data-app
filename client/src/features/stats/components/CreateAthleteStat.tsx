@@ -22,12 +22,14 @@ const CreateAthleteStat = (props: createAthleteStatProps) => {
     <div>
       <Dialog>
         <DialogTrigger asChild>
-          <Button variant="default" size="lg">
-            Add New Game Stats
-          </Button>
+          <div className="flex flex-col">
+            <Button variant="default" size="xl">
+              Add New Game Stats
+            </Button>
+          </div>
         </DialogTrigger>
 
-        <DialogContent className="max-h-11/12 flex flex-col">
+        <DialogContent className="max-h-11/12  flex flex-col">
           <DialogHeader>
             <DialogTitle>Create New Stats</DialogTitle>
             <DialogDescription>
